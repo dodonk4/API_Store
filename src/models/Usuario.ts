@@ -1,9 +1,41 @@
-import db from '../database/init';
+// import { prisma } from "../lib/prisma";
+import db from '../database/init.ts';
+import pool from '../database/index.ts';
 
 interface UsuarioData {
   id? : number,
   nombre : string,
   email : string
+}
+
+class UsuarioPostgreSQL {
+  static async create(data : UsuarioData, callback : (err : Error | null, usuario ? : UsuarioData) => void){
+    const client = await pool.connect();
+    const { nombre, email } = data;
+    try {
+      const resultUsuario = await client.query('INSERT INTO usuarios (nombre, email) VALUES (?)', [nombre, email]);
+    } catch (error) {
+      console.error(error);
+    }finally{
+      client.release();
+    }
+  }
+
+  static async findAll(callback : (err : Error | null, ordenes ? : UsuarioData[]) => void){
+    // const client = await pool.connect();
+    try {
+      // const resultAllUsuarios = await client.query('select * from usuarios');
+      // const resultAllUsuarios = await prisma.usuarios.findMany();
+      // callback(null, resultAllUsuarios.rows);
+      // callback(null, resultAllUsuarios);
+    } catch (error) {
+      console.error(error);
+    }
+    // finally{
+    //   client.release();
+    // }
+  }
+
 }
 
 class Usuario {
@@ -63,4 +95,4 @@ class Usuario {
   }
 }
 
-export default Usuario;
+export { Usuario, UsuarioPostgreSQL };

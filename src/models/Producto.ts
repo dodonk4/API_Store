@@ -1,4 +1,4 @@
-import db from '../database/init';
+import db from '../database/init.ts';
 
 interface ProductoData {
   id?: number;

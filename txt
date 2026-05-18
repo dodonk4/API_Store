@@ -1,0 +1,269 @@
+# Arquitectura del Proyecto — API_Store
+
+> Documentación técnica orientada a entender el código de [`dodonk4/API_Store`](https://github.com/dodonk4/API_Store).
+//Generada por Claude con el repositorio actualizado al 11/5/2026
+
+---
+
+## Descripción General
+
+**API_Store** es una API REST construida con **Node.js + TypeScript** para gestionar los recursos de una tienda: productos, usuarios y órdenes. Usa **Express** como framework HTTP y **SQLite** como base de datos embebida, sin necesidad de servidor externo.
+
+El proyecto sigue una arquitectura de tres capas bien separadas: **rutas → modelos → base de datos**.
+
+---
+
+## Stack Tecnológico
+
+| Capa | Tecnología | Versión |
+|---|---|---|
+| Lenguaje | TypeScript | ^6.0.3 |
+| Runtime | Node.js | — |
+| Framework HTTP | Express | ^4.18.2 |
+| Base de datos | SQLite3 | ^6.0.1 |
+| Ejecución en dev | ts-node + nodemon | ^10.9.2 / ^3.0.1 |
+
+---
+
+## Estructura de Directorios
+
+```
+API_Store/
+│
+├── .github/
+│   └── copilot-instructions.md   # Instrucciones para GitHub Copilot
+│
+├── src/                          # Todo el código fuente
+│   ├── server.ts                 # Punto de entrada: Express, middlewares y rutas
+│   │
+│   ├── database/
+│   │   └── init.ts               # Conexión SQLite y creación de tablas
+│   │
+│   ├── models/                   # Lógica de negocio y acceso a datos
+│   │   ├── Producto.ts
+│   │   ├── Usuario.ts
+│   │   └── Orden.ts
+│   │
+│   └── routes/                   # Definición de endpoints HTTP
+│       ├── productos.ts
+│       ├── usuarios.ts
+│       └── ordenes.ts
+│
+├── store.db                      # Archivo de base de datos SQLite (generado al iniciar)
+├── package.json
+├── package-lock.json
+├── tsconfig.json
+└── .gitignore
+```
+
+---
+
+## Las Tres Capas de la Arquitectura
+
+### 1. Capa de Entrada — `server.ts`
+
+Es el punto de entrada de la aplicación. Se encarga de:
+
+- Instanciar la app Express.
+- Registrar el middleware `express.json()` para parsear el body de las requests.
+- Montar los tres routers bajo sus prefijos de ruta.
+- Inicializar la base de datos (vía el import de `database/init`).
+- Registrar un manejador de errores global.
+- Levantar el servidor en el puerto definido por `process.env.PORT` o `3000` por defecto.
+
+```typescript
+// src/server.ts
+app.use(express.json());
+app.use('/productos', productosRouter);
+app.use('/usuarios', usuariosRouter);
+app.use('/ordenes', ordenesRouter);
+```
+
+### 2. Capa de Rutas — `src/routes/`
+
+Cada archivo define un `express.Router()` con los endpoints CRUD de su recurso. La ruta recibe la request, valida los campos mínimos requeridos, delega al modelo correspondiente y devuelve la respuesta HTTP.
+
+**Rutas disponibles:**
+
+| Recurso | Método | Endpoint | Descripción |
+|---|---|---|---|
+| Productos | GET | `/productos` | Listar todos |
+| Productos | POST | `/productos` | Crear nuevo |
+| Productos | GET | `/productos/:productoId` | Obtener por ID |
+| Productos | PUT | `/productos/:productoId` | Actualizar |
+| Productos | DELETE | `/productos/:productoId` | Eliminar |
+| Usuarios | GET | `/usuarios` | Listar todos |
+| Usuarios | POST | `/usuarios` | Crear nuevo |
+| Usuarios | GET | `/usuarios/:usuarioId` | Obtener por ID |
+| Usuarios | PUT | `/usuarios/:usuarioId` | Actualizar |
+| Usuarios | DELETE | `/usuarios/:usuarioId` | Eliminar |
+| Órdenes | GET | `/ordenes` | Listar todas |
+| Órdenes | POST | `/ordenes` | Crear nueva |
+| Órdenes | GET | `/ordenes/:ordenId` | Obtener por ID |
+| Órdenes | PUT | `/ordenes/:ordenId` | Actualizar productos de la orden |
+| Órdenes | DELETE | `/ordenes/:ordenId` | Eliminar |
+
+**Validaciones en las rutas:**
+
+- `POST /productos` requiere `nombre`, `precio` y `stock`.
+- `POST /usuarios` requiere `nombre` y `email`.
+- `POST /ordenes` requiere `usuarioId` y `productos` (array).
+- Los `PUT` aceptan campos parciales, pero exigen al menos uno.
+
+### 3. Capa de Modelos — `src/models/`
+
+Cada modelo es una clase con métodos estáticos que encapsulan las queries SQL. Todos usan el patrón **callback** (no Promises ni async/await).
+
+**Signatura general de los métodos:**
+
+```typescript
+static create(data, callback: (err, result?) => void)
+static findById(id, callback: (err, result?) => void)
+static findAll(callback: (err, results?) => void)
+static update(id, data, callback: (err, result?) => void)
+static delete(id, callback: (err) => void)
+```
+
+**Particularidades por modelo:**
+
+`Producto` — campos: `id`, `nombre`, `descripcion` (opcional), `precio`, `stock`. El método `update` construye la query dinámicamente solo con los campos provistos, sin pisar datos existentes.
+
+`Usuario` — campos: `id`, `nombre`, `email` (UNIQUE en DB). El `update` también construye la query dinámicamente.
+
+`Orden` — campos: `id`, `usuarioId`, `productos[]`. Es el modelo más complejo: persiste en dos tablas (`ordenes` y `orden_productos`). El `findById` y `findAll` hacen un segundo query para incluir los productos de cada orden. El `update` reemplaza todos los productos de la orden (borra y reinserta).
+
+---
+
+## Base de Datos — `src/database/init.ts`
+
+Se conecta a `./store.db` y crea las tablas al arrancar con `CREATE TABLE IF NOT EXISTS`. La instancia `db` se exporta como singleton y es compartida por todos los modelos.
+
+**NOTA**: esto es temporal. Lo estoy realizando únicamente como prueba de base de datos. La idea principal es utilizar directamente una BD en la nube.
+
+**Esquema de tablas:**
+
+```sql
+CREATE TABLE IF NOT EXISTS productos (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre      TEXT    NOT NULL,
+  descripcion TEXT,
+  precio      REAL    NOT NULL,
+  stock       INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS usuarios (
+  id     INTEGER PRIMARY KEY AUTOINCREMENT,
+  nombre TEXT    NOT NULL,
+  email  TEXT    NOT NULL UNIQUE
+);
+
+CREATE TABLE IF NOT EXISTS ordenes (
+  id        INTEGER PRIMARY KEY AUTOINCREMENT,
+  usuarioId INTEGER NOT NULL,
+  FOREIGN KEY (usuarioId) REFERENCES usuarios(id)
+);
+
+-- Tabla de detalle: relación N:M entre ordenes y productos
+CREATE TABLE IF NOT EXISTS orden_productos (
+  id         INTEGER PRIMARY KEY AUTOINCREMENT,
+  ordenId    INTEGER NOT NULL,
+  productoId INTEGER NOT NULL,
+  cantidad   INTEGER NOT NULL,
+  FOREIGN KEY (ordenId)    REFERENCES ordenes(id),
+  FOREIGN KEY (productoId) REFERENCES productos(id)
+);
+```
+
+**Relación entre tablas:**
+
+```
+usuarios ──< ordenes ──< orden_productos >── productos
+```
+
+Una orden pertenece a un usuario. Una orden puede tener muchos productos con su cantidad, a través de `orden_productos`.
+
+---
+
+## Flujo de una Request
+
+```
+Cliente HTTP
+    │
+    ▼
+server.ts (Express)
+    │
+    ├─ express.json()         ← parsea el body JSON
+    │
+    ▼
+routes/[recurso].ts
+    │
+    ├─ Validación de campos requeridos  →  400 si falta algo
+    │
+    ▼
+models/[Recurso].ts
+    │
+    ├─ Query SQL (INSERT / SELECT / UPDATE / DELETE)
+    │
+    ▼
+database/init.ts  →  store.db (SQLite)
+    │
+    └─ callback(err, result)
+    │
+    ▼
+routes/[recurso].ts
+    │
+    ├─ err  →  500 { error: err.message }
+    ├─ !result  →  404 { error: '... no encontrado' }
+    └─ ok  →  200/201 res.json(result) / 204 res.send()
+```
+
+---
+
+## Manejo de Errores
+
+| Situación | Responsable | Código HTTP |
+|---|---|---|
+| Campo requerido ausente | Router | 400 |
+| Recurso no encontrado | Modelo → Router | 404 |
+| Error de base de datos | Modelo → Router | 500 |
+| Error no capturado | Middleware global en `server.ts` | 500 |
+
+---
+
+## Configuración TypeScript
+
+Opciones clave del `tsconfig.json`:
+
+| Opción | Valor | Efecto |
+|---|---|---|
+| `rootDir` | `./src` | Código fuente |
+| `outDir` | `./dist` | Compilado JS (no usado en dev) |
+| `module` | `nodenext` | Módulos compatibles con Node moderno |
+| `target` | `ES2020` | JS de salida |
+| `strict` | `true` | Chequeo de tipos estricto |
+| `allowJs` | `true` | Permite mezclar `.js` y `.ts` |
+| `esModuleInterop` | `true` | Compatibilidad con imports CommonJS |
+
+---
+
+## Scripts
+
+```bash
+npm run dev   # Desarrollo: recarga automática con nodemon + ts-node
+npm start     # Producción: ejecuta ts-node directamente
+```
+
+---
+
+## Cómo Agregar un Nuevo Recurso
+
+Siguiendo el patrón del proyecto, para agregar, por ejemplo, `categorias`:
+
+1. **Tabla** — agregar `CREATE TABLE IF NOT EXISTS categorias (...)` en `src/database/init.ts`.
+2. **Modelo** — crear `src/models/Categoria.ts` con la clase estática y sus métodos `create`, `findAll`, `findById`, `update`, `delete`.
+3. **Router** — crear `src/routes/categorias.ts` con los 5 endpoints CRUD.
+4. **Registrar** — en `src/server.ts`, importar y montar: `app.use('/categorias', categoriasRouter)`.
+
+---
+
+*Documentación generada a partir del análisis del código fuente de [`dodonk4/API_Store`](https://github.com/dodonk4/API_Store).*

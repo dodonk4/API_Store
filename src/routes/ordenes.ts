@@ -1,10 +1,10 @@
-import express, { Request, Response } from 'express';
-import Orden from '../models/Orden';
+import express from 'express';
+import { Orden, OrdenPostgreSQL } from '../models/Orden.ts';
 
 const router = express.Router();
 
 // GET /ordenes (obtener todas)
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (req: express.Request, res: express.Response) => {
   Orden.findAll((err : Error | null, ordenes : any) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(ordenes || []);
@@ -12,7 +12,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // POST /ordenes
-router.post('/', (req: Request, res: Response) => {
+router.post('/', (req: express.Request, res: express.Response) => {
   const { usuarioId, productos } = req.body;
   if (!usuarioId || !productos || !Array.isArray(productos)) {
     return res.status(400).json({ error: 'usuarioId y productos son requeridos' });
@@ -23,8 +23,19 @@ router.post('/', (req: Request, res: Response) => {
   });
 });
 
+router.post('/postgreSQL', (req: express.Request, res: express.Response) => {
+  const { usuarioId, productos } = req.body;
+  if (!usuarioId || !productos || !Array.isArray(productos)) {
+    return res.status(400).json({ error: 'usuarioId y productos son requeridos' });
+  }
+  OrdenPostgreSQL.create(req.body, (err : Error | null, orden : any) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json(orden);
+  });
+});
+
 // GET /ordenes/:ordenId
-router.get('/:ordenId', (req: Request, res: Response) => {
+router.get('/:ordenId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.ordenId as string);
   Orden.findById(id, (err : Error | null, orden : any) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -34,7 +45,7 @@ router.get('/:ordenId', (req: Request, res: Response) => {
 });
 
 // PUT /ordenes/:ordenId
-router.put('/:ordenId', (req: Request, res: Response) => {
+router.put('/:ordenId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.ordenId as string);
   Orden.findById(id, (err : Error | null, orden : any) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -54,7 +65,7 @@ router.put('/:ordenId', (req: Request, res: Response) => {
 });
 
 // DELETE /ordenes/:ordenId
-router.delete('/:ordenId', (req: Request, res: Response) => {
+router.delete('/:ordenId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.ordenId as string);
   Orden.delete(id, (err : Error | null) => {
     if (err) return res.status(500).json({ error: err.message });

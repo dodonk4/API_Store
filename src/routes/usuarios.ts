@@ -1,18 +1,25 @@
-import express, { Request, Response } from 'express';
-import Usuario from '../models/Usuario';
+import express from 'express';
+import { Usuario, UsuarioPostgreSQL} from '../models/Usuario.ts';
 
 const router = express.Router();
 
 // GET /usuarios (obtener todos)
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (req: express.Request, res: express.Response) => {
   Usuario.findAll((err : Error | null, usuarios : any) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(usuarios || []);
   });
 });
 
+router.get('/all', (req: express.Request, res: express.Response) => {
+  UsuarioPostgreSQL.findAll((err : Error | null, usuarios : any) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.json(usuarios || []);
+  });
+});
+
 // POST /usuarios
-router.post('/', (req: Request, res: Response) => {
+router.post('/', (req: express.Request, res: express.Response) => {
   const { nombre, email } = req.body;
   if (!nombre || !email) {
     return res.status(400).json({ error: 'Nombre y email son requeridos' });
@@ -24,7 +31,7 @@ router.post('/', (req: Request, res: Response) => {
 });
 
 // GET /usuarios/:usuarioId
-router.get('/:usuarioId', (req: Request, res: Response) => {
+router.get('/:usuarioId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.usuarioId as string);
   Usuario.findById(id, (err : Error | null, usuario : any) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -34,7 +41,7 @@ router.get('/:usuarioId', (req: Request, res: Response) => {
 });
 
 // PUT /usuarios/:usuarioId
-router.put('/:usuarioId', (req: Request, res: Response) => {
+router.put('/:usuarioId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.usuarioId as string);
   const { nombre, email } = req.body;
   if (!nombre && !email) {
@@ -47,7 +54,7 @@ router.put('/:usuarioId', (req: Request, res: Response) => {
 });
 
 // DELETE /usuarios/:usuarioId
-router.delete('/:usuarioId', (req: Request, res: Response) => {
+router.delete('/:usuarioId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.usuarioId as string);
   Usuario.delete(id, (err : Error | null) => {
     if (err) return res.status(500).json({ error: err.message });

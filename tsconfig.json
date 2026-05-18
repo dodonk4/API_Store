@@ -7,9 +7,9 @@
 
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "nodenext",
-    "target": "ES2020",
-    "lib": ["ES2020"],
+    "module": "ESNext",
+    "target": "ES2023",
+    "lib": ["ES2023"],
     "types": ["node"],
     // For nodejs:
 
@@ -38,15 +38,19 @@
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
     "skipLibCheck": true,
+    "ignoreDeprecations": "6.0",
 
     //Alowing JavaScript files to be compiled
     "allowJs": true,
     "checkJs": false,
-    "rootDir": "./src",
+    "rootDir": "./",
     "outDir": "./dist",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    
 
   },
   "include": ["src/**/*"],

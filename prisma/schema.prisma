@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model ordenes {
+  id         Int       @id @default(autoincrement())
+  usuario_id Int?
+  usuarios   usuarios? @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model usuarios {
+  id      Int       @id @default(autoincrement())
+  nombre  String?   @db.VarChar(100)
+  email   String?   @db.VarChar(30)
+  ordenes ordenes[]
+}

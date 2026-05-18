@@ -1,8 +1,8 @@
-import express, { Request, Response, NextFunction } from 'express';
-import productosRouter from './routes/productos';
-import usuariosRouter from './routes/usuarios';
-import ordenesRouter from './routes/ordenes';
-import './database/init'; // Inicializar base de datos
+import express from 'express';
+import productosRouter from './routes/productos.ts';
+import usuariosRouter from './routes/usuarios.ts';
+import ordenesRouter from './routes/ordenes.ts';
+import './database/init.ts'; // Inicializar base de datos
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -16,12 +16,12 @@ app.use('/usuarios', usuariosRouter);
 app.use('/ordenes', ordenesRouter);
 
 // Ruta raíz
-app.get('/', (req: Request, res: Response) => {
+app.get('/', (req: express.Request, res: express.Response) => {
   res.json({ message: 'API de Tienda' });
 });
 
 // Manejo de errores
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error(err.stack);
   res.status(500).json({ error: 'Algo salió mal!' });
 });

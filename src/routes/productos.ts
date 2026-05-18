@@ -1,10 +1,11 @@
-import express, { Request, Response } from 'express';
-import Producto from '../models/Producto';
+import express from 'express';
+import Producto from '../models/Producto.ts';
 
 const router = express.Router();
 
+
 // GET /productos (obtener todos)
-router.get('/', (req: Request, res: Response) => {
+router.get('/', (req: express.Request, res: express.Response) => {
   Producto.findAll((err : Error | null, productos : any) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(productos || []);
@@ -12,7 +13,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 // POST /productos
-router.post('/', (req: Request, res: Response) => {
+router.post('/', (req: express.Request, res: express.Response) => {
   const { nombre, descripcion, precio, stock } = req.body;
   if (!nombre || precio === undefined || stock === undefined) {
     return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
@@ -24,7 +25,7 @@ router.post('/', (req: Request, res: Response) => {
 });
 
 // GET /productos/:productoId
-router.get('/:productoId', (req: Request, res: Response) => {
+router.get('/:productoId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.productoId as string);
   Producto.findById(id, (err : Error | null, producto : any) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -34,7 +35,7 @@ router.get('/:productoId', (req: Request, res: Response) => {
 });
 
 // PUT /productos/:productoId
-router.put('/:productoId', (req: Request, res: Response) => {
+router.put('/:productoId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.productoId as string);
   const { nombre, descripcion, precio, stock } = req.body;
   if (!nombre && precio === undefined && stock === undefined && !descripcion) {
@@ -47,7 +48,7 @@ router.put('/:productoId', (req: Request, res: Response) => {
 });
 
 // DELETE /productos/:productoId
-router.delete('/:productoId', (req: Request, res: Response) => {
+router.delete('/:productoId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.productoId as string);
   Producto.delete(id, (err : Error | null) => {
     if (err) return res.status(500).json({ error: err.message });

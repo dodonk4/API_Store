@@ -1,9 +1,46 @@
-import db from '../database/init';
+import db from '../database/init.ts';
+import pool from '../database/index.ts';
+
+import { prisma } from "../lib/prisma.ts";
 
 interface OrdenData {
   id?: number;
   usuarioId: number;
   productos: { productoId: number; cantidad: number }[];
+}
+
+class OrdenPostgreSQL {
+  static async create(data : OrdenData, callback : (err : Error | null, orden? : OrdenData) => void) {
+    const client = await pool.connect()
+    const { usuarioId, productos } = data;
+    try {
+      const resultUsuario = await client.query('INSERT INTO ordenes (usuarioId) VALUES (?)', [usuarioId]);
+      // productos.forEach(async (prod : any) =>{
+      //   const resultProductos = await db2.query('INSERT INTO orden_productos (ordenId, productoId, cantidad) VALUES (?, ?, ?)', [ordenId, prod.productoId, prod.cantidad]);
+      // });
+    } catch (error) {
+      console.error(error);
+    }finally{
+      client.release();
+    }
+    
+  }
+
+  static async findAll(callback : (err : Error | null, ordenes ? : OrdenData[]) => void) {
+    const client = await pool.connect()
+    try {
+      const result = await client.query('SELECT * FROM ordenes');
+      // productos.forEach(async (prod : any) =>{
+      //   const resultProductos = await db2.query('INSERT INTO orden_productos (ordenId, productoId, cantidad) VALUES (?, ?, ?)', [ordenId, prod.productoId, prod.cantidad]);
+      // });
+    } catch (error) {
+      console.error(error);
+    }finally{
+      client.release();
+    }
+    
+  }
+
 }
 
 class Orden {
@@ -78,4 +115,4 @@ class Orden {
   }
 }
 
-export default Orden;
+export { Orden, OrdenPostgreSQL };
