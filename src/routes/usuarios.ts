@@ -1,5 +1,5 @@
 import express from 'express';
-import { Usuario, UsuarioPostgreSQL} from '../models/Usuario.ts';
+import Usuario from '../models/Usuario.ts';
 
 const router = express.Router();
 
@@ -12,7 +12,7 @@ router.get('/', (req: express.Request, res: express.Response) => {
 });
 
 router.get('/all', (req: express.Request, res: express.Response) => {
-  UsuarioPostgreSQL.findAll((err : Error | null, usuarios : any) => {
+  Usuario.findAll((err : Error | null, usuarios : any) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(usuarios || []);
   });
@@ -58,7 +58,7 @@ router.delete('/:usuarioId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.usuarioId as string);
   Usuario.delete(id, (err : Error | null) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.status(204).send();
+    res.status(204);
   });
 });
 

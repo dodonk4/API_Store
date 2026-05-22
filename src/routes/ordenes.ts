@@ -1,5 +1,5 @@
 import express from 'express';
-import { Orden, OrdenPostgreSQL } from '../models/Orden.ts';
+import Orden from '../models/Orden.ts';
 
 const router = express.Router();
 
@@ -28,7 +28,7 @@ router.post('/postgreSQL', (req: express.Request, res: express.Response) => {
   if (!usuarioId || !productos || !Array.isArray(productos)) {
     return res.status(400).json({ error: 'usuarioId y productos son requeridos' });
   }
-  OrdenPostgreSQL.create(req.body, (err : Error | null, orden : any) => {
+  Orden.create(req.body, (err : Error | null, orden : any) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json(orden);
   });

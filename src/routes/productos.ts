@@ -1,5 +1,8 @@
 import express from 'express';
 import Producto from '../models/Producto.ts';
+// import ProductoData from '../interfaces/Producto.ts';
+import * as ProductoData from '../interfaces/Producto.ts';
+import { Prisma } from '../../generated/prisma/client.ts';
 
 const router = express.Router();
 
@@ -21,6 +24,21 @@ router.post('/', (req: express.Request, res: express.Response) => {
   Producto.create(req.body, (err : Error | null, producto : any) => {
     if (err) return res.status(500).json({ error: err.message });
     res.status(201).json(producto);
+  });
+});
+
+// POST MANY /productos/bulk
+router.post('/bulk', (req: express.Request, res: express.Response) => {
+  const productos: ProductoData.default[] = req.body;
+  productos.forEach(e => {
+    if (!e.nombre || e.precio === undefined || e.stock === undefined) {
+    return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
+  }
+  });
+  
+  Producto.createMany(req.body, (err : Error | null, productos?: Prisma.BatchPayload) => {
+    if (err) return res.status(500).json({ error: err.message });
+    res.status(201).json(productos);
   });
 });
 

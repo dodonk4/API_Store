@@ -8,9 +8,10 @@ datasource db {
 }
 
 model ordenes {
-  id         Int       @id @default(autoincrement())
-  usuario_id Int?
-  usuarios   usuarios? @relation(fields: [usuario_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  id               Int                 @id @default(autoincrement())
+  usuarioId       Int?
+  usuarios         usuarios?           @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  ordenesProductos ordenes_productos[]
 }
 
 model usuarios {
@@ -18,4 +19,24 @@ model usuarios {
   nombre  String?   @db.VarChar(100)
   email   String?   @db.VarChar(30)
   ordenes ordenes[]
+}
+
+model productos {
+  id               Int                 @id @default(autoincrement())
+  nombre           String?             @db.VarChar(100)
+  descripcion      String?             @db.VarChar(200)
+  stock            Int                 @default(0)
+  precio           Int                 @default(0)
+  ordenesProductos ordenes_productos[]
+}
+
+model ordenes_productos {
+  id             Int       @id @default(autoincrement())
+  ordenId        Int
+  orden          ordenes   @relation(fields: [ordenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  productId      Int
+  productos      productos @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  precioUnitario Int?      @default(0)
+  fecha          DateTime? @default(now())
+  estado         String?   @db.VarChar(20)
 }
