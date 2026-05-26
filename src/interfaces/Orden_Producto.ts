@@ -3,6 +3,4 @@ export default interface Orden_ProductoData{
     ordenId: number,
     productId: number,
     precioUnitario: number | null,
-    estado: string | null,
-    fecha: Date | null,
 }

@@ -58,7 +58,8 @@ router.delete('/:usuarioId', (req: express.Request, res: express.Response) => {
   const id = parseInt(req.params.usuarioId as string);
   Usuario.delete(id, (err : Error | null) => {
     if (err) return res.status(500).json({ error: err.message });
-    res.status(204);
+    console.log("vuelve");
+    res.status(204).send();
   });
 });
 

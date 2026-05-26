@@ -4,10 +4,10 @@ import { prisma } from "../lib/prisma";
 
 class Orden_Producto {
     static async create(data: Orden_ProductoData.default, callback: (err: Error | null, ordenProducto?: Orden_ProductoData.default) => void) {
-        const { ordenId, productId, precioUnitario, estado } = data;
+        const { ordenId, productId, precioUnitario } = data;
         const fecha = new Date();
         try {
-            const ordenProducto: Orden_ProductoData.default = await prisma.ordenes_productos.create({ data: { ordenId, productId, precioUnitario, estado, fecha } })
+            const ordenProducto: Orden_ProductoData.default = await prisma.ordenes_productos.create({ data: { ordenId, productId, precioUnitario } })
             callback(null, ordenProducto);
         } catch (error) {
             console.error(error);

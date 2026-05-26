@@ -3,9 +3,9 @@ import { prisma } from "../lib/prisma.ts";
 
 class Orden {
   static async create(data: OrdenData.default, callback: (err: Error | null, orden?: OrdenData.default) => void) {
-    const { usuarioId } = data;
+    const { usuarioId, estado, fecha } = data;
     try {
-      const resultOrden: OrdenData.default = await prisma.ordenes.create({ data: { usuarioId } });
+      const resultOrden: OrdenData.default = await prisma.ordenes.create({ data: { usuarioId, estado, fecha } });
       callback(null, resultOrden);
     } catch (error) {
       console.error(error);
@@ -39,18 +39,20 @@ class Orden {
 
   }
 
-  static async update(id: number, data: Partial<OrdenData.default>, callback: (err: Error | null, orden?: Partial<OrdenData.default>) => void) {
-    try{
-      const updateOrden = await prisma.ordenes.update({
-        where: { id },
-        data: { ...data },
-      });
-      callback(null, updateOrden);
-    } catch (error) {
-      console.error(error);
-      callback(new Error('Error al actualizar orden'), undefined);
-    }
-  }
+  //Lo comento porque la orden no es la que debe actualizarse, sino el orden_producto
+
+  // static async update(id: number, data: Partial<OrdenData.default>, callback: (err: Error | null, orden?: Partial<OrdenData.default>) => void) {
+  //   try{
+  //     const updateOrden = await prisma.ordenes.update({
+  //       where: { id },
+  //       data: { ...data },
+  //     });
+  //     callback(null, updateOrden);
+  //   } catch (error) {
+  //     console.error(error);
+  //     callback(new Error('Error al actualizar orden'), undefined);
+  //   }
+  // }
 
   static async delete(id: number, callback: (err: Error | null) => void){
     try {

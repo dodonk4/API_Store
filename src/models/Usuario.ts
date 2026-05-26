@@ -3,9 +3,9 @@ import { prisma } from "../lib/prisma.ts";
 
 class Usuario {
   static async create(data: UsuarioData.default, callback: (err: Error | null, usuario?: UsuarioData.default) => void) {
-    const { nombre, email } = data;
+    const { nombre, email, password } = data;
     try {
-      const resultUsuario: UsuarioData.default = await prisma.usuarios.create({ data: { nombre, email } });
+      const resultUsuario: UsuarioData.default = await prisma.usuarios.create({ data: { nombre, email, password } });
       callback(null, resultUsuario);
     } catch (error) {
       console.error(error);

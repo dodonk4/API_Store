@@ -4,10 +4,10 @@ import { prisma } from '../lib/prisma.ts';
 
 class Producto {
   static async create(data : ProductoData.default, callback: (err: Error | null, producto?: ProductoData.default) => void) {
-    const { nombre, descripcion, stock, precio } = data;
+    const { nombre, descripcion, stock, precio, categoria } = data;
     
     try {
-      const resultProducto : ProductoData.default = await prisma.productos.create({ data: { nombre, descripcion , stock, precio } });
+      const resultProducto : ProductoData.default = await prisma.productos.create({ data: { nombre, descripcion , stock, precio, categoria } });
       callback(null, resultProducto);
     } catch (error) {
       console.error(error);
