@@ -1,4 +1,4 @@
-import * as OrdenData from "../interfaces/Orden.ts";
+import * as OrdenData from "../interfaces/Orden.interface.ts";
 import { prisma } from "../lib/prisma.ts";
 
 class Orden {

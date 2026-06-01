@@ -1,5 +1,5 @@
 import { Prisma } from '../../generated/prisma/client.ts';
-import * as ProductoData from '../interfaces/Producto.ts';
+import * as ProductoData from '../interfaces/Producto.interface.ts';
 import { prisma } from '../lib/prisma.ts';
 
 class Producto {

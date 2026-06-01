@@ -1,4 +1,4 @@
-import * as UsuarioData from "../interfaces/Usuario.ts";
+import * as UsuarioData from "../interfaces/Usuario.interface.ts";
 import { prisma } from "../lib/prisma.ts";
 
 class Usuario {

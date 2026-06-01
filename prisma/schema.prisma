@@ -13,14 +13,18 @@ model ordenes {
   fecha          DateTime? @default(now())
   estado         String?   @db.VarChar(20)
   usuarios         usuarios?           @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  createdAt    DateTime @default(now())
   ordenesProductos ordenes_productos[]
 }
 
 model usuarios {
   id      Int       @id @default(autoincrement())
   nombre  String?   @db.VarChar(100)
-  email   String?   @db.VarChar(30)
-  password String @db.VarChar(30)
+  email   String?   @db.VarChar(30)@unique
+  password String 
+  refreshToken String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   ordenes ordenes[]
 }
 
@@ -31,6 +35,8 @@ model productos {
   categoria      String?             @db.VarChar(200)
   stock            Int                 @default(0)
   precio           Int                 @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   ordenesProductos ordenes_productos[]
 }
 

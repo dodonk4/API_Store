@@ -1,77 +1,17 @@
 import express from 'express';
-import Producto from '../models/Producto.ts';
-// import ProductoData from '../interfaces/Producto.ts';
-import * as ProductoData from '../interfaces/Producto.ts';
-import { Prisma } from '../../generated/prisma/client.ts';
+import { getProductById, getProducts } from '../controllers/productos/get.producto.controller.ts';
+import { postBulk, postProducto } from '../controllers/productos/post.producto.controller.ts';
+import updateProducto from '../controllers/productos/put.producto.controller.ts';
+import deleteProducto from '../controllers/productos/delete.producto.controller.ts';
 
 const router = express.Router();
 
 
-// GET /productos (obtener todos)
-router.get('/', (req: express.Request, res: express.Response) => {
-  Producto.findAll((err : Error | null, productos : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(productos || []);
-  });
-});
-
-// POST /productos
-router.post('/', (req: express.Request, res: express.Response) => {
-  const { nombre, descripcion, precio, stock } = req.body;
-  if (!nombre || precio === undefined || stock === undefined) {
-    return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
-  }
-  Producto.create(req.body, (err : Error | null, producto : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json(producto);
-  });
-});
-
-// POST MANY /productos/bulk
-router.post('/bulk', (req: express.Request, res: express.Response) => {
-  const productos: ProductoData.default[] = req.body;
-  productos.forEach(e => {
-    if (!e.nombre || e.precio === undefined || e.stock === undefined) {
-    return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
-  }
-  });
-  
-  Producto.createMany(req.body, (err : Error | null, productos?: Prisma.BatchPayload) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json(productos);
-  });
-});
-
-// GET /productos/:productoId
-router.get('/:productoId', (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.productoId as string);
-  Producto.findById(id, (err : Error | null, producto : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
-    res.json(producto);
-  });
-});
-
-// PUT /productos/:productoId
-router.put('/:productoId', (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.productoId as string);
-  const { nombre, descripcion, precio, stock } = req.body;
-  if (!nombre && precio === undefined && stock === undefined && !descripcion) {
-    return res.status(400).json({ error: 'Al menos uno de los campos (nombre, descripcion, precio, stock) es requerido' });
-  }
-  Producto.update(id, req.body, (err : Error | null, producto : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(producto);
-  });
-});
-
-// DELETE /productos/:productoId
-router.delete('/:productoId', (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.productoId as string);
-  Producto.delete(id, (err : Error | null) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(204).send();
-  });
-});
+router.get('/', getProducts);
+router.post('/', postProducto);
+router.post('/bulk', postBulk);
+router.get('/:productoId', getProductById);
+router.put('/:productoId', updateProducto);
+router.delete('/:productoId', deleteProducto);
 
 export default router;

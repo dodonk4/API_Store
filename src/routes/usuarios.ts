@@ -1,66 +1,19 @@
 import express from 'express';
-import Usuario from '../models/Usuario.ts';
+import { getAllUsuarios, getUsuarioById } from '../controllers/usuarios/get.usuario.controller.ts';
+import postUsuario from '../controllers/usuarios/post.usuario.controller.ts';
+import putUsuario from '../controllers/usuarios/put.usuario.controller.ts';
+import deleteUsuario from '../controllers/usuarios/delete.usuario.controller.ts';
 
 const router = express.Router();
 
-// GET /usuarios (obtener todos)
-router.get('/', (req: express.Request, res: express.Response) => {
-  Usuario.findAll((err : Error | null, usuarios : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(usuarios || []);
-  });
-});
+router.get('/', getAllUsuarios);
 
-router.get('/all', (req: express.Request, res: express.Response) => {
-  Usuario.findAll((err : Error | null, usuarios : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(usuarios || []);
-  });
-});
+router.post('/', postUsuario);
 
-// POST /usuarios
-router.post('/', (req: express.Request, res: express.Response) => {
-  const { nombre, email } = req.body;
-  if (!nombre || !email) {
-    return res.status(400).json({ error: 'Nombre y email son requeridos' });
-  }
-  Usuario.create(req.body, (err : Error | null, usuario : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json(usuario);
-  });
-});
+router.get('/:usuarioId', getUsuarioById);
 
-// GET /usuarios/:usuarioId
-router.get('/:usuarioId', (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.usuarioId as string);
-  Usuario.findById(id, (err : Error | null, usuario : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
-    res.json(usuario);
-  });
-});
+router.put('/:usuarioId', putUsuario);
 
-// PUT /usuarios/:usuarioId
-router.put('/:usuarioId', (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.usuarioId as string);
-  const { nombre, email } = req.body;
-  if (!nombre && !email) {
-    return res.status(400).json({ error: 'Nombre o email es requerido' });
-  }
-  Usuario.update(id, req.body, (err : Error | null, usuario : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.json(usuario);
-  });
-});
-
-// DELETE /usuarios/:usuarioId
-router.delete('/:usuarioId', (req: express.Request, res: express.Response) => {
-  const id = parseInt(req.params.usuarioId as string);
-  Usuario.delete(id, (err : Error | null) => {
-    if (err) return res.status(500).json({ error: err.message });
-    console.log("vuelve");
-    res.status(204).send();
-  });
-});
+router.delete('/:usuarioId', deleteUsuario);
 
 export default router;
