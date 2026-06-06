@@ -19,12 +19,12 @@ const usernameSchema = z.string()
     });
 
 const login = z.object({
-    email: z.string().trim().min(1, "Email is required").email("Invalid email format"),
+    email: z.email("Invalid email format").trim().min(1, "Email is required"),
     password: z.string().min(1, "Password is required")
 });
 
 const register = z.object({
-    username: usernameSchema,
+    nombre: usernameSchema,
     email: z.string().email("Invalid email format"),
     password: passwordSchema,
     password_confirmation: z.string().min(1, "Password confirmation is required")
