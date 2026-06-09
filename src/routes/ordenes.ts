@@ -2,10 +2,12 @@ import express from 'express';
 import deleteOrden from '../controllers/ordenes/delete.orden.controller.ts';
 import {getAllOrdenes, getOrdenById} from '../controllers/ordenes/get.orden.controller.ts';
 import postOrden from '../controllers/ordenes/post.orden.controller.ts';
+import { validateAccessToken } from '../middlewares/validateAccessToken.ts';
+
 
 const router = express.Router();
 
-router.get('/', getAllOrdenes);
+router.get('/', validateAccessToken, getAllOrdenes);
 
 router.post('/', postOrden);
 

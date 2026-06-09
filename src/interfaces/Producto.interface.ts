@@ -5,4 +5,6 @@ export default interface ProductoData {
   categoria: string | null;
   stock: number;
   precio: number;
+  createdAt: Date;
+  updatedAt: Date;
 }

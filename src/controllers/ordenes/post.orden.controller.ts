@@ -1,29 +1,39 @@
 import express from 'express';
-import Orden from '../../models/Orden.model.ts';
 import * as OrdenData from "../../interfaces/Orden.interface.ts";
 import { prisma } from "../../lib/prisma.ts";
-export async function postOrden(req: express.Request, res: express.Response): void | express.Response {
+import * as AuthRequest from '../../interfaces/AuthRequest.ts';
+import { checkExistingProducts } from '../../utils/checkExistingProducts.utils.ts';
+import { createOrdenesProductos } from '../../utils/createOrdenesProductos.utils.ts';
 
-  //PENDIENTE: Traer el array de productos para que pueda ir a un Orden_Productos, y luego crear el Orden
+//IDEAL:  export default async function postOrden(req: AuthRequest.default, res: express.Response): Promise<void | express.Response> {
+export default async function postOrden(req: any, res: express.Response): Promise<void | express.Response> {
 
   try {
-    const { usuarioId, estado } = req.body;
+    const user: any = JSON.stringify(req.user); //Ver como arreglar este tipado, porque hay conflictos con user.id luego
+    const { productos } = req.body;
     const fecha: Date = new Date();
-    if (!usuarioId || !productos || !Array.isArray(productos)) {
-      return res.status(400).json({ error: 'usuarioId y productos son requeridos' });
+    if (!productos || !Array.isArray(productos)) {
+      return res.status(400).json({ error: 'Se requieren productos para subir a la orden' });
     }
-    const resultOrden: OrdenData.default = await prisma.ordenes.create({ data: { usuarioId, estado, fecha } });
-    // callback(null, resultOrden);
+    // console.log(req);
+    //CORREGIR LO DEL REQ.USER
+    const resultOrden: OrdenData.default = await prisma.ordenes.create({ data: { user: user.id, estado: "pending", fecha } });
+
+    if(!resultOrden){
+      return res.status(400).json({ error: 'Hubo un error al crear la orden' });
+    }
+
+    let productPrices: number[] = [];
+
+    await checkExistingProducts(productos, res, productPrices);
+
+    await createOrdenesProductos(productos, res, resultOrden.id, productPrices);
+
+    res.status(200).json({resultOrden});
+
   } catch (error: any) {
     console.error(error);
     res.status(error.status).json({})
-    // callback(new Error('Error al crear orden'), undefined);
   }
 
-
-
-  // Orden.create(req.body, (err: Error | null, orden: any) => {
-  //   if (err) return res.status(500).json({ error: err.message });
-  //   res.status(201).json(orden);
-  // });
 }

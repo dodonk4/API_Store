@@ -46,5 +46,6 @@ model ordenes_productos {
   orden          ordenes   @relation(fields: [ordenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   productId      Int
   productos      productos @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  precioUnitario Int?      @default(0)
+  precioUnitario Int      @default(0)
+  cantidad Int @default(0)
 }

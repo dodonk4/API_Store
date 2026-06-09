@@ -1,7 +1,9 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import * as AuthRequest from '../interfaces/AuthRequest.ts';
 
-export function validateAccessToken(req: express.Request, res: express.Response, next: express.NextFunction){
+//IDEAL: export function validateAccessToken(req: AuthRequest.default, res: express.Response, next: express.NextFunction){
+export function validateAccessToken(req: any, res: express.Response, next: express.NextFunction){
     try {
         if(!req.cookies?.access_token){
             const error: any = new Error("Acceso denegado: debe haber un usuario logueado");
@@ -9,11 +11,13 @@ export function validateAccessToken(req: express.Request, res: express.Response,
             throw error;
         }
 
-        const verify = jwt.verify(req.cookies.access_token, process.env.AUTH_SECRET as string);
+        const payload = jwt.verify(req.cookies.access_token, process.env.AUTH_SECRET as string);
 
-        if(!verify){
+        if(!payload){
             throw new Error("El accessToken falla en su verificación");
         }
+
+        req.user = payload;
 
         next();
 
