@@ -1,23 +1,27 @@
 import express from 'express';
-import Usuario from '../../models/Usuario.model.ts';
-function getAllUsuarios(req: express.Request, res: express.Response): void {
-  Usuario.findAll((err : Error | null, usuarios : any) => {
-    if (err) return res.status(500).json({ error: err.message });
+import { findAllUsuarios, findUsuarioById } from '../../services/usuarios.service.ts';
+
+async function getAllUsuarios(req: express.Request, res: express.Response): Promise<void> {
+  try {
+    const usuarios = await findAllUsuarios();
     res.json(usuarios || []);
-  });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
 }
 
-function getUsuarioById(req: express.Request, res: express.Response): void {
+async function getUsuarioById(req: express.Request, res: express.Response): Promise<void> {
   const id = parseInt(req.params.usuarioId as string);
-  Usuario.findById(id, (err : Error | null, usuario : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    if (!usuario) return res.status(404).json({ error: 'Usuario no encontrado' });
+  try {
+    const usuario = await findUsuarioById(id);
     res.json(usuario);
-  });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
 }
 
 export {
-    getAllUsuarios,
-    getUsuarioById,
+  getAllUsuarios,
+  getUsuarioById,
 };
 

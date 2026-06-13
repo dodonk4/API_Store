@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
-import Usuario from '../../models/Usuario.model.ts';
+import { createUsuario } from '../../services/usuarios.service.ts';
 
 
 export async function register(req: express.Request, res: express.Response) {
@@ -38,11 +38,13 @@ export async function register(req: express.Request, res: express.Response) {
             createdAt: new Date(),
             updatedAt: new Date()
         }
-        //Guardar el usuario con Prisma
-        Usuario.create(data, (err: Error | null, usuario: any) => {
-            if (err) return res.status(500).json({ error: err.message });
+        //Guardar el usuario con el servicio
+        try {
+            const usuario = await createUsuario(data as any);
             res.status(201).json(usuario);
-        });
+        } catch (err: any) {
+            return res.status(500).json({ error: err.message });
+        }
     } catch (error: any) {
         console.log(error);
         res.json({error: error.message}); 

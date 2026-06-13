@@ -1,7 +1,6 @@
 import express from 'express';
 import * as OrdenData from "../../interfaces/Orden.interface.ts";
-import { prisma } from "../../lib/prisma.ts";
-import * as AuthRequest from '../../interfaces/AuthRequest.ts';
+import { createOrden } from '../../services/ordenes.service.ts';
 import { checkExistingProducts } from '../../utils/checkExistingProducts.utils.ts';
 import { createOrdenesProductos } from '../../utils/createOrdenesProductos.utils.ts';
 
@@ -9,19 +8,16 @@ import { createOrdenesProductos } from '../../utils/createOrdenesProductos.utils
 export default async function postOrden(req: any, res: express.Response): Promise<void | express.Response> {
 
   try {
-    const user: any = JSON.stringify(req.user); //Ver como arreglar este tipado, porque hay conflictos con user.id luego
+    const user: any = req.user; //Ver como arreglar este tipado, porque hay conflictos con user.id luego
     const { productos } = req.body;
+    // const user: any = jwt.verify(req.cookies.access_token, process.env.AUTH_SECRET as string);
+
     const fecha: Date = new Date();
     if (!productos || !Array.isArray(productos)) {
       return res.status(400).json({ error: 'Se requieren productos para subir a la orden' });
     }
-    // console.log(req);
-    //CORREGIR LO DEL REQ.USER
-    const resultOrden: OrdenData.default = await prisma.ordenes.create({ data: { user: user.id, estado: "pending", fecha } });
 
-    if(!resultOrden){
-      return res.status(400).json({ error: 'Hubo un error al crear la orden' });
-    }
+    const resultOrden: OrdenData.default = await createOrden({ usuarioId: user.id as number, estado: "pending", fecha } as OrdenData.default);
 
     let productPrices: number[] = [];
 
@@ -33,7 +29,7 @@ export default async function postOrden(req: any, res: express.Response): Promis
 
   } catch (error: any) {
     console.error(error);
-    res.status(error.status).json({})
+    res.status(error.status as number).json({})
   }
 
 }

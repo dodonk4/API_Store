@@ -1,32 +1,39 @@
 import express from 'express';
-import Producto from '../../models/Producto.model.ts';
 import * as ProductoData from '../../interfaces/Producto.interface.ts';
 import { Prisma } from '../../../generated/prisma/client.ts';
+import { createProducto, createProductosBulk } from '../../services/productos.service.ts';
 
 
-function postProducto(req: express.Request, res: express.Response): express.Response | undefined {
-  const { nombre, descripcion, precio, stock } = req.body;
+async function postProducto(req: express.Request, res: express.Response): Promise<express.Response | undefined> {
+  const { nombre, descripcion, precio, stock, categoria } = req.body;
   if (!nombre || precio === undefined || stock === undefined) {
     return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
   }
-  Producto.create(req.body, (err : Error | null, producto : any) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json(producto);
-  });
+
+  try {
+    const resultProducto: ProductoData.default = await createProducto({ nombre, descripcion, stock, precio, categoria } as ProductoData.default);
+    res.send(resultProducto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: (error as Error).message });
+  }
 }
 
-function postBulk(req: express.Request, res: express.Response): void{
+async function postBulk(req: express.Request, res: express.Response): Promise<void> {
   const productos: ProductoData.default[] = req.body;
+
+  try {
     productos.forEach(e => {
-        if (!e.nombre || e.precio === undefined || e.stock === undefined) {
+      if (!e.nombre || e.precio === undefined || e.stock === undefined) {
         return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
-    }
-  });
-  
-  Producto.createMany(req.body, (err : Error | null, productos?: Prisma.BatchPayload) => {
-    if (err) return res.status(500).json({ error: err.message });
-    res.status(201).json(productos);
-  });
+      }
+    });
+    const resultProducto: Prisma.BatchPayload = await createProductosBulk(productos as ProductoData.default[]);
+    res.send(resultProducto);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: (error as Error).message });
+  }
 }
 
 export { postProducto, postBulk }

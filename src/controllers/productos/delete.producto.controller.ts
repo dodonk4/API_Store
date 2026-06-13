@@ -1,10 +1,13 @@
-import Producto from "../../models/Producto.model.ts";
 import express from 'express';
+import { deleteProducto } from '../../services/productos.service.ts';
 
-export default function deleteProducto(req: express.Request, res: express.Response): void {
+export default async function deleteProductoController(req: express.Request, res: express.Response): Promise<void> {
   const id = parseInt(req.params.productoId as string);
-  Producto.delete(id, (err : Error | null) => {
-    if (err) return res.status(500).json({ error: err.message });
+  try {
+    await deleteProducto(id);
     res.status(204).send();
-  });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ error: (error as Error).message });
+  }
 }

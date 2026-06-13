@@ -1,10 +1,12 @@
 import express from 'express';
-import Usuario from '../../models/Usuario.model.ts';
-export default function deleteUsuario(req: express.Request, res: express.Response): void {
+import { deleteUsuarioService } from '../../services/usuarios.service.ts';
+
+export default async function deleteUsuario(req: express.Request, res: express.Response): Promise<void> {
   const id = parseInt(req.params.usuarioId as string);
-  Usuario.delete(id, (err : Error | null) => {
-    if (err) return res.status(500).json({ error: err.message });
-    console.log("vuelve");
+  try {
+    await deleteUsuarioService(id);
     res.status(204).send();
-  });
+  } catch (error) {
+    res.status(500).json({ error: (error as Error).message });
+  }
 }

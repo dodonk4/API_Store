@@ -1,20 +1,26 @@
 import express from 'express';
-import Producto from '../../models/Producto.model.ts';
+import * as ProductoData from '../../interfaces/Producto.interface.ts';
+import { findAllProductos, findProductoById } from '../../services/productos.service.ts';
 
-function getProducts(req: express.Request, res: express.Response): void {
-    Producto.findAll((err: Error | null, productos: any) => {
-        if (err) return res.status(500).json({ error: err.message });
+async function getProducts(req: express.Request, res: express.Response): Promise<void> {
+    try {
+        const productos: ProductoData.default[] = await findAllProductos();
         res.json(productos || []);
-    });
+    } catch (error) {
+        console.error(error);
+        res.send(error);
+    }
 };
 
-function getProductById(req: express.Request, res: express.Response): void {
+async function getProductById(req: express.Request, res: express.Response): Promise<void> {
     const id = parseInt(req.params.productoId as string);
-    Producto.findById(id, (err: Error | null, producto: any) => {
-        if (err) return res.status(500).json({ error: err.message });
-        if (!producto) return res.status(404).json({ error: 'Producto no encontrado' });
+    try {
+        const producto: ProductoData.default = await findProductoById(id);
         res.json(producto);
-    });
+    } catch (error) {
+        console.error(error);
+        res.send(error);
+    }
 }
 
 export { getProducts, getProductById };

@@ -9,9 +9,9 @@ const router = express.Router();
 
 router.get('/', validateAccessToken, getAllOrdenes);
 
-router.post('/', postOrden);
+router.post('/', validateAccessToken, postOrden);
 
-router.get('/:ordenId', getOrdenById);
+router.get('/:ordenId', validateAccessToken, getOrdenById);
 
 // PUT /ordenes/:ordenId
 // router.put('/:ordenId', (req: express.Request, res: express.Response) => {

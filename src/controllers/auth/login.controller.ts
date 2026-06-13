@@ -1,7 +1,7 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
-import Usuario from '../../models/Usuario.model.ts';
+import { updateUsuario } from '../../services/usuarios.service.ts';
 import * as UsuarioData from '../../interfaces/Usuario.interface.ts';
 import generateRefreshToken from '../../utils/jwt/refreshToken.utils.ts';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
@@ -31,20 +31,15 @@ export async function login(req: express.Request, res: express.Response) {
             throw new Error("La contaseña es incorrecta");
         }
 
-        //Crear refreshToken
-
         const refreshToken = generateRefreshToken(user);//Paso el user y no el user.id, porque seguro más adelante pase roles o algo más en el token
-
-        Usuario.update(user.id, { refreshToken }, (err: Error | null, usuario: any) => {
-            if (err) return res.status(500).json({ error: err.message });
-            res.status(200).json(usuario);
-        });
-
-
-        //Crear accessToken
-
         const accessToken = generateAccessToken(user);
-        //Guardar refreshToken y accesToken en cookies
+
+        res.cookie('refresh_token', refreshToken, {
+            httpOnly: true,     // Block JavaScript access
+            secure: true,       // Force HTTPS protocol
+            sameSite: 'strict', // Mitigate CSRF attacks
+            maxAge: 24 * 60 * 60 * 1000 // Long expiration (24 h)
+        });
 
         res.cookie('access_token', accessToken, {
             httpOnly: true,     // Block JavaScript access
@@ -52,6 +47,9 @@ export async function login(req: express.Request, res: express.Response) {
             sameSite: 'strict', // Mitigate CSRF attacks
             maxAge: 15 * 60 * 1000 // Short expiration (e.g., 15 minutes)
         });
+
+        const usuario = await updateUsuario(user.id, { refreshToken } as any);
+        res.status(200).json(usuario);
     } catch (error: any) {
         console.log(error);
         res.json({error: error.message}); 
