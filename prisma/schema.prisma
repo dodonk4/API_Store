@@ -7,6 +7,11 @@ datasource db {
   provider = "postgresql"
 }
 
+enum Roles{
+  USER
+  ADMIN
+}
+
 model ordenes {
   id               Int                 @id @default(autoincrement())
   usuarioId       Int?
@@ -21,6 +26,7 @@ model usuarios {
   id      Int       @id @default(autoincrement())
   nombre  String?   @db.VarChar(100)
   email   String?   @db.VarChar(30)@unique
+  rol Roles @default(USER)
   password String 
   refreshToken String?
   createdAt    DateTime @default(now())

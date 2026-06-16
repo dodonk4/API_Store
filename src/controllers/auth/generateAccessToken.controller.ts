@@ -2,22 +2,17 @@ import express from 'express';
 import jwt from 'jsonwebtoken';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
 import { findUsuarioById } from '../../services/usuarios.service.ts';
+import authConfig from '../../config/auth.config.ts';
 
 export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response){
-    //Si hay usuario logueado y coincide con el refresh token, se hace una accessToken
-    //Si el user tiene un token refresh guardado, es que estaba logueado
-    //Si un usuario no tiene un token refrsh guardado, es que no estaba logueado
-
-    //Y como se sabe que usuario buscar? Si estaba en el access token
-    //No se va a buscar a todos los usuarios para ver cual tiene un refrsh token, porque puede haber varios
-    //con varias sesiones iniciadas
 
     try {
         //Validaciones
         //El refresh token no está vencido
+
         res.clearCookie('access_token', { httpOnly: true, secure: true });
         const refreshToken = req.cookies.refresh_token;
-        const userDecoded: jwt.JwtPayload | string | null = jwt.decode(refreshToken);
+        const userDecoded: jwt.JwtPayload | string | null = jwt.verify(refreshToken, authConfig.refresh_secret);
 
         if(!userDecoded || typeof userDecoded === "string"){
             throw new Error("El refreshToken no cuenta con información de usuario para poder generar el access token");
@@ -36,9 +31,14 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
 
         res.send("Access token actualizado");
 
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
-        res.json({error}); 
+        if(error.name === 'TokenExpiredError'){
+            res.status(401).json({ error: 'El refresh_token a expirado' });
+        }else{
+            res.status(500).json({error});
+        }
+        
     }
 
 }

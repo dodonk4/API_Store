@@ -7,6 +7,6 @@ export default function generateRefreshToken(user: UsuarioData.default): string 
     },
         process.env.AUTH_REFRESH_SECRET as string,
         {
-            expiresIn: "24h"
+            expiresIn: "15m"
         })
 }

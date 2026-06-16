@@ -19,6 +19,7 @@ async function main() {
         data: {
             nombre: 'Juan Pérez',
             email: 'juan@example.com',
+            rol: 'USER',
             password: bcrypt.hashSync("abc123", 12)
         }
     });
@@ -27,6 +28,7 @@ async function main() {
         data: {
             nombre: 'María Gómez',
             email: 'maria@example.com',
+            rol: 'ADMIN',
             password: bcrypt.hashSync("abc123", 12)
         }
     });
@@ -35,6 +37,7 @@ async function main() {
         data: {
             nombre: 'Carlos López',
             email: 'carlos@example.com',
+            rol: 'USER',
             password: bcrypt.hashSync("abc123", 12)
         }
     });

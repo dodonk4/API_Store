@@ -4,15 +4,16 @@ import { postBulk, postProducto } from '../controllers/productos/post.producto.c
 import updateProducto from '../controllers/productos/put.producto.controller.ts';
 import deleteProducto from '../controllers/productos/delete.producto.controller.ts';
 import { validateAccessToken } from '../middlewares/validateAccessToken.ts';
+import { validateRol } from '../middlewares/validateRol.ts';
 
 const router = express.Router();
 
 
-router.get('/', validateAccessToken, getProducts);
-router.post('/', postProducto);
-router.post('/bulk', postBulk);
+router.get('/', getProducts);
+router.post('/', validateAccessToken, validateRol(["ADMIN"]), postProducto);
+router.post('/bulk', validateAccessToken, validateRol(["ADMIN"]), postBulk);
 router.get('/:productoId', getProductById);
-router.put('/:productoId', updateProducto);
-router.delete('/:productoId', deleteProducto);
+router.put('/:productoId', validateAccessToken, validateRol(["ADMIN"]), updateProducto);
+router.delete('/:productoId', validateAccessToken, validateRol(["ADMIN"]), deleteProducto);
 
 export default router;

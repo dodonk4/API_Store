@@ -15,8 +15,7 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
-    "sqlite3": "^6.0.1",
-    "zod": "^4.4.3"
+    "sqlite3": "^6.0.1"
   },
   "devDependencies": {
     "@prisma/adapter-pg": "^7.8.0",

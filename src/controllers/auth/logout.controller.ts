@@ -1,5 +1,6 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
+import authConfig from '../../config/auth.config.ts';
 
 export function logout(req: express.Request, res: express.Response) {
     try {
@@ -7,7 +8,7 @@ export function logout(req: express.Request, res: express.Response) {
             throw new Error("No hay usuario logueado para desloguearse");
         }
 
-        const accessTokenDecrypted = jwt.verify(req.cookies.access_token, process.env.AUTH_SECRET as string) as jwt.JwtPayload;
+        const accessTokenDecrypted = jwt.verify(req.cookies.access_token, authConfig.secret) as jwt.JwtPayload;
 
         res.clearCookie("access_token");
         

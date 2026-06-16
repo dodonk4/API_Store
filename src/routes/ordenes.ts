@@ -3,15 +3,17 @@ import deleteOrden from '../controllers/ordenes/delete.orden.controller.ts';
 import {getAllOrdenes, getOrdenById} from '../controllers/ordenes/get.orden.controller.ts';
 import postOrden from '../controllers/ordenes/post.orden.controller.ts';
 import { validateAccessToken } from '../middlewares/validateAccessToken.ts';
+import { validateRol } from '../middlewares/validateRol.ts';
 
 
 const router = express.Router();
 
-router.get('/', validateAccessToken, getAllOrdenes);
+router.get('/', validateAccessToken, validateRol(["ADMIN"]), getAllOrdenes);
 
-router.post('/', validateAccessToken, postOrden);
+router.post('/', validateAccessToken, validateRol(["ADMIN"]), postOrden);
 
-router.get('/:ordenId', validateAccessToken, getOrdenById);
+//Hay que arreglar esto para que agarre las ordenes del user, no una orden que no le corresponde
+router.get('/:ordenId', validateAccessToken, validateRol(["USER", "ADMIN"]), getOrdenById);
 
 // PUT /ordenes/:ordenId
 // router.put('/:ordenId', (req: express.Request, res: express.Response) => {
