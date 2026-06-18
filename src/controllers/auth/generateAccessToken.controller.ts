@@ -8,7 +8,6 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
 
     try {
         //Validaciones
-        //El refresh token no está vencido
 
         res.clearCookie('access_token', { httpOnly: true, secure: true });
         const refreshToken = req.cookies.refresh_token;

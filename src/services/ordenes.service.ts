@@ -30,6 +30,17 @@ export async function findOrdenById(id: number): Promise<OrdenData.default> {
   }
 }
 
+//La data que llega acá para actualizar no puede tener productos. Después se tiene que controlar en el
+//controlador o en zod.
+export async function updateOrdenById(id: number, data: Partial<OrdenData.default>){
+  try {
+    await prisma.ordenes.update({ where: { id }, data });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al intentar actualizar la orden');
+  }
+}
+
 export async function deleteOrden(id: number): Promise<void> {
   try {
     await prisma.ordenes.delete({ where: { id } });

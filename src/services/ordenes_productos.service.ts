@@ -31,9 +31,13 @@ export async function findOrdenProductoById(id: number): Promise<Orden_ProductoD
   }
 }
 
+
 export async function updateOrdenProducto(id: number, data: Partial<Orden_ProductoData.default>): Promise<Orden_ProductoData.default> {
   try {
-    return await prisma.ordenes_productos.update({ where: { id }, data });
+    return await prisma.ordenes_productos.update({
+      where: { id },
+      data
+    });
   } catch (error) {
     console.error(error);
     throw new Error('Error al actualizar orden_producto');

@@ -4,11 +4,8 @@ import { Prisma } from '../../../generated/prisma/client.ts';
 import { createProducto, createProductosBulk } from '../../services/productos.service.ts';
 
 
-async function postProducto(req: express.Request, res: express.Response): Promise<express.Response | undefined> {
+async function postProducto(req: express.Request, res: express.Response): Promise<void> {
   const { nombre, descripcion, precio, stock, categoria } = req.body;
-  if (!nombre || precio === undefined || stock === undefined) {
-    return res.status(400).json({ error: 'Nombre, precio y stock son requeridos' });
-  }
 
   try {
     const resultProducto: ProductoData.default = await createProducto({ nombre, descripcion, stock, precio, categoria } as ProductoData.default);
