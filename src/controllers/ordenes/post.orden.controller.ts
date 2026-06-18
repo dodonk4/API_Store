@@ -9,7 +9,6 @@ export default async function postOrden(req: any, res: express.Response): Promis
 
   try {
     const { id } = req.body;
-    // const user: any = jwt.verify(req.cookies.access_token, process.env.AUTH_SECRET as string);
 
     const fecha: Date = new Date();
     if (req.user.rol === 'USER') {
@@ -19,12 +18,6 @@ export default async function postOrden(req: any, res: express.Response): Promis
     }//El otro usuario es ADMIN, así que no se aclara
 
     const resultOrden: OrdenData.default = await createOrden({ usuarioId: id as number, estado: "PENDING", fecha } as OrdenData.default);
-
-    // let productPrices: number[] = [];
-
-    // await checkExistingProducts(productos, res, productPrices);
-
-    // await createOrdenesProductos(productos, res, resultOrden.id, productPrices);
 
     res.status(200).json({ resultOrden });
 
