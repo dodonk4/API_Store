@@ -1,4 +1,5 @@
 import { Prisma } from '../../generated/prisma/client.ts';
+import * as OrdenData from '../interfaces/Orden.interface.ts';
 import * as Orden_ProductoData from '../interfaces/Orden_Producto.interface.ts';
 import { prisma } from '../lib/prisma.ts';
 
@@ -31,6 +32,18 @@ export async function findOrdenProductoById(id: number): Promise<Orden_ProductoD
   }
 }
 
+export async function findAllOrdenesByOrdenId(ordenId: number): Promise<OrdenData.default[]> {
+  try {
+    return await prisma.ordenes.findMany({
+      where: {
+        usuarioId: ordenId,
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    throw new Error('Error al obtener ordenes');
+  }
+}
 
 export async function updateOrdenProducto(id: number, data: Partial<Orden_ProductoData.default>): Promise<Orden_ProductoData.default> {
   try {

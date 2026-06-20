@@ -8,16 +8,29 @@ import { createOrdenesProductos } from '../../utils/createOrdenesProductos.utils
 export default async function postOrden(req: any, res: express.Response): Promise<void | express.Response> {
 
   try {
-    const { id } = req.body;
+    
+    let { usuarioId, estado, fecha } = req.body;
 
-    const fecha: Date = new Date();
     if (req.user.rol === 'USER') {
-      if (id != req.user.id) {
+      //Sino hay un 'usuarioId' en el body, se entiende que se quiere crear una orden para el propio usuario
+      if (usuarioId && usuarioId != req.user.id) {
         throw new Error("No tienes los permisos para crear una orden para otro usuario que no sea el logueado");
       }
     }//El otro usuario es ADMIN, así que no se aclara
 
-    const resultOrden: OrdenData.default = await createOrden({ usuarioId: id as number, estado: "PENDING", fecha } as OrdenData.default);
+    //'estado' tiene como defaulta PENDING en la base de datos
+
+    if (!fecha) {
+      fecha = new Date();
+    }
+
+    //El USER siempre va a llegar acá (porque no tiene permisos para crearle ordenes a otros usuarios).
+    //El ADMIN, a veces, porque sí puede crear ordenes a otros.
+    if(!usuarioId){
+      usuarioId = req.user.id;
+    }
+
+    const resultOrden: OrdenData.default = await createOrden({ usuarioId, estado, fecha } as OrdenData.default);
 
     res.status(200).json({ resultOrden });
 

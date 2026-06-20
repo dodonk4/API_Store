@@ -7,7 +7,7 @@ export function validateRol(allowedRoles: string[]) {
         next: express.NextFunction
     ) => {
         const userRol = req.user.rol;
-  
+
         if (allowedRoles.includes(userRol)) {
             return next();
         }

@@ -12,11 +12,18 @@ enum Roles{
   ADMIN
 }
 
+enum Estados{
+  CARRITO
+  PAGO_PENDIENTE
+  PAGADA
+  CANCELADA
+}
+
 model ordenes {
   id               Int                 @id @default(autoincrement())
   usuarioId       Int?
   fecha          DateTime? @default(now())
-  estado         String?   @db.VarChar(20)
+  estado         Estados   @default(CARRITO)
   usuarios         usuarios?           @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   createdAt    DateTime @default(now())
   ordenesProductos ordenes_productos[]
@@ -40,7 +47,7 @@ model productos {
   descripcion      String?             @db.VarChar(200)
   categoria      String?             @db.VarChar(200)
   stock            Int                 @default(0)
-  precio           Int                 @default(0)
+  precio           Decimal                 @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   ordenesProductos ordenes_productos[]
@@ -52,6 +59,6 @@ model ordenes_productos {
   orden          ordenes   @relation(fields: [ordenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   productId      Int
   productos      productos @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  precioUnitario Int      @default(0)
+  precioUnitario Decimal      @default(0)
   cantidad Int @default(0)
 }
