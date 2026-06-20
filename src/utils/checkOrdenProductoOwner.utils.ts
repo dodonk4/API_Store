@@ -12,9 +12,12 @@ export async function checkOrdenProductoOwner(ordenProductoId: number, ordenId: 
     if (req.user.rol != "ADMIN") {
       const ordenProducto: Orden_ProductoData.default = await findOrdenProductoById(ordenProductoId);
 
-      //Corroborar que el origen ID le corresponde al usuario logueado
+      console.log(ordenProducto);
+
+      console.log("OrdenId del orden_producto: " + ordenProducto.ordenId + " || OrdenId accedida: " + ordenId);
+
       if (ordenProducto.ordenId != ordenId) {
-        throw new Error("La orden a la que se accede no cuenta con el producto buscado");
+        throw new Error("El orden_producto no corresponde a la orden que se está accediendo");
       }
     }
 

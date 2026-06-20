@@ -1,5 +1,5 @@
 import express from 'express';
-import { findAllOrdenesByOrdenId, findOrdenProductoById } from '../../services/ordenes_productos.service.ts';
+import { findAllOrdenesProductosByOrdenId, findOrdenProductoById } from '../../services/ordenes_productos.service.ts';
 import * as Orden_ProductoData from '../../interfaces/Orden_Producto.interface.ts';
 import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
 import { checkOrdenProductoOwner } from '../../utils/checkOrdenProductoOwner.utils.ts';
@@ -32,7 +32,7 @@ export async function getAllOrdenProductoByOrdenId(req: express.Request, res: ex
         //Si es de él, puede. Sino, tiene que ser un ADMIN
         await checkOrdenOwner(ordenId, req);
 
-        const ordenesProductos = await findAllOrdenesByOrdenId(ordenId);
+        const ordenesProductos = await findAllOrdenesProductosByOrdenId(ordenId);
 
         res.json(ordenesProductos);
     } catch (error) {

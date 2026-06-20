@@ -50,7 +50,7 @@ async function main() {
                 descripcion: 'Teclado RGB switches Red',
                 categoria: 'Periféricos',
                 stock: 15,
-                precio: 25000
+                precio: 24999.99
             }
         }),
         prisma.productos.create({
@@ -59,7 +59,7 @@ async function main() {
                 descripcion: 'Mouse Logitech 12000 DPI',
                 categoria: 'Periféricos',
                 stock: 20,
-                precio: 18000
+                precio: 17999.99
             }
         }),
         prisma.productos.create({
@@ -68,7 +68,7 @@ async function main() {
                 descripcion: 'Monitor Full HD IPS',
                 categoria: 'Monitores',
                 stock: 10,
-                precio: 120000
+                precio: 11999.99
             }
         }),
         prisma.productos.create({
@@ -77,7 +77,7 @@ async function main() {
                 descripcion: 'Auriculares inalámbricos',
                 categoria: 'Audio',
                 stock: 30,
-                precio: 45000
+                precio: 44999.99
             }
         }),
         prisma.productos.create({
@@ -86,7 +86,7 @@ async function main() {
                 descripcion: 'Webcam 1080p',
                 categoria: 'Video',
                 stock: 12,
-                precio: 32000
+                precio: 31999.99
             }
         }),
         prisma.productos.create({
@@ -95,7 +95,7 @@ async function main() {
                 descripcion: 'Notebook Ryzen 7',
                 categoria: 'Computadoras',
                 stock: 5,
-                precio: 850000
+                precio: 849999.99
             }
         }),
         prisma.productos.create({
@@ -104,7 +104,7 @@ async function main() {
                 descripcion: 'SSD NVMe Gen4',
                 categoria: 'Almacenamiento',
                 stock: 25,
-                precio: 90000
+                precio: 89999.99
             }
         }),
         prisma.productos.create({
@@ -113,7 +113,7 @@ async function main() {
                 descripcion: 'Silla ergonómica',
                 categoria: 'Muebles',
                 stock: 8,
-                precio: 220000
+                precio: 219999.99
             }
         })
     ]);
@@ -122,21 +122,21 @@ async function main() {
     const orden1 = await prisma.ordenes.create({
         data: {
             usuarioId: usuario1.id,
-            estado: 'PENDIENTE'
+            estado: 'CARRITO'
         }
     });
 
     const orden2 = await prisma.ordenes.create({
         data: {
             usuarioId: usuario2.id,
-            estado: 'COMPLETADA'
+            estado: 'PAGADA'
         }
     });
 
     const orden3 = await prisma.ordenes.create({
         data: {
             usuarioId: usuario3.id,
-            estado: 'ENVIADA'
+            estado: 'PAGO_PENDIENTE'
         }
     });
 

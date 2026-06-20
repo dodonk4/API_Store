@@ -11,6 +11,7 @@ export function logout(req: express.Request, res: express.Response) {
         const accessTokenDecrypted = jwt.verify(req.cookies.access_token, authConfig.secret) as jwt.JwtPayload;
 
         res.clearCookie("access_token");
+        res.clearCookie("refresh_token");
         
         res.status(200).json({
             message: `Usuario ${accessTokenDecrypted.username} deslogueado exitosamente`

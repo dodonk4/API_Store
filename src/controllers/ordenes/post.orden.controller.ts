@@ -1,8 +1,6 @@
 import express from 'express';
 import * as OrdenData from "../../interfaces/Orden.interface.ts";
 import { createOrden } from '../../services/ordenes.service.ts';
-import { checkExistingProducts } from '../../utils/checkExistingProducts.utils.ts';
-import { createOrdenesProductos } from '../../utils/createOrdenesProductos.utils.ts';
 
 //IDEAL:  export default async function postOrden(req: AuthRequest.default, res: express.Response): Promise<void | express.Response> {
 export default async function postOrden(req: any, res: express.Response): Promise<void | express.Response> {
