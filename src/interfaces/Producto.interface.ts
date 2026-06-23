@@ -1,6 +1,6 @@
 import { Decimal } from "@prisma/client/runtime/client";
 
-export default interface ProductoData {
+interface IProductoData {
   id?: number;
   nombre: string | null;
   descripcion: string | null;
@@ -10,3 +10,5 @@ export default interface ProductoData {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export type ProductoData = IProductoData;

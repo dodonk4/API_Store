@@ -2,35 +2,34 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
 import { createUsuario } from '../../services/usuarios.service.ts';
+import type { CreateUsuarioData, UsuarioData } from '../../interfaces/Usuario.interface.ts';
 
+type RegisterBody = {
+    email: string,
+    username: string,
+    password: string,
+    password_confirmation: string
+}
 
 export async function register(req: express.Request, res: express.Response) {
-    //Validar que el cuerpo del body sea valido para registrar un usuario
+
     try {
-        const { email, username, password, password_confirmation } = req.body;
+        const { email, username, password, password_confirmation }: RegisterBody = req.body;
 
-        if (!req.body.username) {
-            throw new Error("Se debe ingresar el nombre de usuario");
+        if(password != password_confirmation){
+            throw new Error("La confirmación de la contraseña no coincide");
         }
 
-        if (!req.body.password) {
-            throw new Error("Se debe ingresar una contraseña");
-        }
-
-        if (!req.body.password_confirmation) {
-            throw new Error("La contraseña de confirmación no coincide");
-        }
-
-        const user = await prisma.usuarios.findUnique({ where: { email: email } })
+        const user: UsuarioData | null = await prisma.usuarios.findUnique({ where: { email: email } })
 
         if (user) {
             throw new Error("El email no está disponible");
         }
 
         //Hashear el password antes de guardarlo
-        const saltRounds = 12;
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-        const data = {
+        const saltRounds: number = 12;
+        const hashedPassword: string = await bcrypt.hash(password, saltRounds);
+        const data: CreateUsuarioData = {
             nombre: username,
             email,
             password: hashedPassword,
@@ -38,16 +37,13 @@ export async function register(req: express.Request, res: express.Response) {
             createdAt: new Date(),
             updatedAt: new Date()
         }
-        //Guardar el usuario con el servicio
-        try {
-            const usuario = await createUsuario(data as any);
-            res.status(201).json(usuario);
-        } catch (err: any) {
-            return res.status(500).json({ error: err.message });
-        }
+
+        const usuario: UsuarioData = await createUsuario(data);
+        res.status(201).json(usuario);
+
     } catch (error: any) {
         console.log(error);
-        res.json({error: error.message}); 
+        res.json({ error: error.message });
     }
 
 }

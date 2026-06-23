@@ -1,24 +1,32 @@
 import express from 'express';
 import { findOrdenById, updateOrdenById } from '../../services/ordenes.service.ts';
 import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
+import * as AuthRequest from '../../interfaces/AuthRequest.ts';
+import { Decimal } from '@prisma/client/runtime/client';
+import type { OrdenData } from '../../interfaces/Orden.interface.ts';
 
-//!!! Hay que ver una forma de que esté más limpio
+type PutOrdenProductoBody = {
+    cantidad?: number,
+    ordenId?: number,
+    precioUnitario?: Decimal,
+    productId?: number
+}
 
-export default async function updateOrdenProductoController(req: any, res: express.Response, next: express.NextFunction) {
+export default async function updateOrdenProductoController(req: AuthRequest.default, res: express.Response) {
     try {
 
-        const ordenIdParams = parseInt(req.params.ordenId as string);//Pongo "params" al final, porque puede venir ordenId del req.body
-        const ordenProductoId = parseInt(req.params.ordenId as string);
+        //El "ordenIdParams" indica el ID de la orden a la que pertenece el orden_producto que se desea modificar
+        //El ordenId (del req.body) indica el ID de la orden a la que se caambiaría el orden_producto
+        const ordenIdParams: number = parseInt(req.params.ordenId as string);
+        const ordenProductoId: number = parseInt(req.params.ordenId as string);
 
-        //Hay que chequear que el orden_producto no pertenezca a una orden completada o activa para cambiarla
-
-        const { cantidad, ordenId, precioUnitario, productId } = req.body; //el campo "ordenes_productos" no se tiene que pasar por aquí
+        const { cantidad, ordenId, precioUnitario, productId }: PutOrdenProductoBody = req.body;
         if (!cantidad && !ordenId && !precioUnitario && !productId) {
             return res.status(400).json({ error: 'Al menos uno de los campos (cantidad, ordenId, precioUnitario, productId) es requerido' });
         }
 
         await checkOrdenOwner(ordenIdParams, req);
-        const orden = await findOrdenById(ordenIdParams);
+        const orden: OrdenData = await findOrdenById(ordenIdParams);
 
         if (req.user.rol === "USER") {
             if (orden.estado != "CARRITO") {
@@ -33,7 +41,7 @@ export default async function updateOrdenProductoController(req: any, res: expre
         await updateOrdenById(ordenProductoId, req.body);
 
         res.status(200).send("Producto de la orden correctamente actualizado");
-    } catch (error) {
+    } catch (error: any) {
         console.log(error);
         res.status(500).json({ error: (error as Error).message });
     }

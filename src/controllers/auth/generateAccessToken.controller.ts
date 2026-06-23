@@ -3,25 +3,24 @@ import jwt from 'jsonwebtoken';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
 import { findUsuarioById } from '../../services/usuarios.service.ts';
 import authConfig from '../../config/auth.config.ts';
+import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
 
-export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response){
+export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response) {
 
     try {
-        //Validaciones
-
         res.clearCookie('access_token', { httpOnly: true, secure: true });
-        const refreshToken = req.cookies.refresh_token;
+        const refreshToken: string = req.cookies.refresh_token;
         const userDecoded: jwt.JwtPayload | string | null = jwt.verify(refreshToken, authConfig.refresh_secret);
 
-        if(!userDecoded || typeof userDecoded === "string"){
+        if (!userDecoded || typeof userDecoded === "string") {
             throw new Error("El refreshToken no cuenta con información de usuario para poder generar el access token");
         }
 
-        const userFound = await findUsuarioById(userDecoded.id);
+        const userFound: UsuarioData = await findUsuarioById(userDecoded.id);
 
-        const accessToken = generateAccessToken(userFound);
+        const accessToken: string = generateAccessToken(userFound);
 
-        res.cookie('access_token', accessToken,{
+        res.cookie('access_token', accessToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
@@ -32,12 +31,12 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
 
     } catch (error: any) {
         console.log(error);
-        if(error.name === 'TokenExpiredError'){
+        if (error.name === 'TokenExpiredError') {
             res.status(401).json({ error: 'El refresh_token a expirado' });
-        }else{
-            res.status(500).json({error});
+        } else {
+            res.status(500).json({ error });
         }
-        
+
     }
 
 }

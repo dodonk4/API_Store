@@ -21,18 +21,18 @@ enum Estados{
 
 model ordenes {
   id               Int                 @id @default(autoincrement())
-  usuarioId       Int?
-  fecha          DateTime? @default(now())
+  usuarioId       Int
+  fecha          DateTime @default(now())
   estado         Estados   @default(CARRITO)
-  usuarios         usuarios?           @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  usuarios         usuarios           @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   createdAt    DateTime @default(now())
   ordenesProductos ordenes_productos[]
 }
 
 model usuarios {
   id      Int       @id @default(autoincrement())
-  nombre  String?   @db.VarChar(100)
-  email   String?   @db.VarChar(30)@unique
+  nombre  String   @db.VarChar(100)
+  email   String   @db.VarChar(30)@unique
   rol Roles @default(USER)
   password String 
   refreshToken String?
@@ -43,9 +43,9 @@ model usuarios {
 
 model productos {
   id               Int                 @id @default(autoincrement())
-  nombre           String?             @db.VarChar(100)
+  nombre           String             @db.VarChar(100)
   descripcion      String?             @db.VarChar(200)
-  categoria      String?             @db.VarChar(200)
+  categoria      String             @db.VarChar(200)
   stock            Int                 @default(0)
   precio           Decimal                 @default(0)
   createdAt    DateTime @default(now())

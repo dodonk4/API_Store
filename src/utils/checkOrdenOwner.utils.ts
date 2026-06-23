@@ -1,8 +1,8 @@
 import express from 'express';
-import * as OrdenData from '../interfaces/Orden.interface.ts';
 import { findOrdenById } from '../services/ordenes.service.ts';
 import * as Orden_ProductoData from '../interfaces/Orden_Producto.interface.ts';
 import { findOrdenProductoById } from '../services/ordenes_productos.service.ts';
+import type { OrdenData } from '../interfaces/Orden.interface.ts';
 
 export async function checkOrdenOwner(id: number, req: express.Request): Promise<void | Error> {
     if (!req.user) {
@@ -10,7 +10,7 @@ export async function checkOrdenOwner(id: number, req: express.Request): Promise
     }
 
     if (req.user.rol != "ADMIN") {
-      const orden: OrdenData.default = await findOrdenById(id);
+      const orden: OrdenData = await findOrdenById(id);
 
       //Corroborar que el origen ID le corresponde al usuario logueado
       if (orden.usuarioId != req.user.id) {

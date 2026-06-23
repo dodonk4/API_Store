@@ -8,7 +8,7 @@ export function logout(req: express.Request, res: express.Response) {
             throw new Error("No hay usuario logueado para desloguearse");
         }
 
-        const accessTokenDecrypted = jwt.verify(req.cookies.access_token, authConfig.secret) as jwt.JwtPayload;
+        const accessTokenDecrypted: jwt.JwtPayload = jwt.verify(req.cookies.access_token, authConfig.secret) as jwt.JwtPayload;
 
         res.clearCookie("access_token");
         res.clearCookie("refresh_token");
