@@ -1,0 +1,31 @@
+import express from 'express';
+import { AppError } from '../errors/AppError.ts';
+
+export function errorHandler(
+    err: any,
+    req: express.Request,
+    res: express.Response,
+    next: express.NextFunction
+) {
+    const statusCode =
+        err instanceof AppError
+            ? err.statusCode
+            : 500;
+
+    const message =
+        err instanceof AppError
+            ? err.message
+            : "Internal Server Error";
+
+    console.error({
+        message: err.message,
+        stack: err.stack,
+        path: req.path,
+        method: req.method
+    });
+
+    return res.status(statusCode).json({
+        success: false,
+        message
+    });
+}
