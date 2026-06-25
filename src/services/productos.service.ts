@@ -1,8 +1,8 @@
 import { Prisma } from '../../generated/prisma/client.ts';
-import * as ProductoData from '../interfaces/Producto.interface.ts';
+import type { CreateProductoData, ProductoData } from '../interfaces/Producto.interface.ts';
 import { prisma } from '../lib/prisma.ts';
 
-export async function createProducto(data: ProductoData.default): Promise<ProductoData.default> {
+export async function createProducto(data: CreateProductoData): Promise<ProductoData> {
   try {
     return await prisma.productos.create({ data });
   } catch (error) {
@@ -11,7 +11,7 @@ export async function createProducto(data: ProductoData.default): Promise<Produc
   }
 }
 
-export async function createProductosBulk(data: ProductoData.default[]): Promise<Prisma.BatchPayload> {
+export async function createProductosBulk(data: ProductoData[]): Promise<Prisma.BatchPayload> {
   try {
     return await prisma.productos.createMany({ data });
   } catch (error) {
@@ -20,9 +20,9 @@ export async function createProductosBulk(data: ProductoData.default[]): Promise
   }
 }
 
-export async function findProductoById(id: number): Promise<ProductoData.default> {
+export async function findProductoById(id: number): Promise<ProductoData> {
   try {
-    const producto = await prisma.productos.findUnique({ where: { id } });
+    const producto: ProductoData | null = await prisma.productos.findUnique({ where: { id } });
     if (!producto) throw new Error('Producto no encontrado');
     return producto;
   } catch (error) {
@@ -31,7 +31,7 @@ export async function findProductoById(id: number): Promise<ProductoData.default
   }
 }
 
-export async function findAllProductos(): Promise<ProductoData.default[]> {
+export async function findAllProductos(): Promise<ProductoData[]> {
   try {
     return await prisma.productos.findMany();
   } catch (error) {
@@ -40,9 +40,9 @@ export async function findAllProductos(): Promise<ProductoData.default[]> {
   }
 }
 
-export async function updateProducto(id: number, data: Partial<ProductoData.default>): Promise<ProductoData.default> {
+export async function updateProducto(id: number, data: Partial<ProductoData>): Promise<ProductoData> {
   try {
-    const producto = await prisma.productos.findUnique({ where: { id } });
+    const producto: ProductoData | null = await prisma.productos.findUnique({ where: { id } });
     if (!producto) throw new Error('Producto no encontrado');
     return await prisma.productos.update({ where: { id }, data });
   } catch (error) {

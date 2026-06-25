@@ -28,7 +28,7 @@ export default async function updateOrdenProductoController(req: AuthRequest.def
         await checkOrdenOwner(ordenIdParams, req);
         const orden: OrdenData = await findOrdenById(ordenIdParams);
 
-        if (req.user.rol === "USER") {
+        if (req.user?.rol === "USER") {
             if (orden.estado != "CARRITO") {
                 throw new Error("No se puede modificar o eliminar un producto de una orden que ya no esté en carrito");
             }

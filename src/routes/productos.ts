@@ -1,6 +1,6 @@
 import express from 'express';
 import { getProductById, getProducts } from '../controllers/productos/get.producto.controller.ts';
-import { postBulk, postProducto } from '../controllers/productos/post.producto.controller.ts';
+import { postProducto } from '../controllers/productos/post.producto.controller.ts';
 import updateProducto from '../controllers/productos/put.producto.controller.ts';
 import deleteProducto from '../controllers/productos/delete.producto.controller.ts';
 import { validateAccessToken } from '../middlewares/validateAccessToken.middleware.ts';
@@ -13,7 +13,6 @@ const router = express.Router();
 
 router.get('/', getProducts);
 router.post('/', validateAccessToken, validateRol(["ADMIN"]), validateSchema(productSchema), postProducto);
-router.post('/bulk', validateAccessToken, validateRol(["ADMIN"]), postBulk);//Ver esto para zod
 router.get('/:productoId', getProductById);
 router.put('/:productoId', validateAccessToken, validateRol(["ADMIN"]), validateSchema(productSchemaUpdate), updateProducto);
 router.delete('/:productoId', validateAccessToken, validateRol(["ADMIN"]), deleteProducto);

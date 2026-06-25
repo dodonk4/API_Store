@@ -2,7 +2,6 @@ import express from 'express';
 import type { OrdenData } from '../../interfaces/Orden.interface.ts';
 import { createOrden } from '../../services/ordenes.service.ts';
 import * as AuthRequest from '../../interfaces/AuthRequest.ts';
-
 //Sí, se puede crear una orden sin aclarar nada
 type PostOrdenBody = {
     usuarioId?: number,
@@ -25,7 +24,7 @@ export default async function postOrden(req: AuthRequest.default, res: express.R
       }
     }
 
-    //'estado' tiene como defaulta PENDING en la base de datos
+    //'estado' tiene como default a PENDING en la base de datos
 
     if (!fecha) {
       fecha = new Date();
@@ -36,7 +35,8 @@ export default async function postOrden(req: AuthRequest.default, res: express.R
       usuarioId = req.user.id;
     }
 
-    const resultOrden: OrdenData = await createOrden({ usuarioId, estado, fecha });
+    //El arreglo para el estado hace que sea enviado únicamente cuando no es undefined
+    const resultOrden: OrdenData = await createOrden({ usuarioId, ...(estado !== undefined && { estado }), fecha });
 
     res.status(200).json({ resultOrden });
 

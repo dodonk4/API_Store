@@ -1,7 +1,7 @@
-import * as UsuarioData from '../interfaces/Usuario.interface.ts';
+import type { CreateUsuarioData, UsuarioData } from '../interfaces/Usuario.interface.ts';
 import { prisma } from '../lib/prisma.ts';
 
-export async function createUsuario(data: UsuarioData.default): Promise<UsuarioData.default> {
+export async function createUsuario(data: CreateUsuarioData): Promise<UsuarioData> {
   try {
     return await prisma.usuarios.create({ data });
   } catch (error) {
@@ -10,7 +10,7 @@ export async function createUsuario(data: UsuarioData.default): Promise<UsuarioD
   }
 }
 
-export async function findUsuarioById(id: number): Promise<UsuarioData.default> {
+export async function findUsuarioById(id: number): Promise<UsuarioData> {
   try {
     const usuario = await prisma.usuarios.findUnique({ where: { id } });
     if (!usuario) throw new Error('Usuario no encontrado');
@@ -21,7 +21,7 @@ export async function findUsuarioById(id: number): Promise<UsuarioData.default> 
   }
 }
 
-export async function findAllUsuarios(): Promise<UsuarioData.default[]> {
+export async function findAllUsuarios(): Promise<UsuarioData[]> {
   try {
     return await prisma.usuarios.findMany();
   } catch (error) {
@@ -30,7 +30,7 @@ export async function findAllUsuarios(): Promise<UsuarioData.default[]> {
   }
 }
 
-export async function updateUsuario(id: number, data: Partial<UsuarioData.default>): Promise<UsuarioData.default> {
+export async function updateUsuario(id: number, data: Partial<UsuarioData>): Promise<UsuarioData> {
   try {
     return await prisma.usuarios.update({ where: { id }, data });
   } catch (error) {

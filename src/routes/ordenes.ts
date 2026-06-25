@@ -22,7 +22,6 @@ router.get('/', validateAccessToken, validateRol(["ADMIN"]), getAllOrdenes);
 
 router.post('/', validateAccessToken, validateRol(["USER", "ADMIN"]), validateSchema(ordenesSchema), postOrden);
 
-//Hay que arreglar esto para que agarre las ordenes del user, no una orden que no le corresponde
 router.get('/:ordenId', validateAccessToken, validateRol(["USER", "ADMIN"]), getOrdenById);
 
 router.put('/:ordenId', validateAccessToken, validateRol(["USER", "ADMIN"]), validateSchema(ordenesSchema), updateOrden); //ACTUALIZAR LAS PARTICULARIDADES DE LA ORDEN, NO SUS PRODUCTOS
@@ -31,10 +30,10 @@ router.delete('/:ordenId', validateAccessToken, validateRol(["USER", "ADMIN"]), 
 
 //Ordenes_productos
 
-//||  //Esto se es más fácil de comprender con lo siguiente:
-//||  //'/2/products/4'
-//||  //No se busca obtener el producto de id 4 en la orden 2
-//V  //Se busca obtener el producto ordenado que se registró con id 4 y que corresponde a la orden 2
+//Esto se es más fácil de comprender con lo siguiente:
+//'/2/products/4'
+//No se busca obtener el producto de id 4 en la orden 2
+//Se busca obtener el producto ordenado que se registró con id 4 y que corresponde a la orden 2
 router.get('/:ordenId/products/:ordenProductoId', validateAccessToken, validateRol(["USER", "ADMIN"]), getOrdenProductoById);
 
 router.get('/:ordenId/products', validateAccessToken, validateRol(["USER", "ADMIN"]), getAllOrdenProductoByOrdenId);

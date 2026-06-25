@@ -23,7 +23,7 @@ export default async function postOrdenProducto(req: AuthRequest.default, res: e
     //Si es de él, puede. Sino, tiene que ser un ADMIN
     await checkOrdenOwner(ordenId, req);
     const orden: OrdenData = await findOrdenById(ordenId);
-    if (req.user.rol === "USER") {
+    if (req.user?.rol === "USER") {
       if (orden.estado != "CARRITO") {
         throw new Error("No se puede modificar o eliminar un producto de una orden que ya no esté en carrito");
       }
