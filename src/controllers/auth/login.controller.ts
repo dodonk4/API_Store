@@ -6,6 +6,8 @@ import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
 import generateRefreshToken from '../../utils/jwt/refreshToken.utils.ts';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
 import * as AuthRequest from '../../interfaces/AuthRequest.ts';
+import { NotFoundError } from '../../errors/NotFoundError.ts';
+import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 
 type LoginBody = {
     email: string,
@@ -13,43 +15,39 @@ type LoginBody = {
 }
 
 export async function login(req: AuthRequest.default, res: express.Response) {
-    try {
-        const { email, password }: LoginBody = req.body;
 
-        const user: UsuarioData | null = await prisma.usuarios.findUnique({ where: { email } });
+    const { email, password }: LoginBody = req.body;
 
-        if (!user) {
-            throw new Error("No existe un usuario con ese correo electrónico");
-        }
+    const user: UsuarioData | null = await prisma.usuarios.findUnique({ where: { email } });
 
-        const isMatch: boolean = bcrypt.compareSync(password, user?.password);
-
-        if (!isMatch) {
-            throw new Error("La contaseña es incorrecta");
-        }
-
-        const refreshToken: string = generateRefreshToken(user);
-        const accessToken: string = generateAccessToken(user);
-
-        res.cookie('refresh_token', refreshToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict', // Mitigate CSRF attacks
-            maxAge: 24 * 60 * 60 * 1000
-        });
-
-        res.cookie('access_token', accessToken, {
-            httpOnly: true,
-            secure: true,
-            sameSite: 'strict', // Mitigate CSRF attacks
-            maxAge: 15 * 60 * 1000
-        });
-
-        const usuario: UsuarioData = await updateUsuario(user.id, { refreshToken });
-        res.status(200).json(usuario);
-    } catch (error: any) {
-        console.log(error);
-        res.json({ error: error.message });
+    if (!user) {
+        throw new NotFoundError("No existe un usuario con ese correo electrónico");
     }
+
+    const isMatch: boolean = bcrypt.compareSync(password, user?.password);
+
+    if (!isMatch) {
+        throw new UnauthorizedError("La contaseña es incorrecta");
+    }
+
+    const refreshToken: string = generateRefreshToken(user);
+    const accessToken: string = generateAccessToken(user);
+
+    res.cookie('refresh_token', refreshToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict', // Mitigate CSRF attacks
+        maxAge: 24 * 60 * 60 * 1000
+    });
+
+    res.cookie('access_token', accessToken, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'strict', // Mitigate CSRF attacks
+        maxAge: 15 * 60 * 1000
+    });
+
+    const usuario: UsuarioData = await updateUsuario(user.id, { refreshToken });
+    res.status(200).json(usuario);
 
 }

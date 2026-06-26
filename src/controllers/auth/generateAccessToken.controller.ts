@@ -4,6 +4,7 @@ import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
 import { findUsuarioById } from '../../services/usuarios.service.ts';
 import authConfig from '../../config/auth.config.ts';
 import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import { AppError } from '../../errors/AppError.ts';
 
 export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response) {
 
@@ -13,7 +14,7 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
         const userDecoded: jwt.JwtPayload | string | null = jwt.verify(refreshToken, authConfig.refresh_secret);
 
         if (!userDecoded || typeof userDecoded === "string") {
-            throw new Error("El refreshToken no cuenta con información de usuario para poder generar el access token");
+            throw new AppError("El refreshToken no cuenta con información de usuario para poder generar el access token", 401);
         }
 
         const userFound: UsuarioData = await findUsuarioById(userDecoded.id);

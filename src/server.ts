@@ -4,6 +4,7 @@ import productosRouter from './routes/productos.ts';
 import usuariosRouter from './routes/usuarios.ts';
 import ordenesRouter from './routes/ordenes.ts';
 import cookieParser from 'cookie-parser';
+import { errorHandler } from './middlewares/errorHandler.middleware.ts';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -20,12 +21,7 @@ app.get('/', (req: express.Request, res: express.Response) => {
   res.json({ message: 'API de Tienda' });
 });
 
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: 'Algo salió mal!' });
-});
-
-
+app.use(errorHandler);
 
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
