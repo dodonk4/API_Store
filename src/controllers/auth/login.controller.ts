@@ -14,7 +14,7 @@ type LoginBody = {
     password: string,
 }
 
-export async function login(req: AuthRequest.default, res: express.Response) {
+export async function login(req: express.Request, res: express.Response) {
 
     const { email, password }: LoginBody = req.body;
 

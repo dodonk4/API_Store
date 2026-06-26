@@ -5,36 +5,29 @@ import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
 import { checkOrdenProductoOwner } from '../../utils/checkOrdenProductoOwner.utils.ts';
 
 export async function getOrdenProductoById(req: express.Request, res: express.Response): Promise<void> {
-    try {
-        const ordenId: number = parseInt(req.params.ordenId as string);
-        const ordenProductoId: number = parseInt(req.params.ordenProductoId as string);
 
-        //Corrobora que el usuario tenga permisos para modificar este o_p
-        //Si es de él, puede. Sino, tiene que ser un ADMIN
-        await checkOrdenOwner(ordenId, req);
-        await checkOrdenProductoOwner(ordenProductoId, ordenId, req);
+    const ordenId: number = parseInt(req.params.ordenId as string);
+    const ordenProductoId: number = parseInt(req.params.ordenProductoId as string);
 
-        const ordenProducto: Orden_ProductoData = await findOrdenProductoById(ordenProductoId);
-        res.json(ordenProducto);
-    } catch (error: any) {
-        console.error(error);
-        res.status(500).send({ error: (error as Error).message });
-    }
+    //Corrobora que el usuario tenga permisos para modificar este o_p
+    //Si es de él, puede. Sino, tiene que ser un ADMIN
+    await checkOrdenOwner(ordenId, req);
+    await checkOrdenProductoOwner(ordenProductoId, ordenId, req);
+
+    const ordenProducto: Orden_ProductoData = await findOrdenProductoById(ordenProductoId);
+    res.json(ordenProducto);
+
 }
 
 export async function getAllOrdenProductoByOrdenId(req: express.Request, res: express.Response): Promise<void> {
-    try {
-        const ordenId: number = parseInt(req.params.ordenId as string);
+    const ordenId: number = parseInt(req.params.ordenId as string);
 
-        //Corrobora que el usuario tenga permisos para modificar este o_p
-        //Si es de él, puede. Sino, tiene que ser un ADMIN
-        await checkOrdenOwner(ordenId, req);
+    //Corrobora que el usuario tenga permisos para modificar este o_p
+    //Si es de él, puede. Sino, tiene que ser un ADMIN
+    await checkOrdenOwner(ordenId, req);
 
-        const ordenesProductos: Orden_ProductoData[] = await findAllOrdenesProductosByOrdenId(ordenId);
+    const ordenesProductos: Orden_ProductoData[] = await findAllOrdenesProductosByOrdenId(ordenId);
 
-        res.json(ordenesProductos);
-    } catch (error: any) {
-        console.error(error);
-        res.status(500).send({ error: (error as Error).message });
-    }
+    res.json(ordenesProductos);
+
 }

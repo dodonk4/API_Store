@@ -24,11 +24,7 @@ export async function register(req: express.Request, res: express.Response) {
     const user: UsuarioData | null = await prisma.usuarios.findUnique({ where: { email: email } })
 
     if (user) {
-        const error = new ConflictError("El email no está disponible");
-        console.log(error);
-        console.log(error.statusCode);
-        // console.log(error.status);
-        throw error;
+        throw new ConflictError("El email no está disponible");
     }
 
     //Hashear el password antes de guardarlo

@@ -7,6 +7,12 @@ export function errorHandler(
     res: express.Response,
     next: express.NextFunction
 ) {
+
+    if(err.code){//Para ver el codigo de errores de Prisma
+        console.log("Error code: ", err.code);
+    }
+
+
     const statusCode =
         err instanceof AppError
             ? err.statusCode

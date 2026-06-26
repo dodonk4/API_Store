@@ -7,15 +7,16 @@ import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
 import { findProductoById } from '../../services/productos.service.ts';
 import { Decimal } from '@prisma/client/runtime/client';
 import { findOrdenById } from '../../services/ordenes.service.ts';
-import * as AuthRequest from '../../interfaces/AuthRequest.ts';
+import { ConflictError } from '../../errors/ConflictError.ts';
+import { NotFoundError } from '../../errors/NotFoundError.ts';
 
 type PostOrdenProductoBody = {
     productId: number,
     cantidad: number
 }
 
-export default async function postOrdenProducto(req: AuthRequest.default, res: express.Response): Promise<void> {
-  try {
+export default async function postOrdenProducto(req: express.Request, res: express.Response): Promise<void> {
+
     const ordenId: number = parseInt(req.params.ordenId as string);
     const { productId, cantidad }: PostOrdenProductoBody = req.body;
 
@@ -25,14 +26,14 @@ export default async function postOrdenProducto(req: AuthRequest.default, res: e
     const orden: OrdenData = await findOrdenById(ordenId);
     if (req.user?.rol === "USER") {
       if (orden.estado != "CARRITO") {
-        throw new Error("No se puede modificar o eliminar un producto de una orden que ya no esté en carrito");
+        throw new ConflictError("No se puede modificar o eliminar un producto de una orden que ya no esté en carrito");
       }
     }
 
     const producto: ProductoData = await findProductoById(productId);
 
     if (!producto) {
-      throw new Error("No se encuentra el producto que se quiere agregar a la orden");
+      throw new NotFoundError("No se encuentra el producto que se quiere agregar a la orden");
     }
 
     const precioUnitario: Decimal = producto.precio;
@@ -40,8 +41,5 @@ export default async function postOrdenProducto(req: AuthRequest.default, res: e
 
     const resultOrdenProducto: Orden_ProductoData = await createOrdenProducto({ ordenId, productId, precioUnitario, cantidad });
     res.send(resultOrdenProducto);
-  } catch (error: any) {
-    console.error(error);
-    res.status(500).send({ error: (error as Error).message });
-  }
+
 }

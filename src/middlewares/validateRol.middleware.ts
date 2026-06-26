@@ -1,4 +1,5 @@
 import express from 'express';
+import { ForbiddenError } from '../errors/ForbiddenError.ts';
 
 export function validateRol(allowedRoles: string[]) {
     return (
@@ -12,8 +13,6 @@ export function validateRol(allowedRoles: string[]) {
             return next();
         }
 
-        return res.status(403).json({
-            message: 'Los permisos del usuario logueado son insuficientes'
-        });
+        throw new ForbiddenError("Los permisos del usuario logueado son insuficientes");
     };
 }

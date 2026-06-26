@@ -1,5 +1,6 @@
 import express from "express";
 import { z } from "zod";
+import { ValidationError } from "../errors/ValidationError.ts";
 
 export const validateSchema = (schema: z.ZodSchema) =>
     (req: express.Request, res: express.Response, next: express.NextFunction) => {
@@ -7,9 +8,7 @@ export const validateSchema = (schema: z.ZodSchema) =>
         const result: z.ZodSafeParseResult<unknown> = schema.safeParse(req.body);
 
         if (!result.success) {
-            return res.status(400).json({
-                errors: z.treeifyError(result.error),
-            });
+            throw new ValidationError(result.error);
         }
 
         req.body = result.data;

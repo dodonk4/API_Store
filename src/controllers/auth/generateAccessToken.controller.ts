@@ -4,9 +4,9 @@ import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
 import { findUsuarioById } from '../../services/usuarios.service.ts';
 import authConfig from '../../config/auth.config.ts';
 import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
-import { AppError } from '../../errors/AppError.ts';
+import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 
-export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response) {
+export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response, next: express.NextFunction) {
 
     try {
         res.clearCookie('access_token', { httpOnly: true, secure: true });
@@ -14,7 +14,7 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
         const userDecoded: jwt.JwtPayload | string | null = jwt.verify(refreshToken, authConfig.refresh_secret);
 
         if (!userDecoded || typeof userDecoded === "string") {
-            throw new AppError("El refreshToken no cuenta con información de usuario para poder generar el access token", 401);
+            throw new UnauthorizedError("El refreshToken no cuenta con información de usuario para poder generar el access token");
         }
 
         const userFound: UsuarioData = await findUsuarioById(userDecoded.id);
@@ -31,11 +31,10 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
         res.send("Access token actualizado");
 
     } catch (error: any) {
-        console.log(error);
         if (error.name === 'TokenExpiredError') {
-            res.status(401).json({ error: 'El refresh_token a expirado' });
+            throw new UnauthorizedError("El refresh_token a expirado");
         } else {
-            res.status(500).json({ error });
+            next(error);
         }
 
     }
