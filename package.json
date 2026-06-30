@@ -5,9 +5,12 @@
   "main": "src/server.js",
   "type": "module",
   "scripts": {
-    "start": "ts-node src/server.ts",
-    "dev": "nodemon --exec ts-node src/server.ts",
-    "test": "node --experimental-vm-modules ./node_modules/jest/bin/jest.js"
+    "dev": "dotenv -e .env.development -- nodemon --exec ts-node src/server.ts",
+    "test": "dotenv -e .env.test -- jest",
+    "start": "dotenv -e .env.production -- ts-node src/server.ts",
+    "migrate:dev": "dotenv -e .env.development -- prisma migrate dev",
+    "migrate:test": "dotenv -e .env.test -- prisma migrate dev",
+    "migrate:prod": "dotenv -e .env.production -- prisma migrate deploy"
   },
   "dependencies": {
     "@prisma/client": "^7.8.0",
@@ -34,7 +37,9 @@
     "@types/sqlite3": "^3.1.11",
     "@types/supertest": "^7.2.0",
     "babel-jest": "^30.4.1",
+    "cross-env": "^10.1.0",
     "dotenv": "^17.4.2",
+    "dotenv-cli": "^11.0.0",
     "jest": "^30.4.2",
     "nodemon": "^3.1.14",
     "pg": "^8.21.0",

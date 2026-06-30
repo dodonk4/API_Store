@@ -26,6 +26,7 @@ app.use(errorHandler);
 if (process.env.NODE_ENV !== 'test') {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
+    console.log(process.env["DATABASE_URL"]);
   });
 }
 
