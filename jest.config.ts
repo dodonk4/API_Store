@@ -1,21 +1,13 @@
-// jest.config.ts
 import type { Config } from 'jest';
 
 const config: Config = {
-  preset: 'ts-jest/presets/default-esm',
   testEnvironment: 'node',
   extensionsToTreatAsEsm: ['.ts'],
-  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      {
-        useESM: true,
-      },
-    ],
+    '^.+\\.(ts|js)$': ['babel-jest', { presets: [['@babel/preset-env', { targets: { node: 'current' }, modules: 'auto' }], '@babel/preset-typescript'], sourceType: 'unambiguous' }],
   },
   moduleNameMapper: {
-    '^\\.\\./\\.\\./generated/prisma/client\\.ts$': '<rootDir>/test/mocks/prisma-client.ts',
+    '^(\\.{1,2}/.*)\\.js$': '$1',
   },
 };
 
