@@ -8,7 +8,7 @@ export function errorHandler(
     next: express.NextFunction
 ) {
 
-    if(err.code){//Para ver el codigo de errores de Prisma
+    if (err.code) {//Para ver el codigo de errores de Prisma
         console.log("Error code: ", err.code);
     }
 
@@ -23,12 +23,16 @@ export function errorHandler(
             ? err.message
             : "Internal Server Error";
 
-    console.error({
-        message: err.message,
-        stack: err.stack,
-        path: req.path,
-        method: req.method
-    });
+    if (statusCode == 500) {
+        console.error({
+            message: err.message,
+            stack: err.stack,
+            path: req.path,
+            method: req.method
+        });
+    }
+
+
 
     return res.status(statusCode).json({
         success: false,

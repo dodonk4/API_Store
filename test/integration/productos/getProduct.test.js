@@ -1,16 +1,14 @@
 import { jest } from '@jest/globals';
-import {app} from '../../../src/server.ts'
+import { app } from '../../../src/app.ts'
 import request from 'supertest';
-import * as productosService from '../../../src/services/productos.service.ts';
-
-let getProductByIdController;
+import { prisma } from '../../../src/lib/prisma.ts';
 
 describe('GET /productos/:productoId', () => {
 
   it('debería devolver un producto por su id', async () => {
 
     let productoId = 1;
-    
+
     const response = await request(app)
       .get(`/productos/${productoId}`);
 
@@ -18,12 +16,21 @@ describe('GET /productos/:productoId', () => {
     expect(response.status).toBe(200);
   });
 
-  it('debería devolver que el producto no existe con un codigo 404', async () => {
-    
+  it('debería devolver 404 si el producto no existe', async () => {
     const response = await request(app)
-      .get(`/productos/9999999`);
-
+      .get('/productos/999999');
 
     expect(response.status).toBe(404);
+  });
+
+  it('debería devolver 409 si el id es invalido', async () => {
+    const response = await request(app)
+      .get('/productos/abcdef');
+
+    expect(response.status).toBe(409);
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
   });
 });

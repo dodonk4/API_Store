@@ -35,14 +35,16 @@ export async function login(req: express.Request, res: express.Response) {
 
     res.cookie('refresh_token', refreshToken, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict', // Mitigate CSRF attacks
         maxAge: 24 * 60 * 60 * 1000
     });
 
     res.cookie('access_token', accessToken, {
         httpOnly: true,
-        secure: true,
+        // secure: true,
+        secure: process.env.NODE_ENV === 'production',
         sameSite: 'strict', // Mitigate CSRF attacks
         maxAge: 15 * 60 * 1000
     });
