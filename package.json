@@ -12,7 +12,8 @@
     "seed:test": "dotenv -e .env.test -- tsx prisma/seed.ts",
     "migrate:dev": "dotenv -e .env.development -- prisma migrate dev",
     "migrate:test": "dotenv -e .env.test -- prisma migrate dev",
-    "migrate:prod": "dotenv -e .env.production -- prisma migrate deploy"
+    "migrate:prod": "dotenv -e .env.production -- prisma migrate deploy",
+    "reset:test" : "dotenv -e .env.test -- npx prisma migrate reset"
   },
   "dependencies": {
     "@prisma/client": "^7.8.0",

@@ -17,4 +17,13 @@ describe('GET /productos/:productoId', () => {
 
     expect(response.status).toBe(200);
   });
+
+  it('debería devolver que el producto no existe con un codigo 404', async () => {
+    
+    const response = await request(app)
+      .get(`/productos/9999999`);
+
+
+    expect(response.status).toBe(404);
+  });
 });
