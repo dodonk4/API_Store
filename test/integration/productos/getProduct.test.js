@@ -23,11 +23,11 @@ describe('GET /productos/:productoId', () => {
     expect(response.status).toBe(404);
   });
 
-  it('debería devolver 409 si el id es invalido', async () => {
+  it('debería devolver 400 si el id es invalido', async () => {
     const response = await request(app)
       .get('/productos/abcdef');
 
-    expect(response.status).toBe(409);
+    expect(response.status).toBe(400);
   });
 
   afterAll(async () => {

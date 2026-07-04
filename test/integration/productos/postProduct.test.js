@@ -3,6 +3,7 @@ import { logoutHelper } from '../../helpers/logout.ts';
 import { app } from '../../../src/app.ts';
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
+import { badProductoCrear, productoCrear } from '../../fixtures.ts';
 
 describe('POST /productos', () => {
 
@@ -15,14 +16,6 @@ describe('POST /productos', () => {
 
     const agent = await getAuthenticatedAgent();
 
-    const productoCrear = {
-      "nombre": "Gabinete",
-      "descripcion": "Gabinete espacioso",
-      "precio": 25000,
-      "categoria": "Tecnología",
-      "stock": 5
-    }
-
     const res = await agent
       .post('/productos')
       .send(productoCrear);
@@ -31,14 +24,6 @@ describe('POST /productos', () => {
   });
 
   it('debería rechazar por no tener un token', async () => {
-
-    const productoCrear = {
-      "nombre": "Gabinete",
-      "descripcion": "Gabinete espacioso",
-      "precio": 25000,
-      "categoria": "Tecnología",
-      "stock": 5
-    }
 
     const res = await request(app)
       .post('/productos')
@@ -51,19 +36,22 @@ describe('POST /productos', () => {
 
     const agent = await getNonAuthenticatedAgent();
 
-    const productoCrear = {
-      "nombre": "Gabinete",
-      "descripcion": "Gabinete espacioso",
-      "precio": 25000,
-      "categoria": "Tecnología",
-      "stock": 5
-    }
-
     const res = await agent
       .post('/productos')
       .send(productoCrear);
 
     expect(res.status).toBe(403);
+  });
+
+  it('debería devolver un error de zod 409 por subir mal el producto', async () => {
+    const agent = await getAuthenticatedAgent();
+
+    const res = await agent
+      .post('/productos')
+      .send(badProductoCrear);
+
+    expect(res.status).toBe(400);
+    
   });
 
   afterAll(async () => {
