@@ -5,13 +5,16 @@ import { prisma } from '../../../src/lib/prisma.ts';
 
 describe('GET /productos/:productoId', () => {
 
+
   it('debería devolver un producto por su id', async () => {
 
     let productoId = 1;
 
+    const responseMock = await request(app)
+      .get(`/productos`);
+
     const response = await request(app)
       .get(`/productos/${productoId}`);
-
 
     expect(response.status).toBe(200);
   });

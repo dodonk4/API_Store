@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "dotenv -e .env.development -- nodemon --exec ts-node src/server.ts",
-    "test": "dotenv -e .env.test -- node --experimental-vm-modules node_modules/jest/bin/jest.js",
+    "test": "dotenv -e .env.test -- node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "start": "dotenv -e .env.production -- ts-node src/server.ts",
     "seed:dev": "dotenv -e .env.development -- tsx prisma/seed.ts",
     "seed:test": "dotenv -e .env.test -- tsx prisma/seed.ts",
