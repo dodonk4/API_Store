@@ -1,9 +1,9 @@
-import { getAuthenticatedAgent, getNonAuthenticatedAgent } from '../../helpers/getAccessToken.ts';
+import { getAdminAgent, getNonAuthenticatedAgent } from '../../helpers/getAccessToken.ts';
 import { logoutHelper } from '../../helpers/logout.ts';
 import { app } from '../../../src/app.ts';
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
-import { badProductoCrear, productoCrear } from '../../fixtures/productos.ts';
+import { badProductoCrear, productoCrear } from '../../fixtures/productos.fixture.ts';
 import { id } from 'zod/locales';
 
 describe('POST /productos', () => {
@@ -15,7 +15,7 @@ describe('POST /productos', () => {
 
   it('debería crear un producto', async () => {
 
-    const agent = await getAuthenticatedAgent();
+    const agent = await getAdminAgent();
 
     const response = await agent
       .post('/productos')
@@ -50,7 +50,7 @@ describe('POST /productos', () => {
 
   
   it('debería devolver un error de zod 400 por subir mal el producto', async () => {
-    const agent = await getAuthenticatedAgent();
+    const agent = await getAdminAgent();
 
     const response = await agent
       .post('/productos')

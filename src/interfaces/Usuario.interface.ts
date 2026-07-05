@@ -1,6 +1,6 @@
 interface IUsuarioData {
   id: number,
-  nombre: string,
+  username: string,
   email: string,
   rol: "USER" | "ADMIN",
   password: string,

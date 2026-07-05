@@ -30,7 +30,7 @@ model ordenes {
 
 model usuarios {
   id      Int       @id @default(autoincrement())
-  nombre  String   @db.VarChar(100)
+  username  String   @db.VarChar(100)
   email   String   @db.VarChar(30)@unique
   rol Roles @default(USER)
   password String 

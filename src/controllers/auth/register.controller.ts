@@ -31,7 +31,7 @@ export async function register(req: express.Request, res: express.Response) {
     const saltRounds: number = 12;
     const hashedPassword: string = await bcrypt.hash(password, saltRounds);
     const data: CreateUsuarioData = {
-        nombre: username,
+        username,
         email,
         password: hashedPassword,
         refreshToken: null,

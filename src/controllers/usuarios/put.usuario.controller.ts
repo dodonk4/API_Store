@@ -10,6 +10,11 @@ interface PutUsuarioBody {
 
 export default async function putUsuario(req: express.Request, res: express.Response): Promise<void | express.Response> {
   const id: number = parseInt(req.params.usuarioId as string);
+
+  if (!Number.isInteger(id)) {
+    throw new BadRequestError("El id debe ser un numero");
+  }
+
   const { nombre, email }: PutUsuarioBody = req.body;
 
   if (!nombre && !email) {

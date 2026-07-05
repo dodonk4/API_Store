@@ -9,8 +9,15 @@ import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response, next: express.NextFunction) {
 
     try {
-        res.clearCookie('access_token', { httpOnly: true, secure: true });
+
         const refreshToken: string = req.cookies.refresh_token;
+
+        // if(!refreshToken){
+        //     throw new UnauthorizedError("No hay un usuario logueado");
+        // }
+
+        res.clearCookie('access_token', { httpOnly: true, secure: true });
+        
         const userDecoded: jwt.JwtPayload | string | null = jwt.verify(refreshToken, authConfig.refresh_secret);
 
         if (!userDecoded || typeof userDecoded === "string") {

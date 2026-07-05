@@ -5,17 +5,19 @@ import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 
 export function logout(req: express.Request, res: express.Response) {
 
-    if (!req.cookies?.access_token) {
-        throw new UnauthorizedError("No hay usuario logueado para desloguearse");
-    }
+    // const refreshToken: string = req.cookies.refresh_token;
 
-    const accessTokenDecrypted: jwt.JwtPayload = jwt.verify(req.cookies.access_token, authConfig.secret) as jwt.JwtPayload;
+    // if (!refreshToken) {
+    //     throw new UnauthorizedError("No hay usuario logueado para desloguearse");
+    // }
+    
+    const accessTokenDecrypted: jwt.JwtPayload = jwt.verify(req.cookies.refresh_token, authConfig.refresh_secret) as jwt.JwtPayload;
 
     res.clearCookie("access_token");
     res.clearCookie("refresh_token");
 
     res.status(200).json({
-        message: `Usuario ${accessTokenDecrypted.username} deslogueado exitosamente`
+        message: `Usuario ${accessTokenDecrypted.id} deslogueado exitosamente`
     })
 
 }
