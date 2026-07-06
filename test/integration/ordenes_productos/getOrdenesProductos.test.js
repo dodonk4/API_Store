@@ -13,7 +13,7 @@ describe('GET ordenes/:ordenId/products', ()=> {
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
-    })
+    });
 
     it('debería devolver 404 por no existir la orden', async () => {
         const agent = await getUserAgent();
@@ -22,7 +22,7 @@ describe('GET ordenes/:ordenId/products', ()=> {
         .get(`/ordenes/999999/products`);
 
         expect(response.status).toBe(404);
-    })
+    });
 
     it('debería devolver 401 por no haber usuario logueado', async () => {
 
@@ -30,5 +30,9 @@ describe('GET ordenes/:ordenId/products', ()=> {
         .get(`/ordenes/3/products`);
 
         expect(response.status).toBe(401);
-    })
+    });
+
+    afterAll(async () => {
+        await prisma.$disconnect();
+    });
 });

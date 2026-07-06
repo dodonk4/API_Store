@@ -6,11 +6,17 @@ import { createManyProducts } from '../../helpers/createManyProducts.ts';
 
 describe('GET /productos', () => {
     beforeEach(async () => {
+        const relaciones = await prisma.ordenes_productos.findMany();
+
         await prisma.$executeRawUnsafe(`
-      TRUNCATE TABLE "productos" RESTART IDENTITY CASCADE;
-    `);
+            TRUNCATE TABLE "productos" RESTART IDENTITY CASCADE;
+        `);
 
         await createManyProducts();
+
+        await prisma.ordenes_productos.createMany({
+            data: relaciones,
+        });
     });
 
     it('debería devolver la lista de productos', async () => {
@@ -22,6 +28,8 @@ describe('GET /productos', () => {
     });
 
     it('debería devolver una lista vacía', async () => {
+        const relaciones = await prisma.ordenes_productos.findMany();
+
         await prisma.$executeRawUnsafe(`
       TRUNCATE TABLE "productos" RESTART IDENTITY CASCADE;
     `);
@@ -32,6 +40,10 @@ describe('GET /productos', () => {
         expect(response.body).toEqual([]);
 
         await createManyProducts();
+
+        await prisma.ordenes_productos.createMany({
+            data: relaciones,
+        });
     });
 
     afterAll(async () => {

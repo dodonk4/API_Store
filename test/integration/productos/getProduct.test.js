@@ -10,9 +10,6 @@ describe('GET /productos/:productoId', () => {
 
     let productoId = 1;
 
-    const responseMock = await request(app)
-      .get(`/productos`);
-
     const response = await request(app)
       .get(`/productos/${productoId}`);
 
