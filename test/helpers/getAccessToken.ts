@@ -23,7 +23,7 @@ export async function getUserAgent() {
   const agent = request.agent(app);
 
   const credentials = {
-    email: 'juan@example.com',
+    email: 'carlos@example.com',
     password: 'abcd1234'
   };
 

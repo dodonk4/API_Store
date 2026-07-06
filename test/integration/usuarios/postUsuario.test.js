@@ -20,44 +20,46 @@ describe('POST /usuarios', () => {
       .post('/usuarios')
       .send(usuarioCrear);
 
-    expect(response.status).toBe(200);
+    expect(response.status).toBe(201);
 
     const id = response.body.id;
 
-    await prisma.usuarios.delete({ where: { id } });
+    const deleteUsuario = await prisma.usuarios.delete({ where: { id } });
+
+
   });
 
-//   it('debería rechazar por no tener un token', async () => {
+  it('debería rechazar por no tener un token', async () => {
 
-//     const response = await request(app)
-//       .post('/usuarios')
-//       .send(usuarioCrear);
+    const response = await request(app)
+      .post('/usuarios')
+      .send(usuarioCrear);
 
-//     expect(response.status).toBe(401);
-//   });
+    expect(response.status).toBe(401);
+  });
 
-//   it('debería devolver un 403 por tener prohibido agregar usuarios', async () => {
+  it('debería devolver un 403 por tener prohibido agregar usuarios', async () => {
 
-//     const agent = await getNonAuthenticatedAgent();
+    const agent = await getNonAuthenticatedAgent();
 
-//     const response = await agent
-//       .post('/usuarios')
-//       .send(usuarioCrear);
+    const response = await agent
+      .post('/usuarios')
+      .send(usuarioCrear);
 
-//     expect(response.status).toBe(403);
-//   });
+    expect(response.status).toBe(403);
+  });
 
   
-//   it('debería devolver un error de zod 400 por subir mal el usuario', async () => {
-//     const agent = await getAdminAgent();
+  it('debería devolver un error de zod 400 por subir mal el usuario', async () => {
+    const agent = await getAdminAgent();
 
-//     const response = await agent
-//       .post('/usuarios')
-//       .send(badUsuarioCrear);
+    const response = await agent
+      .post('/usuarios')
+      .send(badUsuarioCrear);
 
-//     expect(response.status).toBe(400);
+    expect(response.status).toBe(400);
     
-//   });
+  });
 
   afterAll(async () => {
     await prisma.$disconnect();

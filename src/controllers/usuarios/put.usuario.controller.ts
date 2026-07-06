@@ -2,10 +2,12 @@ import express from 'express';
 import { updateUsuario } from '../../services/usuarios.service.ts';
 import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
+import bcrypt from 'bcryptjs';
 
 interface PutUsuarioBody {
-  nombre?: string,
-  email?: string
+  username?: string,
+  email?: string,
+  password?: string,
 }
 
 export default async function putUsuario(req: express.Request, res: express.Response): Promise<void | express.Response> {
@@ -15,13 +17,24 @@ export default async function putUsuario(req: express.Request, res: express.Resp
     throw new BadRequestError("El id debe ser un numero");
   }
 
-  const { nombre, email }: PutUsuarioBody = req.body;
+  let { username, email, password }: PutUsuarioBody = req.body;
 
-  if (!nombre && !email) {
-    throw new BadRequestError("Nombre o email es requerido");
+  if (!username && !email && !password) {
+    throw new BadRequestError("Nombre, email o password es requerido");
   }
 
-  const usuario: UsuarioData = await updateUsuario(id, req.body);
+  if (password) {
+    const saltRounds: number = 12;
+    password = await bcrypt.hash(password, saltRounds);
+  }
+
+  const updateData = {
+    ...(username !== undefined && { username }),
+    ...(email !== undefined && { email }),
+    ...(password !== undefined && { password }),
+  };
+
+  const usuario: UsuarioData = await updateUsuario(id, updateData);
   res.json(usuario);
 
 }

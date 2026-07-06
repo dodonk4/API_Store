@@ -17,9 +17,13 @@ export async function findAllUsuarios(): Promise<UsuarioData[]> {
 }
 
 export async function updateUsuario(id: number, data: Partial<UsuarioData>): Promise<UsuarioData> {
+  const usuario: UsuarioData | null = await prisma.usuarios.findUnique({ where: { id } });
+  if (!usuario) throw new NotFoundError('Usuario no encontrado');
   return await prisma.usuarios.update({ where: { id }, data });
 }
 
 export async function deleteUsuarioService(id: number): Promise<void> {
+  const usuario: UsuarioData | null = await prisma.usuarios.findUnique({ where: { id } });
+  if (!usuario) throw new NotFoundError('Usuario no encontrado');
   await prisma.usuarios.delete({ where: { id } });
 }
