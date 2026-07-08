@@ -138,7 +138,21 @@ async function main() {
     const orden3 = await prisma.ordenes.create({
         data: {
             usuarioId: usuario3.id,
+            estado: 'CARRITO'
+        }
+    });
+
+    const orden4 = await prisma.ordenes.create({
+        data: {
+            usuarioId: usuario3.id,
             estado: 'PAGO_PENDIENTE'
+        }
+    });
+
+    const orden5 = await prisma.ordenes.create({
+        data: {
+            usuarioId: usuario3.id,
+            estado: 'PAGADA'
         }
     });
 
@@ -180,6 +194,18 @@ async function main() {
                 productId: productos[6].id,
                 cantidad: 2,
                 precioUnitario: productos[6].precio
+            },
+            {
+                ordenId: orden4.id,
+                productId: productos[6].id,
+                cantidad: 2,
+                precioUnitario: productos[6].precio
+            },
+            {
+                ordenId: orden5.id,
+                productId: productos[4].id,
+                cantidad: 2,
+                precioUnitario: productos[4].precio
             }
         ]
     });

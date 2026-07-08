@@ -36,6 +36,10 @@ export default async function postOrdenProducto(req: express.Request, res: expre
       throw new NotFoundError("No se encuentra el producto que se quiere agregar a la orden");
     }
 
+    if(producto.stock < cantidad){
+      throw new ConflictError("La cantidad pedida es menor al stock del producto");
+    }
+
     const precioUnitario: Decimal = producto.precio;
 
 
