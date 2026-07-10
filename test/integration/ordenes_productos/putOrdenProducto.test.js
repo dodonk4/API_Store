@@ -3,38 +3,39 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
-import { exceededQuantityOrdenProducto, goodOrdenProducto, nonExistingProductOrdenProducto } from '../../fixtures/ordenesProductos.fixtures.ts';
+import { exceededQuantityOrdenProducto, goodOrdenProducto, goodOrdenProductoActualizar, nonExistingProductOrdenProducto, rollback } from '../../fixtures/ordenesProductos.fixtures.ts';
 
-describe('POST ordenes/:ordenId/products', () => {
-    it('debería devolver 200 por haber creado exitosamente un producto', async () => {
+describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
+    it('debería devolver 200 por haber actualizado exitosamente un producto', async () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes/3/products`)
-            .send(goodOrdenProducto);
+            .put(`/ordenes/3/products/5`)
+            .send(goodOrdenProductoActualizar);
 
         expect(response.status).toBe(200);
 
-        const id = response.body.id;
-
-        await prisma.ordenes_productos.delete({ where: { id } });
+        //Es más fácil llamar al agent a que haga el rollback, porque ya actualiza el stock del producto
+        await agent
+            .put(`/ordenes/3/products/5`)
+            .send(rollback);
     })
 
-    it('debería devolver 404 por no existir el producto que se quiere agregar', async () => {
+    it('debería devolver 404 por no existir el producto que se quiere reemplazar en la orden', async () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes/3/products`)
+            .put(`/ordenes/3/products/5`)
             .send(nonExistingProductOrdenProducto);
 
         expect(response.status).toBe(404);
     })
 
-    it('debería devolver 404 por no existir la orden en la que se quiere agregar', async () => {
+    it('debería devolver 404 por no existir la orden en la que se quiere actualizar', async () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes/99999/products`)
+            .put(`/ordenes/99999/products/5`)
             .send(goodOrdenProducto);
 
         expect(response.status).toBe(404);
@@ -44,17 +45,18 @@ describe('POST ordenes/:ordenId/products', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes/3/products`)
+            .put(`/ordenes/3/products/5`)
             .send(exceededQuantityOrdenProducto);
 
         expect(response.status).toBe(409);
+
     });
 
     it('debería devolver 409 por intentar actualizar una orden con pago pendiente', async () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes/4/products`)
+            .put(`/ordenes/4/products/7`)
             .send(goodOrdenProducto);
 
         expect(response.status).toBe(409);
@@ -64,7 +66,7 @@ describe('POST ordenes/:ordenId/products', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes/5/products`)
+            .put(`/ordenes/5/products/6`)
             .send(goodOrdenProducto);
 
         expect(response.status).toBe(409);

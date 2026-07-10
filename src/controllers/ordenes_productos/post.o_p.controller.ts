@@ -4,11 +4,12 @@ import type { OrdenData } from '../../interfaces/Orden.interface.ts';
 import type { ProductoData } from '../../interfaces/Producto.interface.ts';
 import { createOrdenProducto } from '../../services/ordenes_productos.service.ts';
 import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
-import { findProductoById } from '../../services/productos.service.ts';
+import { findProductoById, updateProducto } from '../../services/productos.service.ts';
 import { Decimal } from '@prisma/client/runtime/client';
 import { findOrdenById } from '../../services/ordenes.service.ts';
 import { ConflictError } from '../../errors/ConflictError.ts';
 import { NotFoundError } from '../../errors/NotFoundError.ts';
+import { prisma } from '../../lib/prisma.ts';
 
 type PostOrdenProductoBody = {
     productId: number,
@@ -32,13 +33,15 @@ export default async function postOrdenProducto(req: express.Request, res: expre
 
     const producto: ProductoData = await findProductoById(productId);
 
-    if (!producto) {
+    if (!producto || !producto.id) {
       throw new NotFoundError("No se encuentra el producto que se quiere agregar a la orden");
     }
 
     if(producto.stock < cantidad){
-      throw new ConflictError("La cantidad pedida es menor al stock del producto");
+      throw new ConflictError("La cantidad pedida es mayor al stock del producto");
     }
+
+    await updateProducto(producto.id, { stock: (producto.stock - cantidad) })
 
     const precioUnitario: Decimal = producto.precio;
 

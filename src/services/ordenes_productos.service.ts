@@ -5,7 +5,6 @@ import type { Orden_ProductoData } from '../interfaces/Orden_Producto.interface.
 import { prisma } from '../lib/prisma.ts';
 
 export async function createOrdenProducto(data: Orden_ProductoData): Promise<Orden_ProductoData> {
-  console.log("Data:", data);
   return await prisma.ordenes_productos.create({ data });
 }
 

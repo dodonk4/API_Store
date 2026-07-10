@@ -14,9 +14,16 @@ describe('GET /productos', () => {
 
         await createManyProducts();
 
-        await prisma.ordenes_productos.createMany({
-            data: relaciones,
-        });
+        for (const relacion of relaciones) {
+            await prisma.ordenes_productos.create({
+                data: {
+                    ordenId: relacion.ordenId,
+                    productId: relacion.productId,
+                    precioUnitario: relacion.precioUnitario,
+                    cantidad: relacion.cantidad,
+                },
+            });
+        }
     });
 
     it('debería devolver la lista de productos', async () => {
@@ -41,9 +48,16 @@ describe('GET /productos', () => {
 
         await createManyProducts();
 
-        await prisma.ordenes_productos.createMany({
-            data: relaciones,
-        });
+        for (const relacion of relaciones) {
+            await prisma.ordenes_productos.create({
+                data: {
+                    ordenId: relacion.ordenId,
+                    productId: relacion.productId,
+                    precioUnitario: relacion.precioUnitario,
+                    cantidad: relacion.cantidad,
+                },
+            });
+        }
     });
 
     afterAll(async () => {

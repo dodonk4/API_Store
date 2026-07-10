@@ -9,6 +9,7 @@ export async function createUsuario(data: CreateUsuarioData): Promise<UsuarioDat
 export async function findUsuarioById(id: number): Promise<UsuarioData> {
   const usuario = await prisma.usuarios.findUnique({ where: { id } });
   if (!usuario) throw new NotFoundError('Usuario no encontrado');
+
   return usuario;
 }
 

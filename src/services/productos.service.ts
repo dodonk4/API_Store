@@ -9,6 +9,7 @@ export async function createProducto(data: CreateProductoData): Promise<Producto
 export async function findProductoById(id: number): Promise<ProductoData> {
   const producto: ProductoData | null = await prisma.productos.findUnique({ where: { id } });
   if (!producto) throw new NotFoundError('Producto no encontrado');
+
   return producto;
 }
 

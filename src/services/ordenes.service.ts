@@ -12,7 +12,7 @@ export async function findAllOrdenes(): Promise<OrdenData[]> {
 
 export async function findOrdenById(id: number): Promise<OrdenData> {
   const orden: OrdenData | null = await prisma.ordenes.findUnique({ where: { id } });
-  if (!orden) throw new NotFoundError('Orden no encontrada');
+  if (!orden) throw new NotFoundError('Orden no encontrada')
   return orden;
 }
 

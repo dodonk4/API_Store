@@ -9,6 +9,6 @@ export default function generateAccessToken(user: UsuarioData): string {
     },
         process.env.AUTH_SECRET as string,
         {
-            expiresIn: "15s"
+            expiresIn: "15m"
         })
 }

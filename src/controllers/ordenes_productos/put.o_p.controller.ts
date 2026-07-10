@@ -6,6 +6,12 @@ import type { OrdenData } from '../../interfaces/Orden.interface.ts';
 import { ConflictError } from '../../errors/ConflictError.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
+import type { Orden_ProductoData } from '../../interfaces/Orden_Producto.interface.ts';
+import { findOrdenProductoById, updateOrdenProducto } from '../../services/ordenes_productos.service.ts';
+import { updateProductQuantity } from '../../utils/updateProductQuantity.utils.ts';
+import type { ProductoData } from '../../interfaces/Producto.interface.ts';
+import { findProductoById } from '../../services/productos.service.ts';
+import { NotFoundError } from '../../errors/NotFoundError.ts';
 
 type PutOrdenProductoBody = {
     cantidad?: number,
@@ -19,7 +25,7 @@ export default async function updateOrdenProductoController(req: express.Request
     //El "ordenIdParams" indica el ID de la orden a la que pertenece el orden_producto que se desea modificar
     //El ordenId (del req.body) indica el ID de la orden a la que se caambiaría el orden_producto
     const ordenIdParams: number = parseInt(req.params.ordenId as string);
-    const ordenProductoId: number = parseInt(req.params.ordenId as string);
+    const ordenProductoId: number = parseInt(req.params.ordenProductoId as string);
 
     const { cantidad, ordenId, precioUnitario, productId }: PutOrdenProductoBody = req.body;
     if (!cantidad && !ordenId && !precioUnitario && !productId) {
@@ -29,17 +35,38 @@ export default async function updateOrdenProductoController(req: express.Request
     await checkOrdenOwner(ordenIdParams, req);
     const orden: OrdenData = await findOrdenById(ordenIdParams);
 
+    // console.log("La orden es: ", orden);
+
     if (req.user?.rol === "USER") {
         if (orden.estado != "CARRITO") {
             throw new ConflictError("No se puede modificar o eliminar un producto de una orden que ya no esté en carrito");
         }
-
         if (precioUnitario) {
             throw new UnauthorizedError("No tienes permisos para modificar el precio unitario del producto pedido en la orden");
         }
     }
 
-    await updateOrdenById(ordenProductoId, req.body);
+    if (productId) {
+        // console.log("Entra: El productId es: ", productId);
+        // console.log(req.body);
+        const producto: ProductoData = await findProductoById(productId);
+        // console.log("El producto es: ", producto);
+        
+        if (!producto || !producto.id) {
+            console.log("NO ESTAAAAAAA, NO EXISTEEEEEEEE JAJAJAJAAJAJAJA");
+            throw new NotFoundError("No se encuentra el producto que se quiere actualizar en la orden");
+        }
+    }
+
+    const ordenProducto: Orden_ProductoData = await findOrdenProductoById(ordenProductoId);
+
+    // console.log("El ordenProducto es: ", ordenProducto);
+
+    if (cantidad) {
+        await updateProductQuantity(ordenProducto, cantidad);
+    }
+
+    await updateOrdenProducto(ordenProductoId, req.body);
 
     res.status(200).send("Producto de la orden correctamente actualizado");
 

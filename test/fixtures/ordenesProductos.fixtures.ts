@@ -12,3 +12,11 @@ export const exceededQuantityOrdenProducto = {
     "productId": 1,
     "cantidad": 99999
 }
+
+export const goodOrdenProductoActualizar = {
+    "cantidad": 3
+}
+
+export const rollback = {
+    "cantidad": 1
+}

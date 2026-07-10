@@ -157,58 +157,62 @@ async function main() {
     });
 
     // Productos de las órdenes
-    await prisma.ordenes_productos.createMany({
-        data: [
-            {
-                ordenId: orden1.id,
-                productId: productos[0].id,
-                cantidad: 1,
-                precioUnitario: productos[0].precio
-            },
-            {
-                ordenId: orden1.id,
-                productId: productos[1].id,
-                cantidad: 2,
-                precioUnitario: productos[1].precio
-            },
-            {
-                ordenId: orden2.id,
-                productId: productos[2].id,
-                cantidad: 1,
-                precioUnitario: productos[2].precio
-            },
-            {
-                ordenId: orden2.id,
-                productId: productos[3].id,
-                cantidad: 1,
-                precioUnitario: productos[3].precio
-            },
-            {
-                ordenId: orden3.id,
-                productId: productos[5].id,
-                cantidad: 1,
-                precioUnitario: productos[5].precio
-            },
-            {
-                ordenId: orden3.id,
-                productId: productos[6].id,
-                cantidad: 2,
-                precioUnitario: productos[6].precio
-            },
-            {
-                ordenId: orden4.id,
-                productId: productos[6].id,
-                cantidad: 2,
-                precioUnitario: productos[6].precio
-            },
-            {
-                ordenId: orden5.id,
-                productId: productos[4].id,
-                cantidad: 2,
-                precioUnitario: productos[4].precio
-            }
-        ]
-    });
+    const ordenesProductos = [
+        {
+            ordenId: orden1.id,
+            productId: productos[0].id,
+            cantidad: 1,
+            precioUnitario: productos[0].precio
+        },
+        {
+            ordenId: orden1.id,
+            productId: productos[1].id,
+            cantidad: 2,
+            precioUnitario: productos[1].precio
+        },
+        {
+            ordenId: orden2.id,
+            productId: productos[2].id,
+            cantidad: 1,
+            precioUnitario: productos[2].precio
+        },
+        {
+            ordenId: orden2.id,
+            productId: productos[3].id,
+            cantidad: 1,
+            precioUnitario: productos[3].precio
+        },
+        {
+            ordenId: orden3.id,
+            productId: productos[5].id,
+            cantidad: 1,
+            precioUnitario: productos[5].precio
+        },
+        {
+            ordenId: orden3.id,
+            productId: productos[6].id,
+            cantidad: 2,
+            precioUnitario: productos[6].precio
+        },
+        {
+            ordenId: orden4.id,
+            productId: productos[6].id,
+            cantidad: 2,
+            precioUnitario: productos[6].precio
+        },
+        {
+            ordenId: orden5.id,
+            productId: productos[4].id,
+            cantidad: 2,
+            precioUnitario: productos[4].precio
+        }
+    ];
+
+    for (const item of ordenesProductos) {
+        await prisma.ordenes_productos.create({
+            data: item
+        });
+    }
 
     console.log('✅ Seed completado');
 }
