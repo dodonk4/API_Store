@@ -4,8 +4,14 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 import { productoCrear } from '../../fixtures/productos.fixture.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('DELETE productos/:productId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 204 al eliminar un producto siendo ADMIN', async () => {
 
         const agent = await getAdminAgent();

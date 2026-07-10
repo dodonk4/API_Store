@@ -5,11 +5,13 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { badUsuarioCrear, usuarioCrear } from '../../fixtures/usuarios.fixture.ts';
 import { id } from 'zod/locales';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('POST /usuarios', () => {
 
   beforeEach(async () => {
     await logoutHelper();
+    await resetDatabase();
   })
 
   it('debería crear un usuario siendo ADMIN', async () => {

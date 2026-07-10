@@ -4,8 +4,14 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 import { usuarioCrear } from '../../fixtures/usuarios.fixture.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('DELETE usuarios/:usuarioId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 204 al eliminar un usuario siendo ADMIN', async () => {
 
         const agent = await getAdminAgent();

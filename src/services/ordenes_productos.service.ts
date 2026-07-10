@@ -23,6 +23,8 @@ export async function findAllOrdenesProductosByOrdenId(ordenId: number): Promise
 }
 
 export async function updateOrdenProducto(id: number, data: Partial<Orden_ProductoData>): Promise<Orden_ProductoData> {
+  const ordenProducto: Orden_ProductoData | null = await prisma.ordenes_productos.findUnique({ where: { id } });
+  if (!ordenProducto) throw new NotFoundError('Orden_Producto no encontrado');
   return await prisma.ordenes_productos.update({
     where: { id },
     data
@@ -30,5 +32,7 @@ export async function updateOrdenProducto(id: number, data: Partial<Orden_Produc
 }
 
 export async function deleteOrdenProducto(id: number): Promise<void> {
+  const ordenProducto: Orden_ProductoData | null = await prisma.ordenes_productos.findUnique({ where: { id } });
+  if (!ordenProducto) throw new NotFoundError('Orden_Producto no encontrado');
   await prisma.ordenes_productos.delete({ where: { id } });
 }

@@ -4,8 +4,14 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
 import { exceededQuantityOrdenProducto, goodOrdenProducto, nonExistingProductOrdenProducto } from '../../fixtures/ordenesProductos.fixtures.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('POST ordenes/:ordenId/products', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 200 por haber creado exitosamente un producto', async () => {
         const agent = await getUserAgent();
 

@@ -4,12 +4,14 @@ import { PrismaClient } from "../generated/prisma/client.ts";
 // import { PrismaClient } from "../generated/prisma/client.d.ts";
 
 import bcrypt from 'bcryptjs';
-const connectionString = `${process.env.DATABASE_URL}`;
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
+// const connectionString = `${process.env.DATABASE_URL}`;
+// const adapter = new PrismaPg({ connectionString });
+// const prisma = new PrismaClient({ adapter });
 
-async function main() {
-    console.log('🌱 Iniciando seed...');
+import { prisma } from '../src/lib/prisma.ts';
+
+export async function seed() {
+    // console.log('🌱 Iniciando seed...');
 
     await prisma.ordenes_productos.deleteMany();
     await prisma.ordenes.deleteMany();
@@ -22,7 +24,7 @@ async function main() {
             username: 'Juan Pérez',
             email: 'juan@example.com',
             rol: 'USER',
-            password: bcrypt.hashSync("abcd1234", 12)
+            password: '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'//abcd1234
         }
     });
 
@@ -31,7 +33,7 @@ async function main() {
             username: 'María Gómez',
             email: 'maria@example.com',
             rol: 'ADMIN',
-            password: bcrypt.hashSync("abcd1234", 12)
+            password: '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'//abcd1234
         }
     });
 
@@ -40,7 +42,7 @@ async function main() {
             username: 'Carlos López',
             email: 'carlos@example.com',
             rol: 'USER',
-            password: bcrypt.hashSync("abcd1234", 12)
+            password: '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'//abcd1234
         }
     });
 
@@ -214,14 +216,16 @@ async function main() {
         });
     }
 
-    console.log('✅ Seed completado');
+    // console.log('✅ Seed completado');
 }
 
-main()
-    .catch((error) => {
-        console.error(error);
-        process.exit(1);
-    })
-    .finally(async () => {
-        await prisma.$disconnect();
-    });
+if (import.meta.main) {
+    seed()
+        .catch((error) => {
+            console.error(error);
+            process.exit(1);
+        })
+        .finally(async () => {
+            await prisma.$disconnect();
+        });
+}

@@ -3,8 +3,14 @@ import request from 'supertest';
 import { getAdminAgent, getNonAuthenticatedAgent } from '../../helpers/getAccessToken.ts';
 import { badProductoCrear, productoActualizar } from '../../fixtures/productos.fixture.ts';
 import { prisma } from '../../../src/lib/prisma.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('PUT /productos/:productoId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 200 al actualizar exitosamente un producto', async () => {
         let productoId = 8;
 
@@ -16,7 +22,7 @@ describe('PUT /productos/:productoId', () => {
         expect(response.status).toBe(200);
     })
 
-    
+
     it('debería devolver 404 al intentar actualizar un producto inexistente', async () => {
         let productoId = 99999;
 
@@ -63,14 +69,14 @@ describe('PUT /productos/:productoId', () => {
 
     it('debería devolver un error de zod 400 por subir mal los datos a actualizar del producto', async () => {
         const agent = await getAdminAgent();
-    
+
         const res = await agent
-          .post('/productos')
-          .send(badProductoCrear);//El badProductoCrear sirve también para la actualización mala
-    
+            .post('/productos')
+            .send(badProductoCrear);//El badProductoCrear sirve también para la actualización mala
+
         expect(res.status).toBe(400);
-        
-      });
+
+    });
 
     afterAll(async () => {
         await prisma.$disconnect();

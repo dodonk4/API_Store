@@ -3,8 +3,14 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('GET /usuarios/:usuarioId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 200 cuando se solicita un usuario siendo ADMIN', async () => {
         const agent = await getAdminAgent();
 

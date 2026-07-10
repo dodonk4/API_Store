@@ -3,8 +3,14 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('GET ordenes/:ordenId/products/:ordenProductoId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 200 al devolver exitosamente un producto', async () => {
 
         const agent = await getUserAgent();

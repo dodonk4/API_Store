@@ -35,8 +35,6 @@ export default async function updateOrdenProductoController(req: express.Request
     await checkOrdenOwner(ordenIdParams, req);
     const orden: OrdenData = await findOrdenById(ordenIdParams);
 
-    // console.log("La orden es: ", orden);
-
     if (req.user?.rol === "USER") {
         if (orden.estado != "CARRITO") {
             throw new ConflictError("No se puede modificar o eliminar un producto de una orden que ya no esté en carrito");
@@ -46,21 +44,16 @@ export default async function updateOrdenProductoController(req: express.Request
         }
     }
 
+
     if (productId) {
-        // console.log("Entra: El productId es: ", productId);
-        // console.log(req.body);
         const producto: ProductoData = await findProductoById(productId);
-        // console.log("El producto es: ", producto);
         
         if (!producto || !producto.id) {
-            console.log("NO ESTAAAAAAA, NO EXISTEEEEEEEE JAJAJAJAAJAJAJA");
             throw new NotFoundError("No se encuentra el producto que se quiere actualizar en la orden");
         }
     }
 
     const ordenProducto: Orden_ProductoData = await findOrdenProductoById(ordenProductoId);
-
-    // console.log("El ordenProducto es: ", ordenProducto);
 
     if (cantidad) {
         await updateProductQuantity(ordenProducto, cantidad);

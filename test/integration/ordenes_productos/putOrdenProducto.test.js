@@ -4,8 +4,14 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
 import { exceededQuantityOrdenProducto, goodOrdenProducto, goodOrdenProductoActualizar, nonExistingProductOrdenProducto, rollback } from '../../fixtures/ordenesProductos.fixtures.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 200 por haber actualizado exitosamente un producto', async () => {
         const agent = await getUserAgent();
 
@@ -15,10 +21,6 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
 
         expect(response.status).toBe(200);
 
-        //Es más fácil llamar al agent a que haga el rollback, porque ya actualiza el stock del producto
-        await agent
-            .put(`/ordenes/3/products/5`)
-            .send(rollback);
     })
 
     it('debería devolver 404 por no existir el producto que se quiere reemplazar en la orden', async () => {

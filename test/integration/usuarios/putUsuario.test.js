@@ -3,8 +3,14 @@ import request from 'supertest';
 import { getAdminAgent, getNonAuthenticatedAgent } from '../../helpers/getAccessToken.ts';
 import { badUsuarioCrear, usuarioActualizar, usuarioActualizarRollback } from '../../fixtures/usuarios.fixture.ts';
 import { prisma } from '../../../src/lib/prisma.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('PUT /usuarios/:usuarioId', () => {
+
+    beforeEach(async () => {
+        await resetDatabase();
+    });
+
     it('debería devolver 200 al actualizar exitosamente un usuario', async () => {
         let usuarioId = 3;
 

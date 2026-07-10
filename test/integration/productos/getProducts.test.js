@@ -3,27 +3,11 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { createManyProducts } from '../../helpers/createManyProducts.ts';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('GET /productos', () => {
     beforeEach(async () => {
-        const relaciones = await prisma.ordenes_productos.findMany();
-
-        await prisma.$executeRawUnsafe(`
-            TRUNCATE TABLE "productos" RESTART IDENTITY CASCADE;
-        `);
-
-        await createManyProducts();
-
-        for (const relacion of relaciones) {
-            await prisma.ordenes_productos.create({
-                data: {
-                    ordenId: relacion.ordenId,
-                    productId: relacion.productId,
-                    precioUnitario: relacion.precioUnitario,
-                    cantidad: relacion.cantidad,
-                },
-            });
-        }
+        await resetDatabase();
     });
 
     it('debería devolver la lista de productos', async () => {
@@ -35,7 +19,7 @@ describe('GET /productos', () => {
     });
 
     it('debería devolver una lista vacía', async () => {
-        const relaciones = await prisma.ordenes_productos.findMany();
+        // const relaciones = await prisma.ordenes_productos.findMany();
 
         await prisma.$executeRawUnsafe(`
       TRUNCATE TABLE "productos" RESTART IDENTITY CASCADE;
@@ -46,18 +30,18 @@ describe('GET /productos', () => {
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
 
-        await createManyProducts();
+        // await createManyProducts();
 
-        for (const relacion of relaciones) {
-            await prisma.ordenes_productos.create({
-                data: {
-                    ordenId: relacion.ordenId,
-                    productId: relacion.productId,
-                    precioUnitario: relacion.precioUnitario,
-                    cantidad: relacion.cantidad,
-                },
-            });
-        }
+        // for (const relacion of relaciones) {
+        //     await prisma.ordenes_productos.create({
+        //         data: {
+        //             ordenId: relacion.ordenId,
+        //             productId: relacion.productId,
+        //             precioUnitario: relacion.precioUnitario,
+        //             cantidad: relacion.cantidad,
+        //         },
+        //     });
+        // }
     });
 
     afterAll(async () => {

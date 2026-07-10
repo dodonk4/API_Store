@@ -5,12 +5,14 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { badProductoCrear, productoCrear } from '../../fixtures/productos.fixture.ts';
 import { id } from 'zod/locales';
+import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('POST /productos', () => {
 
 
   beforeEach(async () => {
     await logoutHelper();
+    await resetDatabase();
   })
 
   it('debería crear un producto', async () => {

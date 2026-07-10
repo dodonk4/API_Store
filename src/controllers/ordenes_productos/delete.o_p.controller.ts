@@ -3,7 +3,6 @@ import { deleteOrdenProducto } from '../../services/ordenes_productos.service.ts
 import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
 import { checkOrdenProductoOwner } from '../../utils/checkOrdenProductoOwner.utils.ts';
 import { findOrdenById } from '../../services/ordenes.service.ts';
-import * as AuthRequest from '../../interfaces/AuthRequest.ts';
 import type { OrdenData } from '../../interfaces/Orden.interface.ts';
 import { ConflictError } from '../../errors/ConflictError.ts';
 
