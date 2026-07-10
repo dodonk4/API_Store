@@ -3,7 +3,7 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
-import { exceededQuantityOrdenProducto, goodOrdenProducto, goodOrdenProductoActualizar, nonExistingProductOrdenProducto, rollback } from '../../fixtures/ordenesProductos.fixtures.ts';
+import { exceededQuantityOrdenProducto, goodOrdenProducto, goodOrdenProductoActualizar, nonExistingProductOrdenProducto, rollback } from '../../fixtures/ordenesProductos.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {

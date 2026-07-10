@@ -1,222 +1,180 @@
 import 'dotenv/config';
-import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient } from "../generated/prisma/client.ts";
-// import { PrismaClient } from "../generated/prisma/client.d.ts";
-
-import bcrypt from 'bcryptjs';
-// const connectionString = `${process.env.DATABASE_URL}`;
-// const adapter = new PrismaPg({ connectionString });
-// const prisma = new PrismaClient({ adapter });
-
 import { prisma } from '../src/lib/prisma.ts';
 
+const PASSWORD_HASH =
+    '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'; // abcd1234
+
 export async function seed() {
-    // console.log('🌱 Iniciando seed...');
+    await prisma.$executeRawUnsafe(`
+        TRUNCATE TABLE
+            "ordenes_productos",
+            "ordenes",
+            "productos",
+            "usuarios"
+        RESTART IDENTITY CASCADE;
+    `);
 
-    await prisma.ordenes_productos.deleteMany();
-    await prisma.ordenes.deleteMany();
-    await prisma.productos.deleteMany();
-    await prisma.usuarios.deleteMany();
-
-    // Usuarios
-    const usuario1 = await prisma.usuarios.create({
-        data: {
-            username: 'Juan Pérez',
-            email: 'juan@example.com',
-            rol: 'USER',
-            password: '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'//abcd1234
-        }
+    await prisma.usuarios.createMany({
+        data: [
+            {
+                username: 'Juan Pérez',
+                email: 'juan@example.com',
+                rol: 'USER',
+                password: PASSWORD_HASH,
+            },
+            {
+                username: 'María Gómez',
+                email: 'maria@example.com',
+                rol: 'ADMIN',
+                password: PASSWORD_HASH,
+            },
+            {
+                username: 'Carlos López',
+                email: 'carlos@example.com',
+                rol: 'USER',
+                password: PASSWORD_HASH,
+            },
+        ],
     });
 
-    const usuario2 = await prisma.usuarios.create({
-        data: {
-            username: 'María Gómez',
-            email: 'maria@example.com',
-            rol: 'ADMIN',
-            password: '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'//abcd1234
-        }
-    });
-
-    const usuario3 = await prisma.usuarios.create({
-        data: {
-            username: 'Carlos López',
-            email: 'carlos@example.com',
-            rol: 'USER',
-            password: '$2b$12$MIInMAEMLNPGpIs/fRUMqOUG0CtVsgN.j1rm1vRACOfHEhCZe86Ci'//abcd1234
-        }
-    });
-
-    // Productos
-    const productos = await Promise.all([
-        prisma.productos.create({
-            data: {
+    await prisma.productos.createMany({
+        data: [
+            {
                 nombre: 'Teclado Mecánico',
                 descripcion: 'Teclado RGB switches Red',
                 categoria: 'Periféricos',
                 stock: 15,
-                precio: 24999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 24999.99,
+            },
+            {
                 nombre: 'Mouse Gamer',
                 descripcion: 'Mouse Logitech 12000 DPI',
                 categoria: 'Periféricos',
                 stock: 20,
-                precio: 17999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 17999.99,
+            },
+            {
                 nombre: 'Monitor 24"',
                 descripcion: 'Monitor Full HD IPS',
                 categoria: 'Monitores',
                 stock: 10,
-                precio: 11999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 11999.99,
+            },
+            {
                 nombre: 'Auriculares',
                 descripcion: 'Auriculares inalámbricos',
                 categoria: 'Audio',
                 stock: 30,
-                precio: 44999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 44999.99,
+            },
+            {
                 nombre: 'Webcam HD',
                 descripcion: 'Webcam 1080p',
                 categoria: 'Video',
                 stock: 12,
-                precio: 31999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 31999.99,
+            },
+            {
                 nombre: 'Notebook',
                 descripcion: 'Notebook Ryzen 7',
                 categoria: 'Computadoras',
                 stock: 5,
-                precio: 849999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 849999.99,
+            },
+            {
                 nombre: 'Disco SSD 1TB',
                 descripcion: 'SSD NVMe Gen4',
                 categoria: 'Almacenamiento',
                 stock: 25,
-                precio: 89999.99
-            }
-        }),
-        prisma.productos.create({
-            data: {
+                precio: 89999.99,
+            },
+            {
                 nombre: 'Silla Gamer',
                 descripcion: 'Silla ergonómica',
                 categoria: 'Muebles',
                 stock: 8,
-                precio: 219999.99
-            }
-        })
-    ]);
-
-    // Órdenes
-    const orden1 = await prisma.ordenes.create({
-        data: {
-            usuarioId: usuario1.id,
-            estado: 'CARRITO'
-        }
+                precio: 219999.99,
+            },
+        ],
     });
 
-    const orden2 = await prisma.ordenes.create({
-        data: {
-            usuarioId: usuario2.id,
-            estado: 'PAGADA'
-        }
+    await prisma.ordenes.createMany({
+        data: [
+            {
+                usuarioId: 1,
+                estado: 'CARRITO',
+            },
+            {
+                usuarioId: 2,
+                estado: 'PAGADA',
+            },
+            {
+                usuarioId: 3,
+                estado: 'CARRITO',
+            },
+            {
+                usuarioId: 3,
+                estado: 'PAGO_PENDIENTE',
+            },
+            {
+                usuarioId: 3,
+                estado: 'PAGADA',
+            },
+        ],
     });
 
-    const orden3 = await prisma.ordenes.create({
-        data: {
-            usuarioId: usuario3.id,
-            estado: 'CARRITO'
-        }
+    await prisma.ordenes_productos.createMany({
+        data: [
+            {
+                ordenId: 1,
+                productId: 1,
+                cantidad: 1,
+                precioUnitario: 24999.99,
+            },
+            {
+                ordenId: 1,
+                productId: 2,
+                cantidad: 2,
+                precioUnitario: 17999.99,
+            },
+            {
+                ordenId: 2,
+                productId: 3,
+                cantidad: 1,
+                precioUnitario: 11999.99,
+            },
+            {
+                ordenId: 2,
+                productId: 4,
+                cantidad: 1,
+                precioUnitario: 44999.99,
+            },
+            {
+                ordenId: 3,
+                productId: 6,
+                cantidad: 1,
+                precioUnitario: 849999.99,
+            },
+            {
+                ordenId: 3,
+                productId: 7,
+                cantidad: 2,
+                precioUnitario: 89999.99,
+            },
+            {
+                ordenId: 4,
+                productId: 7,
+                cantidad: 2,
+                precioUnitario: 89999.99,
+            },
+            {
+                ordenId: 5,
+                productId: 5,
+                cantidad: 2,
+                precioUnitario: 31999.99,
+            },
+        ],
     });
-
-    const orden4 = await prisma.ordenes.create({
-        data: {
-            usuarioId: usuario3.id,
-            estado: 'PAGO_PENDIENTE'
-        }
-    });
-
-    const orden5 = await prisma.ordenes.create({
-        data: {
-            usuarioId: usuario3.id,
-            estado: 'PAGADA'
-        }
-    });
-
-    // Productos de las órdenes
-    const ordenesProductos = [
-        {
-            ordenId: orden1.id,
-            productId: productos[0].id,
-            cantidad: 1,
-            precioUnitario: productos[0].precio
-        },
-        {
-            ordenId: orden1.id,
-            productId: productos[1].id,
-            cantidad: 2,
-            precioUnitario: productos[1].precio
-        },
-        {
-            ordenId: orden2.id,
-            productId: productos[2].id,
-            cantidad: 1,
-            precioUnitario: productos[2].precio
-        },
-        {
-            ordenId: orden2.id,
-            productId: productos[3].id,
-            cantidad: 1,
-            precioUnitario: productos[3].precio
-        },
-        {
-            ordenId: orden3.id,
-            productId: productos[5].id,
-            cantidad: 1,
-            precioUnitario: productos[5].precio
-        },
-        {
-            ordenId: orden3.id,
-            productId: productos[6].id,
-            cantidad: 2,
-            precioUnitario: productos[6].precio
-        },
-        {
-            ordenId: orden4.id,
-            productId: productos[6].id,
-            cantidad: 2,
-            precioUnitario: productos[6].precio
-        },
-        {
-            ordenId: orden5.id,
-            productId: productos[4].id,
-            cantidad: 2,
-            precioUnitario: productos[4].precio
-        }
-    ];
-
-    for (const item of ordenesProductos) {
-        await prisma.ordenes_productos.create({
-            data: item
-        });
-    }
-
-    // console.log('✅ Seed completado');
 }
 
 if (import.meta.main) {

@@ -15,7 +15,7 @@ describe('POST /productos', () => {
     await resetDatabase();
   })
 
-  it('debería crear un producto', async () => {
+  it('debería devolver 200 al crear un producto', async () => {
 
     const agent = await getAdminAgent();
 
@@ -24,13 +24,9 @@ describe('POST /productos', () => {
       .send(productoCrear);
 
     expect(response.status).toBe(200);
-
-    const id = response.body.id;
-
-    await prisma.productos.delete({ where: { id } });
   });
 
-  it('debería rechazar por no tener un token', async () => {
+  it('debería devolver 401 por no estar logueado', async () => {
 
     const response = await request(app)
       .post('/productos')

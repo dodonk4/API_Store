@@ -3,7 +3,7 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
-import { exceededQuantityOrdenProducto, goodOrdenProducto, nonExistingProductOrdenProducto } from '../../fixtures/ordenesProductos.fixtures.ts';
+import { exceededQuantityOrdenProducto, goodOrdenProducto, nonExistingProductOrdenProducto } from '../../fixtures/ordenesProductos.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
 describe('POST ordenes/:ordenId/products', () => {
@@ -20,10 +20,6 @@ describe('POST ordenes/:ordenId/products', () => {
             .send(goodOrdenProducto);
 
         expect(response.status).toBe(200);
-
-        const id = response.body.id;
-
-        await prisma.ordenes_productos.delete({ where: { id } });
     })
 
     it('debería devolver 404 por no existir el producto que se quiere agregar', async () => {

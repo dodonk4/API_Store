@@ -3,52 +3,50 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
-import { goodOrdenProducto } from '../../fixtures/ordenesProductos.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('DELETE ordenes/:ordenId/products/:ordenProductoId', () => {
+describe('DELETE /ordenes/:ordenId', () => {
 
     beforeEach(async () => {
         await resetDatabase();
     });
 
-    it('debería devolver 200 al eliminar un producto de una orden ', async () => {
+    it('debería devolver 204 al eliminar una orden', async () => {
 
         const agent = await getUserAgent();
 
         const response = await agent
-            .delete(`/ordenes/3/products/5`);
+            .delete('/ordenes/3');
 
         expect(response.status).toBe(204);
-
     });
 
-    it('debería devolver 404 al tratar de eliminar un producto que no existe de una orden', async () => {
+    it('debería devolver 404 al tratar de eliminar una orden que no existe', async () => {
 
         const agent = await getAdminAgent();
 
         const response = await agent
-            .delete('/ordenes/3/products/999999');
+            .delete('/ordenes/999999');
 
         expect(response.status).toBe(404);
     });
 
-    it('debería devolver 401 al tratar de eliminar un producto de una orden sin estar logueado', async () => {
+    it('debería devolver 401 al tratar de eliminar una orden sin estar logueado', async () => {
 
         const response = await request(app)
-            .delete('/ordenes/3/products/1');
+            .delete('/ordenes/3');
 
         expect(response.status).toBe(401);
     });
 
-    it('debería devolver 409 al tratar de eliminar un producto de una orden que no está en carrito', async () => {
+    it('debería devolver 403 al tratar de eliminar una orden que no le corresponde a su usuario', async () => {
 
         const agent = await getUserAgent();
 
         const response = await agent
-            .delete('/ordenes/3/products/1');
+            .delete('/ordenes/1');
 
-        expect(response.status).toBe(409);
+        expect(response.status).toBe(403);
     });
 
 

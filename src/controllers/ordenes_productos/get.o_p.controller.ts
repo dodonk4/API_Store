@@ -3,11 +3,20 @@ import { findAllOrdenesProductosByOrdenId, findOrdenProductoById } from '../../s
 import type { Orden_ProductoData } from '../../interfaces/Orden_Producto.interface.ts';
 import { checkOrdenOwner } from '../../utils/checkOrdenOwner.utils.ts';
 import { checkOrdenProductoOwner } from '../../utils/checkOrdenProductoOwner.utils.ts';
+import { BadRequestError } from '../../errors/BadRequestError.ts';
 
 export async function getOrdenProductoById(req: express.Request, res: express.Response): Promise<void> {
 
     const ordenId: number = parseInt(req.params.ordenId as string);
     const ordenProductoId: number = parseInt(req.params.ordenProductoId as string);
+
+    if (!Number.isInteger(ordenId)) {
+        throw new BadRequestError("El ordenId debe ser un numero");
+    }
+
+    if (!Number.isInteger(ordenProductoId)) {
+        throw new BadRequestError("El ordenProductoId debe ser un numero");
+    }
 
     //Corrobora que el usuario tenga permisos para modificar este o_p
     //Si es de él, puede. Sino, tiene que ser un ADMIN

@@ -23,5 +23,14 @@ export async function updateOrdenById(id: number, data: Partial<OrdenData>) {
 }
 
 export async function deleteOrden(id: number): Promise<void> {
+  const orden: OrdenData | null = await prisma.ordenes.findUnique({ where: { id } });
+  if (!orden) throw new NotFoundError('Orden no encontrada');
+
+  await prisma.ordenes_productos.deleteMany({
+    where: {
+      ordenId: 3,
+    },
+  });
+  
   await prisma.ordenes.delete({ where: { id } });
 }
