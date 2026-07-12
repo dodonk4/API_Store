@@ -1,23 +1,23 @@
 import express from 'express';
-import { updateUsuario } from '../../services/users.service.ts';
-import type { UsuarioData } from '../../interfaces/User.interface.ts';
+import { updateUser } from '../../services/users.service.ts';
+import type { UserData } from '../../interfaces/User.interface.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 import bcrypt from 'bcryptjs';
 
-interface PutUsuarioBody {
+interface PutUserBody {
   username?: string,
   email?: string,
   password?: string,
 }
 
-export default async function putUsuario(req: express.Request, res: express.Response): Promise<void | express.Response> {
-  const id: number = parseInt(req.params.usuarioId as string);
+export default async function putUser(req: express.Request, res: express.Response): Promise<void | express.Response> {
+  const id: number = parseInt(req.params.userId as string);
 
   if (!Number.isInteger(id)) {
     throw new BadRequestError("El id debe ser un numero");
   }
 
-  let { username, email, password }: PutUsuarioBody = req.body;
+  let { username, email, password }: PutUserBody = req.body;
 
   if (!username && !email && !password) {
     throw new BadRequestError("Nombre, email o password es requerido");
@@ -34,7 +34,7 @@ export default async function putUsuario(req: express.Request, res: express.Resp
     ...(password !== undefined && { password }),
   };
 
-  const usuario: UsuarioData = await updateUsuario(id, updateData);
-  res.json(usuario);
+  const user: UserData = await updateUser(id, updateData);
+  res.json(user);
 
 }

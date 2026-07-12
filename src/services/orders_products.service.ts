@@ -1,5 +1,5 @@
 import { NotFoundError } from '../errors/NotFoundError.ts';
-import { Order_ProductData } from '../interfaces/Order_Product.interface.ts';
+import type { Order_ProductData } from '../interfaces/Order_Product.interface.ts';
 import { prisma } from '../lib/prisma.ts';
 
 export async function createOrderProduct(data: Order_ProductData): Promise<Order_ProductData> {

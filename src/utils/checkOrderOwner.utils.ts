@@ -10,10 +10,10 @@ export async function checkOrderOwner(id: number, req: express.Request): Promise
   }
 
   if (req.user.rol != "ADMIN") {
-    const orden: OrderData = await findOrderById(id);
+    const order: OrderData = await findOrderById(id);
 
     //Corroborar que el origen ID le corresponde al usuario logueado
-    if (orden.userId != req.user.id) {
+    if (order.userId != req.user.id) {
       throw new ForbiddenError("El usuario logueado no tiene permisos para acceder a la orden");
     }
 

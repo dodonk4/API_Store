@@ -3,9 +3,8 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
-import { exceededQuantityOrdenProducto, goodOrdenProducto, nonExistingProductOrdenProducto } from '../../fixtures/ordenesProductos.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
-import { badOrden, goodOrdenActualizar, unauthorizedOrdenCrear } from '../../fixtures/ordenes.fixture.ts';
+import { badOrden, goodOrdenUpdate, unauthorizedOrdenCrear } from '../../fixtures/ordenes.fixture.ts';
 
 describe('PUT /ordenes', () => {
 
@@ -18,7 +17,7 @@ describe('PUT /ordenes', () => {
 
         const response = await agent
             .put('/ordenes/3')
-            .send(goodOrdenActualizar);
+            .send(goodOrdenUpdate);
 
         expect(response.status).toBe(200);
 
@@ -28,7 +27,7 @@ describe('PUT /ordenes', () => {
 
         const response = await request(app)
             .put('/ordenes/3')
-            .send(goodOrdenActualizar);
+            .send(goodOrdenUpdate);
 
         expect(response.status).toBe(401);
 
@@ -39,7 +38,7 @@ describe('PUT /ordenes', () => {
 
         const response = await agent
             .put(`/ordenes/99999`)
-            .send(goodOrdenActualizar);
+            .send(goodOrdenUpdate);
 
         expect(response.status).toBe(404);
 
@@ -50,7 +49,7 @@ describe('PUT /ordenes', () => {
 
         const response = await agent
             .put('/ordenes/1')
-            .send(goodOrdenActualizar);
+            .send(goodOrdenUpdate);
 
         expect(response.status).toBe(403);
     });

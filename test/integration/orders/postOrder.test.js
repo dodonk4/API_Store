@@ -3,11 +3,10 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
-import { exceededQuantityOrdenProducto, goodOrdenProducto, nonExistingProductOrdenProducto } from '../../fixtures/ordenesProductos.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
-import { badOrden, unauthorizedOrdenCrear } from '../../fixtures/ordenes.fixture.ts';
+import { badOrder, unauthorizedOrderCrear } from '../../fixtures/orders.fixture.ts';
 
-describe('POST /ordenes', () => {
+describe('POST /orders', () => {
 
     beforeEach(async () => {
         await resetDatabase();
@@ -17,7 +16,7 @@ describe('POST /ordenes', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .post(`/ordenes`)
+            .post(`/orders`)
             .send({});//Al estar vacío, lo crea como un nuevo CARRITO el propio usuario
 
         expect(response.status).toBe(200);
@@ -27,8 +26,8 @@ describe('POST /ordenes', () => {
     it('debería devolver 401 por intentar crear una orden de un usuario diferente sin ser ADMIN', async () => {
 
         const response = await request(app)
-            .post('/ordenes')
-            .send(unauthorizedOrdenCrear);
+            .post('/orders')
+            .send(unauthorizedOrderCrear);
 
         expect(response.status).toBe(401);
     });
@@ -37,8 +36,8 @@ describe('POST /ordenes', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .post('/ordenes')
-            .send(badOrden);
+            .post('/orders')
+            .send(badOrder);
 
         expect(response.status).toBe(400);
     })

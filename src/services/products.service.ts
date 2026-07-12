@@ -23,7 +23,7 @@ export async function updateProduct(id: number, data: Partial<ProductData>): Pro
   return await prisma.products.update({ where: { id }, data });
 }
 
-export async function deleteProducto(id: number): Promise<void> {
+export async function deleteProduct(id: number): Promise<void> {
   const product: ProductData | null = await prisma.products.findUnique({ where: { id } });
   if (!product) throw new NotFoundError('Product no encontrado');
   await prisma.products.delete({ where: { id } });

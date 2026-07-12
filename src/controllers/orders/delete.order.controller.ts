@@ -1,11 +1,11 @@
 import express from 'express';
-import { deleteOrden, findOrderById } from '../../services/orders.service.ts';
+import { deleteOrder, findOrderById } from '../../services/orders.service.ts';
 import { checkOrderOwner } from '../../utils/checkOrderOwner.utils.ts';
 import type { OrderData } from '../../interfaces/Order.interface.ts';
 import { ConflictError } from '../../errors/ConflictError.ts';
 
 
-export default async function deleteOrdenController(req: express.Request, res: express.Response): Promise<void | Error> {
+export default async function deleteOrderController(req: express.Request, res: express.Response): Promise<void | Error> {
 
   const id: number = parseInt(req.params.ordenId as string);
 
@@ -17,7 +17,7 @@ export default async function deleteOrdenController(req: express.Request, res: e
     }
   }
 
-  await deleteOrden(id);
+  await deleteOrder(id);
   res.status(204).send();
 
 }

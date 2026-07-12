@@ -5,7 +5,7 @@ import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('GET ordenes', () => {
+describe('GET orders', () => {
 
     beforeEach(async () => {
         await resetDatabase();
@@ -15,7 +15,7 @@ describe('GET ordenes', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .get(`/ordenes`);
+            .get(`/orders`);
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
@@ -25,7 +25,7 @@ describe('GET ordenes', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .get('/ordenes');
+            .get('/orders');
 
         expect(response.status).toBe(403);
     })
@@ -33,7 +33,7 @@ describe('GET ordenes', () => {
     it('debería devolver 401 por no haber usuario logueado', async () => {
 
         const response = await request(app)
-            .get(`/ordenes`);
+            .get(`/orders`);
 
         expect(response.status).toBe(401);
     });

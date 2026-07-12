@@ -6,5 +6,4 @@ export async function logoutHelper() {
   const logout = await request(app)
     .post('/auth/logout');
 
-//   return logout;
 }

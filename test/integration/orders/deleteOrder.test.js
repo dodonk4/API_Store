@@ -5,7 +5,7 @@ import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('DELETE /ordenes/:ordenId', () => {
+describe('DELETE /orders/:orderId', () => {
 
     beforeEach(async () => {
         await resetDatabase();
@@ -16,7 +16,7 @@ describe('DELETE /ordenes/:ordenId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .delete('/ordenes/3');
+            .delete('/orders/3');
 
         expect(response.status).toBe(204);
     });
@@ -26,7 +26,7 @@ describe('DELETE /ordenes/:ordenId', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .delete('/ordenes/999999');
+            .delete('/orders/999999');
 
         expect(response.status).toBe(404);
     });
@@ -34,7 +34,7 @@ describe('DELETE /ordenes/:ordenId', () => {
     it('debería devolver 401 al tratar de eliminar una orden sin estar logueado', async () => {
 
         const response = await request(app)
-            .delete('/ordenes/3');
+            .delete('/orders/3');
 
         expect(response.status).toBe(401);
     });
@@ -44,7 +44,7 @@ describe('DELETE /ordenes/:ordenId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .delete('/ordenes/1');
+            .delete('/orders/1');
 
         expect(response.status).toBe(403);
     });

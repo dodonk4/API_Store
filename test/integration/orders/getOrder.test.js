@@ -5,7 +5,7 @@ import { prisma } from '../../../src/lib/prisma.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 
-describe('GET /ordenes', () => {
+describe('GET /orders', () => {
     beforeEach(async () => {
         await resetDatabase();
     });
@@ -15,7 +15,7 @@ describe('GET /ordenes', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .get('/ordenes/3');
+            .get('/orders/3');
 
         expect(response.status).toBe(200);
     });
@@ -23,7 +23,7 @@ describe('GET /ordenes', () => {
     it('debería devolver 401 si se solicita una orden sin estar logueado', async () => {
 
         const response = await request(app)
-            .get('/ordenes/1');
+            .get('/orders/1');
 
         expect(response.status).toBe(401);
     });
@@ -33,7 +33,7 @@ describe('GET /ordenes', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .get('/ordenes/1');
+            .get('/orders/1');
 
         expect(response.status).toBe(403);
     });
@@ -42,7 +42,7 @@ describe('GET /ordenes', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .get('/ordenes/999999');
+            .get('/orders/999999');
 
         expect(response.status).toBe(404);
     });
@@ -51,7 +51,7 @@ describe('GET /ordenes', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .get('/ordenes/abcdef');
+            .get('/orders/abcdef');
 
         expect(response.status).toBe(400);
     });

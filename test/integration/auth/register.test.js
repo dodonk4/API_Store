@@ -15,7 +15,7 @@ describe('POST auth/register', () => {
 
         const id = response.body.id;
 
-        await prisma.usuarios.delete({ where: { id } });
+        await prisma.users.delete({ where: { id } });
     })
 
     it('debería devolver 400 por falta de datos (sea tanto email, contraseña como confirmación de contraseña)', async () => {
