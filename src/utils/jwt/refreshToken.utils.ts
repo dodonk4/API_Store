@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import type { UserData } from '../../interfaces/User.interface.ts';
 
-export default function generateRefreshToken(user: UsuarioData): string {
+export default function generateRefreshToken(user: UserData): string {
     return jwt.sign({
         id: user.id
     },

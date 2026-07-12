@@ -1,6 +1,6 @@
 import express from 'express';
-import { createUsuario } from '../../services/usuarios.service.ts';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import { createUsuario } from '../../services/users.service.ts';
+import type { UsuarioData } from '../../interfaces/User.interface.ts';
 
 export default async function postUsuario(req: express.Request, res: express.Response): Promise<void | express.Response> {
   //El body ya es controlado por zod

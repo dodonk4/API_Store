@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteProducto } from '../../services/productos.service.ts';
+import { deleteProducto } from '../../services/products.service.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 
 export default async function deleteProductoController(req: express.Request, res: express.Response): Promise<void> {

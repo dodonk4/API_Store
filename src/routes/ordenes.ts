@@ -1,10 +1,10 @@
 import express from 'express';
-import deleteOrden from '../controllers/ordenes/delete.orden.controller.ts';
-import {getAllOrdenes, getOrdenById} from '../controllers/ordenes/get.orden.controller.ts';
-import postOrden from '../controllers/ordenes/post.orden.controller.ts';
+import deleteOrden from '../controllers/ordenes/delete.order.controller.ts';
+import {getAllOrdenes, getOrdenById} from '../controllers/ordenes/get.order.controller.ts';
+import postOrden from '../controllers/ordenes/post.order.controller.ts';
 import { validateAccessToken } from '../middlewares/validateAccessToken.middleware.ts';
 import { validateRol } from '../middlewares/validateRol.middleware.ts';
-import updateOrden from '../controllers/ordenes/put.orden.controller.ts';
+import updateOrden from '../controllers/ordenes/put.order.controller.ts';
 import { getAllOrdenProductoByOrdenId, getOrdenProductoById } from '../controllers/ordenes_productos/get.o_p.controller.ts';
 import { validateSchema } from '../middlewares/validateSchema.middleware.ts';
 import { ordenesSchema } from '../schemas/ordenes.schema.ts';

@@ -1,6 +1,6 @@
 import express from 'express';
-import type { ProductoData } from '../../interfaces/Producto.interface.ts';
-import { createProducto } from '../../services/productos.service.ts';
+import type { ProductoData } from '../../interfaces/Product.interface.ts';
+import { createProducto } from '../../services/products.service.ts';
 import { Decimal } from '@prisma/client/runtime/client';
 
 type PostProductoBody = {

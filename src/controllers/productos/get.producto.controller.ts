@@ -1,6 +1,6 @@
 import express from 'express';
-import type { ProductoData } from '../../interfaces/Producto.interface.ts';
-import { findAllProductos, findProductoById } from '../../services/productos.service.ts';
+import type { ProductoData } from '../../interfaces/Product.interface.ts';
+import { findAllProductos, findProductoById } from '../../services/products.service.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 
 async function getProducts(req: express.Request, res: express.Response): Promise<void> {

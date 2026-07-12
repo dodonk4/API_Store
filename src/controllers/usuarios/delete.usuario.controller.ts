@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteUsuarioService } from '../../services/usuarios.service.ts';
+import { deleteUsuarioService } from '../../services/users.service.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 
 export default async function deleteUsuario(req: express.Request, res: express.Response): Promise<void> {

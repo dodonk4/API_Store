@@ -1,21 +1,21 @@
 import { ConflictError } from "../errors/ConflictError.ts";
-import type { Orden_ProductoData } from "../interfaces/Orden_Producto.interface.ts";
-import type { ProductoData } from "../interfaces/Producto.interface.ts";
-import { findProductoById, updateProducto } from "../services/productos.service.ts";
+import type { Order_ProductData } from "../interfaces/Order_Product.interface.ts";
+import type { ProductData } from "../interfaces/Product.interface.ts";
+import { findProductById, updateProduct } from "../services/products.service.ts";
 
-export async function updateProductQuantity(ordenProducto: Orden_ProductoData, cantidad: number): Promise<void | Error> {
-    const producto: ProductoData = await findProductoById(ordenProducto.productId);
-    let diferencia = 0;
-    if (ordenProducto.cantidad > cantidad && producto.id) {//Se tiene que corregir el data para hacer obligatorio que haya un id y no hacer esta verificación
-        diferencia = ordenProducto.cantidad - cantidad;
-        await updateProducto(producto.id, { stock: (producto.stock + diferencia) })
+export async function updateProductQuantity(orderProduct: Order_ProductData, quantity: number): Promise<void | Error> {
+    const product: ProductData = await findProductById(orderProduct.productId);
+    let difference = 0;
+    if (orderProduct.quantity > quantity && product.id) {//Se tiene que corregir el data para hacer obligatorio que haya un id y no hacer esta verificación
+        difference = orderProduct.quantity - quantity;
+        await updateProduct(product.id, { stock: (product.stock + difference) });
     }
-    if (ordenProducto.cantidad < cantidad && producto.id) {//Se tiene que corregir el data para hacer obligatorio que haya un id y no hacer esta verificación
-        diferencia = cantidad - ordenProducto.cantidad
-        if ((producto.stock - diferencia) < 0) {
-            throw new ConflictError("La cantidad pedida es mayor al stock del producto");
+    if (orderProduct.quantity < quantity && product.id) {//Se tiene que corregir el data para hacer obligatorio que haya un id y no hacer esta verificación
+        difference = quantity - orderProduct.quantity
+        if ((product.stock - difference) < 0) {
+            throw new ConflictError("La cantidad pedida es mayor al stock del product");
         }
-        await updateProducto(producto.id, { stock: (producto.stock - diferencia) })
+        await updateProduct(product.id, { stock: (product.stock - difference) });
     }
 
 }

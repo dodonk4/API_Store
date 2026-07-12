@@ -1,8 +1,8 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
-import { createUsuario } from '../../services/usuarios.service.ts';
-import type { CreateUsuarioData, UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import { createUser } from '../../services/users.service.ts';
+import type { CreateUserData, UserData } from '../../interfaces/User.interface.ts';
 import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 import { ConflictError } from '../../errors/ConflictError.ts';
 
@@ -21,16 +21,15 @@ export async function register(req: express.Request, res: express.Response) {
         throw new UnauthorizedError("La confirmación de la contraseña no coincide");
     }
 
-    const user: UsuarioData | null = await prisma.usuarios.findUnique({ where: { email: email } })
+    const user: UserData | null = await prisma.users.findUnique({ where: { email: email } })
 
     if (user) {
         throw new ConflictError("El email no está disponible");
     }
 
-    //Hashear el password antes de guardarlo
     const saltRounds: number = 12;
     const hashedPassword: string = await bcrypt.hash(password, saltRounds);
-    const data: CreateUsuarioData = {
+    const data: CreateUserData = {
         username,
         email,
         password: hashedPassword,
@@ -39,8 +38,8 @@ export async function register(req: express.Request, res: express.Response) {
         updatedAt: new Date()
     }
 
-    const usuario: UsuarioData = await createUsuario(data);
-    res.status(201).json(usuario);
+    const userRegistered: UserData = await createUser(data);
+    res.status(201).json(userRegistered);
 
 
 }

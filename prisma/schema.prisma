@@ -7,58 +7,58 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Roles{
+enum Rols{
   USER
   ADMIN
 }
 
-enum Estados{
-  CARRITO
-  PAGO_PENDIENTE
-  PAGADA
-  CANCELADA
+enum States{
+  CART
+  PENDING_PAYMENT
+  PAID
+  CANCELED
 }
 
-model ordenes {
+model orders {
   id               Int                 @id @default(autoincrement())
-  usuarioId       Int
-  fecha          DateTime @default(now())
-  estado         Estados   @default(CARRITO)
-  usuarios         usuarios           @relation(fields: [usuarioId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  userId       Int
+  date          DateTime @default(now())
+  state         States   @default(CART)
+  users         users           @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   createdAt    DateTime @default(now())
-  ordenesProductos ordenes_productos[]
+  ordersProducts orders_products[]
 }
 
-model usuarios {
+model users {
   id      Int       @id @default(autoincrement())
   username  String   @db.VarChar(100)
   email   String   @db.VarChar(30)@unique
-  rol Roles @default(USER)
+  rol Rols @default(USER)
   password String 
   refreshToken String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  ordenes ordenes[]
+  orders orders[]
 }
 
-model productos {
+model products {
   id               Int                 @id @default(autoincrement())
-  nombre           String             @db.VarChar(100)
-  descripcion      String?             @db.VarChar(200)
-  categoria      String             @db.VarChar(200)
+  name           String             @db.VarChar(100)
+  description      String?             @db.VarChar(200)
+  category      String             @db.VarChar(200)
   stock            Int                 @default(0)
-  precio           Decimal                 @default(0)
+  price           Decimal                 @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  ordenesProductos ordenes_productos[]
+  ordersProducts orders_products[]
 }
 
-model ordenes_productos {
+model orders_products {
   id             Int       @id @default(autoincrement())
-  ordenId        Int
-  orden          ordenes   @relation(fields: [ordenId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  orderId        Int
+  order          orders   @relation(fields: [orderId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   productId      Int
-  productos      productos @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-  precioUnitario Decimal      @default(0)
-  cantidad Int @default(0)
+  products      products @relation(fields: [productId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  unitPrice Decimal      @default(0)
+  quantity Int @default(0)
 }

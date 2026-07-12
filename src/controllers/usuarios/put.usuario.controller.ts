@@ -1,6 +1,6 @@
 import express from 'express';
-import { updateUsuario } from '../../services/usuarios.service.ts';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import { updateUsuario } from '../../services/users.service.ts';
+import type { UsuarioData } from '../../interfaces/User.interface.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 import bcrypt from 'bcryptjs';
 

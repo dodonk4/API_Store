@@ -7,14 +7,14 @@ const PASSWORD_HASH =
 export async function seed() {
     await prisma.$executeRawUnsafe(`
         TRUNCATE TABLE
-            "ordenes_productos",
-            "ordenes",
-            "productos",
-            "usuarios"
+            "orders_products",
+            "orders",
+            "products",
+            "users"
         RESTART IDENTITY CASCADE;
     `);
 
-    await prisma.usuarios.createMany({
+    await prisma.users.createMany({
         data: [
             {
                 username: 'Juan Pérez',
@@ -37,141 +37,141 @@ export async function seed() {
         ],
     });
 
-    await prisma.productos.createMany({
+    await prisma.products.createMany({
         data: [
             {
-                nombre: 'Teclado Mecánico',
-                descripcion: 'Teclado RGB switches Red',
-                categoria: 'Periféricos',
+                name: 'Teclado Mecánico',
+                description: 'Teclado RGB switches Red',
+                category: 'Periféricos',
                 stock: 15,
-                precio: 24999.99,
+                price: 24999.99,
             },
             {
-                nombre: 'Mouse Gamer',
-                descripcion: 'Mouse Logitech 12000 DPI',
-                categoria: 'Periféricos',
+                name: 'Mouse Gamer',
+                description: 'Mouse Logitech 12000 DPI',
+                category: 'Periféricos',
                 stock: 20,
-                precio: 17999.99,
+                price: 17999.99,
             },
             {
-                nombre: 'Monitor 24"',
-                descripcion: 'Monitor Full HD IPS',
-                categoria: 'Monitores',
+                name: 'Monitor 24"',
+                description: 'Monitor Full HD IPS',
+                category: 'Monitores',
                 stock: 10,
-                precio: 11999.99,
+                price: 11999.99,
             },
             {
-                nombre: 'Auriculares',
-                descripcion: 'Auriculares inalámbricos',
-                categoria: 'Audio',
+                name: 'Auriculares',
+                description: 'Auriculares inalámbricos',
+                category: 'Audio',
                 stock: 30,
-                precio: 44999.99,
+                price: 44999.99,
             },
             {
-                nombre: 'Webcam HD',
-                descripcion: 'Webcam 1080p',
-                categoria: 'Video',
+                name: 'Webcam HD',
+                description: 'Webcam 1080p',
+                category: 'Video',
                 stock: 12,
-                precio: 31999.99,
+                price: 31999.99,
             },
             {
-                nombre: 'Notebook',
-                descripcion: 'Notebook Ryzen 7',
-                categoria: 'Computadoras',
+                name: 'Notebook',
+                description: 'Notebook Ryzen 7',
+                category: 'Computadoras',
                 stock: 5,
-                precio: 849999.99,
+                price: 849999.99,
             },
             {
-                nombre: 'Disco SSD 1TB',
-                descripcion: 'SSD NVMe Gen4',
-                categoria: 'Almacenamiento',
+                name: 'Disco SSD 1TB',
+                description: 'SSD NVMe Gen4',
+                category: 'Almacenamiento',
                 stock: 25,
-                precio: 89999.99,
+                price: 89999.99,
             },
             {
-                nombre: 'Silla Gamer',
-                descripcion: 'Silla ergonómica',
-                categoria: 'Muebles',
+                name: 'Silla Gamer',
+                description: 'Silla ergonómica',
+                category: 'Muebles',
                 stock: 8,
-                precio: 219999.99,
+                price: 219999.99,
             },
         ],
     });
 
-    await prisma.ordenes.createMany({
+    await prisma.orders.createMany({
         data: [
             {
-                usuarioId: 1,
-                estado: 'CARRITO',
+                userId: 1,
+                state: 'CART',
             },
             {
-                usuarioId: 2,
-                estado: 'PAGADA',
+                userId: 2,
+                state: 'PAID',
             },
             {
-                usuarioId: 3,
-                estado: 'CARRITO',
+                userId: 3,
+                state: 'CART',
             },
             {
-                usuarioId: 3,
-                estado: 'PAGO_PENDIENTE',
+                userId: 3,
+                state: 'PENDING_PAYMENT',
             },
             {
-                usuarioId: 3,
-                estado: 'PAGADA',
+                userId: 3,
+                state: 'PAID',
             },
         ],
     });
 
-    await prisma.ordenes_productos.createMany({
+    await prisma.orders_products.createMany({
         data: [
             {
-                ordenId: 1,
+                orderId: 1,
                 productId: 1,
-                cantidad: 1,
-                precioUnitario: 24999.99,
+                quantity: 1,
+                unitPrice: 24999.99,
             },
             {
-                ordenId: 1,
+                orderId: 1,
                 productId: 2,
-                cantidad: 2,
-                precioUnitario: 17999.99,
+                quantity: 2,
+                unitPrice: 17999.99,
             },
             {
-                ordenId: 2,
+                orderId: 2,
                 productId: 3,
-                cantidad: 1,
-                precioUnitario: 11999.99,
+                quantity: 1,
+                unitPrice: 11999.99,
             },
             {
-                ordenId: 2,
+                orderId: 2,
                 productId: 4,
-                cantidad: 1,
-                precioUnitario: 44999.99,
+                quantity: 1,
+                unitPrice: 44999.99,
             },
             {
-                ordenId: 3,
+                orderId: 3,
                 productId: 6,
-                cantidad: 1,
-                precioUnitario: 849999.99,
+                quantity: 1,
+                unitPrice: 849999.99,
             },
             {
-                ordenId: 3,
+                orderId: 3,
                 productId: 7,
-                cantidad: 2,
-                precioUnitario: 89999.99,
+                quantity: 2,
+                unitPrice: 89999.99,
             },
             {
-                ordenId: 4,
+                orderId: 4,
                 productId: 7,
-                cantidad: 2,
-                precioUnitario: 89999.99,
+                quantity: 2,
+                unitPrice: 89999.99,
             },
             {
-                ordenId: 5,
+                orderId: 5,
                 productId: 5,
-                cantidad: 2,
-                precioUnitario: 31999.99,
+                quantity: 2,
+                unitPrice: 31999.99,
             },
         ],
     });

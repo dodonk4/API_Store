@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import type { UserData } from '../../interfaces/User.interface.ts';
 
-export default function generateAccessToken(user: UsuarioData): string {
+export default function generateAccessToken(user: UserData): string {
     return jwt.sign({
         id: user.id,
         username: user.username,

@@ -1,6 +1,6 @@
 import express from 'express';
-import { findAllUsuarios, findUsuarioById } from '../../services/usuarios.service.ts';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import { findAllUsuarios, findUsuarioById } from '../../services/users.service.ts';
+import type { UsuarioData } from '../../interfaces/User.interface.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 
 async function getAllUsuarios(req: express.Request, res: express.Response): Promise<void> {

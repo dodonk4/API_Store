@@ -1,7 +1,7 @@
 import express from 'express';
-import { updateProducto } from '../../services/productos.service.ts';
+import { updateProducto } from '../../services/products.service.ts';
 import { Decimal } from '@prisma/client/runtime/client';
-import type { ProductoData } from '../../interfaces/Producto.interface.ts';
+import type { ProductoData } from '../../interfaces/Product.interface.ts';
 import { BadRequestError } from '../../errors/BadRequestError.ts';
 
 type PutProductoBody = {

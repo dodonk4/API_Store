@@ -1,4 +1,4 @@
-interface IUsuarioData {
+interface IUserData {
   id: number,
   username: string,
   email: string,
@@ -9,5 +9,5 @@ interface IUsuarioData {
   createdAt: Date,
 }
 
-export type UsuarioData = IUsuarioData;
-export type CreateUsuarioData = Omit<UsuarioData, "id" | "rol">;
+export type UserData = IUserData;
+export type CreateUserData = Omit<UserData, "id" | "rol">;

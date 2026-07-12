@@ -1,11 +1,10 @@
 import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
-import { updateUsuario } from '../../services/usuarios.service.ts';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import { updateUser } from '../../services/users.service.ts';
+import type { UserData } from '../../interfaces/User.interface.ts';
 import generateRefreshToken from '../../utils/jwt/refreshToken.utils.ts';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
-import * as AuthRequest from '../../interfaces/AuthRequest.ts';
 import { NotFoundError } from '../../errors/NotFoundError.ts';
 import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 
@@ -18,7 +17,7 @@ export async function login(req: express.Request, res: express.Response) {
 
     const { email, password }: LoginBody = req.body;
 
-    const user: UsuarioData | null = await prisma.usuarios.findUnique({ where: { email } });
+    const user: UserData | null = await prisma.users.findUnique({ where: { email } });
 
     if (!user) {
         throw new NotFoundError("No existe un usuario con ese correo electrónico");
@@ -49,7 +48,7 @@ export async function login(req: express.Request, res: express.Response) {
         maxAge: 15 * 60 * 1000
     });
 
-    const usuario: UsuarioData = await updateUsuario(user.id, { refreshToken });
-    res.status(200).json(usuario);
+    const userLogged: UserData = await updateUser(user.id, { refreshToken });
+    res.status(200).json(userLogged);
 
 }

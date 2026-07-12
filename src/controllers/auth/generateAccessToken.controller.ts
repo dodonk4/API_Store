@@ -1,9 +1,9 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
-import { findUsuarioById } from '../../services/usuarios.service.ts';
+import { findUserById } from '../../services/users.service.ts';
 import authConfig from '../../config/auth.config.ts';
-import type { UsuarioData } from '../../interfaces/Usuario.interface.ts';
+import type { UserData } from '../../interfaces/User.interface.ts';
 import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 
 export async function generateAccessTokenForLoggedUser(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -11,10 +11,6 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
     try {
 
         const refreshToken: string = req.cookies.refresh_token;
-
-        // if(!refreshToken){
-        //     throw new UnauthorizedError("No hay un usuario logueado");
-        // }
 
         res.clearCookie('access_token', { httpOnly: true, secure: true });
         
@@ -24,7 +20,7 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
             throw new UnauthorizedError("El refreshToken no cuenta con información de usuario para poder generar el access token");
         }
 
-        const userFound: UsuarioData = await findUsuarioById(userDecoded.id);
+        const userFound: UserData = await findUserById(userDecoded.id);
 
         const accessToken: string = generateAccessToken(userFound);
 
