@@ -2,16 +2,15 @@ import { jest } from '@jest/globals';
 import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
-import { createManyProducts } from '../../helpers/createManyProducts.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('GET /productos', () => {
+describe('GET /products', () => {
     beforeEach(async () => {
         await resetDatabase();
     });
 
-    it('debería devolver la lista de productos', async () => {
-        const response = await request(app).get('/productos');
+    it('debería devolver la lista de products', async () => {
+        const response = await request(app).get('/products');
 
         expect(response.status).toBe(200);
         expect(Array.isArray(response.body)).toBe(true);
@@ -19,29 +18,16 @@ describe('GET /productos', () => {
     });
 
     it('debería devolver una lista vacía', async () => {
-        // const relaciones = await prisma.ordenes_productos.findMany();
 
         await prisma.$executeRawUnsafe(`
-      TRUNCATE TABLE "productos" RESTART IDENTITY CASCADE;
+      TRUNCATE TABLE "products" RESTART IDENTITY CASCADE;
     `);
 
-        const response = await request(app).get('/productos');
+        const response = await request(app).get('/products');
 
         expect(response.status).toBe(200);
         expect(response.body).toEqual([]);
 
-        // await createManyProducts();
-
-        // for (const relacion of relaciones) {
-        //     await prisma.ordenes_productos.create({
-        //         data: {
-        //             ordenId: relacion.ordenId,
-        //             productId: relacion.productId,
-        //             precioUnitario: relacion.precioUnitario,
-        //             cantidad: relacion.cantidad,
-        //         },
-        //     });
-        // }
     });
 
     afterAll(async () => {

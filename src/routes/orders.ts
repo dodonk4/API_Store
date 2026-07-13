@@ -1,10 +1,10 @@
 import express from 'express';
 import deleteOrderController from '../controllers/orders/delete.order.controller.ts'; '../controllers/ordenes/delete.order.controller.ts';
 import {getAllOrders, getOrderById} from '../controllers/orders/get.order.controller.ts';
-import postOrden from '../controllers/orders/post.order.controller.ts';
+import postOrder from '../controllers/orders/post.order.controller.ts';
 import { validateAccessToken } from '../middlewares/validateAccessToken.middleware.ts';
 import { validateRol } from '../middlewares/validateRol.middleware.ts';
-import updateOrden from '../controllers/orders/put.order.controller.ts';
+import updateOrder from '../controllers/orders/put.order.controller.ts';
 import { getAllOrderProductByOrderId, getOrderProductById } from '../controllers/orders_products/get.o_p.controller.ts';
 import { validateSchema } from '../middlewares/validateSchema.middleware.ts';
 import { ordersSchema } from '../schemas/orders.schema.ts';
@@ -21,11 +21,11 @@ const router = express.Router();
 
 router.get('/', validateAccessToken, validateRol(["ADMIN"]), getAllOrders);
 
-router.post('/', validateAccessToken, validateRol(["USER", "ADMIN"]), validateSchema(ordersSchema), postOrden);
+router.post('/', validateAccessToken, validateRol(["USER", "ADMIN"]), validateSchema(ordersSchema), postOrder);
 
 router.get('/:orderId', validateAccessToken, validateRol(["USER", "ADMIN"]), getOrderById);
 
-router.put('/:orderId', validateAccessToken, validateRol(["USER", "ADMIN"]), validateSchema(ordersSchema), updateOrden); //ACTUALIZAR LAS PARTICULARIDADES DE LA ORDEN, NO SUS products
+router.put('/:orderId', validateAccessToken, validateRol(["USER", "ADMIN"]), validateSchema(ordersSchema), updateOrder); //ACTUALIZAR LAS PARTICULARIDADES DE LA ORDEN, NO SUS products
 
 router.delete('/:orderId', validateAccessToken, validateRol(["USER", "ADMIN"]), deleteOrderController);
 

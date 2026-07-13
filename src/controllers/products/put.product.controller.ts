@@ -14,7 +14,7 @@ type PutProductBody = {
 
 export default async function updateProductController(req: express.Request, res: express.Response): Promise<express.Response | undefined> {
 
-  const id: number = parseInt(req.params.productoId as string);
+  const id: number = parseInt(req.params.productId as string);
 
   if (!Number.isInteger(id)) {
     throw new BadRequestError("El id debe ser un numero");

@@ -5,40 +5,51 @@ import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('GET ordenes/:ordenId/products', () => {
+describe('GET orders/:orderId/products/:orderProductId', () => {
 
     beforeEach(async () => {
         await resetDatabase();
     });
 
-    it('debería devolver 200 y una lista de los productos de la orden', async () => {
+    it('debería devolver 200 al devolver exitosamente un producto', async () => {
+
         const agent = await getUserAgent();
 
         const response = await agent
-            .get(`/ordenes/3/products`);
+            .get(`/orders/3/products/5`);
 
         expect(response.status).toBe(200);
-        expect(Array.isArray(response.body)).toBe(true);
-    });
+    })
 
-    it('debería devolver 404 por no existir la orden', async () => {
+    it('debería devolver 404 al no encontrar el producto', async () => {
+
         const agent = await getUserAgent();
 
         const response = await agent
-            .get(`/ordenes/999999/products`);
+            .get(`/orders/3/products/99999`);
 
         expect(response.status).toBe(404);
-    });
+    })
 
-    it('debería devolver 401 por no haber usuario logueado', async () => {
+    it('debería devolver 404 al no encontrar la orden', async () => {
+
+        const agent = await getUserAgent();
+
+        const response = await agent
+            .get(`/orders/99999/products/5`);
+
+        expect(response.status).toBe(404);
+    })
+
+    it('debería devolver 401 al no haber usuario logueado', async () => {
 
         const response = await request(app)
-            .get(`/ordenes/3/products`);
+            .get(`/orders/3/products/5`);
 
         expect(response.status).toBe(401);
-    });
+    })
 
     afterAll(async () => {
         await prisma.$disconnect();
     });
-});
+})

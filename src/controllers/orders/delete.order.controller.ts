@@ -7,7 +7,7 @@ import { ConflictError } from '../../errors/ConflictError.ts';
 
 export default async function deleteOrderController(req: express.Request, res: express.Response): Promise<void | Error> {
 
-  const id: number = parseInt(req.params.ordenId as string);
+  const id: number = parseInt(req.params.orderId as string);
 
   await checkOrderOwner(id, req);
   const order: OrderData = await findOrderById(id);

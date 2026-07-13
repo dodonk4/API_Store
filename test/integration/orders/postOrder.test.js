@@ -4,7 +4,7 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
-import { badOrder, unauthorizedOrderCrear } from '../../fixtures/orders.fixture.ts';
+import { badOrder, unauthorizedOrderCreate } from '../../fixtures/orders.fixture.ts';
 
 describe('POST /orders', () => {
 
@@ -27,7 +27,7 @@ describe('POST /orders', () => {
 
         const response = await request(app)
             .post('/orders')
-            .send(unauthorizedOrderCrear);
+            .send(unauthorizedOrderCreate);
 
         expect(response.status).toBe(401);
     });

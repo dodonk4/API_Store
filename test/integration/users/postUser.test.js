@@ -3,11 +3,11 @@ import { logoutHelper } from '../../helpers/logout.ts';
 import { app } from '../../../src/app.ts';
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
-import { badUsuarioCrear, usuarioCrear } from '../../fixtures/usuarios.fixture.ts';
+import { badUserCreate, userCreate } from '../../fixtures/users.fixture.ts';
 import { id } from 'zod/locales';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('POST /usuarios', () => {
+describe('POST /users', () => {
 
   beforeEach(async () => {
     await logoutHelper();
@@ -19,14 +19,10 @@ describe('POST /usuarios', () => {
     const agent = await getAdminAgent();
 
     const response = await agent
-      .post('/usuarios')
-      .send(usuarioCrear);
+      .post('/users')
+      .send(userCreate);
 
     expect(response.status).toBe(201);
-
-    const id = response.body.id;
-
-    const deleteUsuario = await prisma.usuarios.delete({ where: { id } });
 
 
   });
@@ -34,19 +30,19 @@ describe('POST /usuarios', () => {
   it('debería rechazar por no tener un token', async () => {
 
     const response = await request(app)
-      .post('/usuarios')
-      .send(usuarioCrear);
+      .post('/users')
+      .send(userCreate);
 
     expect(response.status).toBe(401);
   });
 
-  it('debería devolver un 403 por tener prohibido agregar usuarios', async () => {
+  it('debería devolver un 403 por tener prohibido agregar users', async () => {
 
     const agent = await getNonAuthenticatedAgent();
 
     const response = await agent
-      .post('/usuarios')
-      .send(usuarioCrear);
+      .post('/users')
+      .send(userCreate);
 
     expect(response.status).toBe(403);
   });
@@ -56,8 +52,8 @@ describe('POST /usuarios', () => {
     const agent = await getAdminAgent();
 
     const response = await agent
-      .post('/usuarios')
-      .send(badUsuarioCrear);
+      .post('/users')
+      .send(badUserCreate);
 
     expect(response.status).toBe(400);
     

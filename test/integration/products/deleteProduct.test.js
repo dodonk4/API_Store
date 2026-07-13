@@ -3,10 +3,10 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
-import { productoCrear } from '../../fixtures/productos.fixture.ts';
+import { productCreate } from '../../fixtures/products.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('DELETE productos/:productId', () => {
+describe('DELETE products/:productId', () => {
 
     beforeEach(async () => {
         await resetDatabase();
@@ -16,10 +16,10 @@ describe('DELETE productos/:productId', () => {
 
         const agent = await getAdminAgent();
 
-        const nuevoProducto = await prisma.productos.create({ data: productoCrear });
+        const newProduct = await prisma.products.create({ data: productCreate });
 
         const response = await agent
-            .delete(`/productos/${nuevoProducto.id}`);
+            .delete(`/products/${newProduct.id}`);
 
         expect(response.status).toBe(204);
     });
@@ -29,7 +29,7 @@ describe('DELETE productos/:productId', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .delete('/productos/999999');
+            .delete('/products/999999');
 
         expect(response.status).toBe(404);
     });
@@ -37,7 +37,7 @@ describe('DELETE productos/:productId', () => {
     it('debería devolver 401 al tratar de eliminar un producto sin estar logueado', async () => {
 
         const response = await request(app)
-            .delete('/productos/1');
+            .delete('/products/1');
 
         expect(response.status).toBe(401);
     });
@@ -47,7 +47,7 @@ describe('DELETE productos/:productId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .delete('/productos/1');
+            .delete('/products/1');
 
         expect(response.status).toBe(403);
     });

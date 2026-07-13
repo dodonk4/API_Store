@@ -25,7 +25,7 @@ export default async function updateOrderProductController(req: express.Request,
     //El "orderIdParams" indica el ID de la orden a la que pertenece el orden_producto que se desea modificar
     //El orderId (del req.body) indica el ID de la orden a la que se caambiaría el orden_producto
     const orderIdParams: number = parseInt(req.params.orderId as string);
-    const orderProductoId: number = parseInt(req.params.orderProductoId as string);
+    const orderProductId: number = parseInt(req.params.orderProductId as string);
 
     const { quantity, orderId, unitPrice, productId }: PutOrderProductBody = req.body;
     if (!quantity && !orderId && !unitPrice && !productId) {
@@ -53,13 +53,13 @@ export default async function updateOrderProductController(req: express.Request,
         }
     }
 
-    const orderProduct: Order_ProductData = await findOrderProductById(orderProductoId);
+    const orderProduct: Order_ProductData = await findOrderProductById(orderProductId);
 
     if (quantity) {
         await updateProductQuantity(orderProduct, quantity);
     }
 
-    await updateOrderProduct(orderProductoId, req.body);
+    await updateOrderProduct(orderProductId, req.body);
 
     res.status(200).send("Producto de la orden correctamente actualizado");
 

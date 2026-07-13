@@ -3,10 +3,10 @@ import { app } from '../../../src/app.ts'
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getUserAgent } from '../../helpers/getAccessToken.ts';
-import { exceededQuantityOrdenProducto, goodOrdenProducto, goodOrdenProductoActualizar, nonExistingProductOrdenProducto, rollback } from '../../fixtures/ordenesProductos.fixture.ts';
+import { exceededQuantityOrderProduct, goodOrderProduct, goodOrderProductUpdate, nonExistingProductOrderProduct, rollback } from '../../fixtures/ordersProducts.fixture.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
+describe('PUT orders/:orderId/products/:orderProductId', () => {
 
     beforeEach(async () => {
         await resetDatabase();
@@ -16,8 +16,8 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put(`/ordenes/3/products/5`)
-            .send(goodOrdenProductoActualizar);
+            .put(`/orders/3/products/5`)
+            .send(goodOrderProductUpdate);
 
         expect(response.status).toBe(200);
 
@@ -27,8 +27,8 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put(`/ordenes/3/products/5`)
-            .send(nonExistingProductOrdenProducto);
+            .put(`/orders/3/products/5`)
+            .send(nonExistingProductOrderProduct);
 
         expect(response.status).toBe(404);
     })
@@ -37,8 +37,8 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put(`/ordenes/99999/products/5`)
-            .send(goodOrdenProducto);
+            .put(`/orders/99999/products/5`)
+            .send(goodOrderProduct);
 
         expect(response.status).toBe(404);
     })
@@ -47,8 +47,8 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put(`/ordenes/3/products/5`)
-            .send(exceededQuantityOrdenProducto);
+            .put(`/orders/3/products/5`)
+            .send(exceededQuantityOrderProduct);
 
         expect(response.status).toBe(409);
 
@@ -58,8 +58,8 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put(`/ordenes/4/products/7`)
-            .send(goodOrdenProducto);
+            .put(`/orders/4/products/7`)
+            .send(goodOrderProduct);
 
         expect(response.status).toBe(409);
     })
@@ -68,8 +68,8 @@ describe('PUT ordenes/:ordenId/products/:ordenProductoId', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put(`/ordenes/5/products/6`)
-            .send(goodOrdenProducto);
+            .put(`/orders/5/products/6`)
+            .send(goodOrderProduct);
 
         expect(response.status).toBe(409);
     })

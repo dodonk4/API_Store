@@ -3,11 +3,11 @@ import { logoutHelper } from '../../helpers/logout.ts';
 import { app } from '../../../src/app.ts';
 import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
-import { badProductoCrear, productoCrear } from '../../fixtures/productos.fixture.ts';
+import { badProductCreate, productCreate } from '../../fixtures/products.fixture.ts';
 import { id } from 'zod/locales';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
 
-describe('POST /productos', () => {
+describe('POST /products', () => {
 
 
   beforeEach(async () => {
@@ -20,8 +20,8 @@ describe('POST /productos', () => {
     const agent = await getAdminAgent();
 
     const response = await agent
-      .post('/productos')
-      .send(productoCrear);
+      .post('/products')
+      .send(productCreate);
 
     expect(response.status).toBe(200);
   });
@@ -29,19 +29,19 @@ describe('POST /productos', () => {
   it('debería devolver 401 por no estar logueado', async () => {
 
     const response = await request(app)
-      .post('/productos')
-      .send(productoCrear);
+      .post('/products')
+      .send(productCreate);
 
     expect(response.status).toBe(401);
   });
 
-  it('debería devolver un 403 por tener prohibido agregar productos', async () => {
+  it('debería devolver un 403 por tener prohibido agregar products', async () => {
 
     const agent = await getNonAuthenticatedAgent();
 
     const response = await agent
-      .post('/productos')
-      .send(productoCrear);
+      .post('/products')
+      .send(productCreate);
 
     expect(response.status).toBe(403);
   });
@@ -51,8 +51,8 @@ describe('POST /productos', () => {
     const agent = await getAdminAgent();
 
     const response = await agent
-      .post('/productos')
-      .send(badProductoCrear);
+      .post('/products')
+      .send(badProductCreate);
 
     expect(response.status).toBe(400);
     

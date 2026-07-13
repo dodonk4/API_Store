@@ -4,9 +4,9 @@ import request from 'supertest';
 import { prisma } from '../../../src/lib/prisma.ts';
 import { getAdminAgent, getUserAgent } from '../../helpers/getAccessToken.ts';
 import { resetDatabase } from '../../helpers/resetDatabase.ts';
-import { badOrden, goodOrdenUpdate, unauthorizedOrdenCrear } from '../../fixtures/ordenes.fixture.ts';
+import { badOrder, goodOrderUpdate } from '../../fixtures/orders.fixture.ts';
 
-describe('PUT /ordenes', () => {
+describe('PUT /orders', () => {
 
     beforeEach(async () => {
         await resetDatabase();
@@ -16,8 +16,8 @@ describe('PUT /ordenes', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put('/ordenes/3')
-            .send(goodOrdenUpdate);
+            .put('/orders/3')
+            .send(goodOrderUpdate);
 
         expect(response.status).toBe(200);
 
@@ -26,8 +26,8 @@ describe('PUT /ordenes', () => {
     it('debería devolver 401 por querer actualizar una orden al estar deslogueado', async () => {
 
         const response = await request(app)
-            .put('/ordenes/3')
-            .send(goodOrdenUpdate);
+            .put('/orders/3')
+            .send(goodOrderUpdate);
 
         expect(response.status).toBe(401);
 
@@ -37,8 +37,8 @@ describe('PUT /ordenes', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .put(`/ordenes/99999`)
-            .send(goodOrdenUpdate);
+            .put(`/orders/99999`)
+            .send(goodOrderUpdate);
 
         expect(response.status).toBe(404);
 
@@ -48,8 +48,8 @@ describe('PUT /ordenes', () => {
         const agent = await getUserAgent();
 
         const response = await agent
-            .put('/ordenes/1')
-            .send(goodOrdenUpdate);
+            .put('/orders/1')
+            .send(goodOrderUpdate);
 
         expect(response.status).toBe(403);
     });
@@ -58,8 +58,8 @@ describe('PUT /ordenes', () => {
         const agent = await getAdminAgent();
 
         const response = await agent
-            .put('/ordenes/3')
-            .send(badOrden);
+            .put('/orders/3')
+            .send(badOrder);
 
         expect(response.status).toBe(400);
     })
