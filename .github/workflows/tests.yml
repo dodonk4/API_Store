@@ -32,11 +32,13 @@ jobs:
 
     env:
       DATABASE_URL: postgresql://postgres:postgres@localhost:5432/api_store_test
-      JWT_ACCESS_SECRET: github_actions_access_secret
-      JWT_REFRESH_SECRET: github_actions_refresh_secret
-      ACCESS_TOKEN_EXPIRES_IN: 15m
-      REFRESH_TOKEN_EXPIRES_IN: 7d
-      NODE_ENV: TEST
+      NODE_ENV: test
+
+      AUTH_SECRET: github_actions_access_secret
+      AUTH_SECRET_EXPIRES_IN: 15m
+
+      AUTH_REFRESH_SECRET: github_actions_refresh_secret
+      AUTH_REFRESH_SECRET_EXPIRES_IN: 24h
 
     steps:
       - name: Clonar repositorio
