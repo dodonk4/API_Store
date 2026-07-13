@@ -200,7 +200,6 @@ La API incorpora diferentes mecanismos de seguridad:
 
 * Documentación interactiva con Swagger/OpenAPI.
 * Deploy de la API.
-* Pipeline de integración continua (GitHub Actions).
 * Dockerización del proyecto.
 
 ---
