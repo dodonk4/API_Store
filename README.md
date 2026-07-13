@@ -96,15 +96,14 @@ Crear un archivo `.env.development` con las variables necesarias.
 Ejemplo:
 
 ```env
-DATABASE_URL=
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/api_store_dev"
 
-JWT_ACCESS_SECRET=
-JWT_REFRESH_SECRET=
+AUTH_SECRET="your_jwt_access_token_secret" 
+AUTH_SECRET_EXPIRES_IN="15m"
+AUTH_REFRESH_SECRET="your_jwt_refresh_token_secret"
+AUTH_REFRESH_SECRET_EXPIRES_IN="24h"
 
-ACCESS_TOKEN_EXPIRES_IN=
-REFRESH_TOKEN_EXPIRES_IN=
-
-PORT=
+PORT=3000
 ```
 
 También es posible utilizar los archivos de entorno correspondientes para testing y producción.
