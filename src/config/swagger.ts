@@ -57,22 +57,27 @@ const options: swaggerJsdoc.Options = {
                             type: 'integer',
                             example: 1
                         },
-                        nombre: {
+                        name: {
                             type: 'string',
-                            example: 'Mouse Gamer'
+                            example: 'Gaming Mouse'
                         },
-                        descripcion: {
+                        description: {
                             type: 'string',
-                            example: 'Mouse inalámbrico RGB'
+                            nullable: true,
+                            example: 'Wireless RGB gaming mouse'
                         },
-                        precio: {
-                            type: 'number',
-                            format: 'float',
-                            example: 24999.99
+                        category: {
+                            type: 'string',
+                            example: 'Electronics'
                         },
                         stock: {
                             type: 'integer',
-                            example: 20
+                            example: 25
+                        },
+                        price: {
+                            type: 'number',
+                            format: 'float',
+                            example: 24999.99
                         }
                     }
                 },
@@ -81,27 +86,35 @@ const options: swaggerJsdoc.Options = {
                     type: 'object',
                     required: [
                         'name',
-                        'description',
-                        'price',
-                        'stock'
+                        'category',
+                        'stock',
+                        'price'
                     ],
                     properties: {
                         name: {
                             type: 'string',
+                            maxLength: 30,
                             example: 'Gaming Mouse'
                         },
                         description: {
                             type: 'string',
+                            maxLength: 200,
                             example: 'Wireless RGB gaming mouse'
+                        },
+                        category: {
+                            type: 'string',
+                            example: 'Electronics'
+                        },
+                        stock: {
+                            type: 'integer',
+                            minimum: 0,
+                            example: 25
                         },
                         price: {
                             type: 'number',
                             format: 'float',
+                            minimum: 0,
                             example: 24999.99
-                        },
-                        stock: {
-                            type: 'integer',
-                            example: 20
                         }
                     }
                 },
@@ -142,12 +155,12 @@ const options: swaggerJsdoc.Options = {
                             type: 'integer',
                             example: 15
                         },
-                        estado: {
+                        state: {
                             type: 'string',
-                            enum: ['PENDIENTE', 'PAGADA', 'CANCELADA'],
-                            example: 'PENDIENTE'
+                            enum: ['CART', 'PENDING_PAYMENT', 'PAID', 'CANCELED'],
+                            example: 'CART'
                         },
-                        usuarioId: {
+                        userId: {
                             type: 'integer',
                             example: 3
                         }
@@ -161,11 +174,11 @@ const options: swaggerJsdoc.Options = {
                             type: 'integer',
                             example: 7
                         },
-                        ordenId: {
+                        orderId: {
                             type: 'integer',
                             example: 15
                         },
-                        productoId: {
+                        productId: {
                             type: 'integer',
                             example: 2
                         },
@@ -202,6 +215,40 @@ const options: swaggerJsdoc.Options = {
                         refreshToken: {
                             type: 'string',
                             example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                        }
+                    }
+                },
+
+                RegisterRequest: {
+                    type: 'object',
+                    required: [
+                        'email',
+                        'username',
+                        'password',
+                        'password_confirmation'
+                    ],
+                    properties: {
+                        email: {
+                            type: 'string',
+                            format: 'email',
+                            example: 'ismael@email.com'
+                        },
+                        username: {
+                            type: 'string',
+                            maxLength: 20,
+                            example: 'ismael'
+                        },
+                        password: {
+                            type: 'string',
+                            format: 'password',
+                            minLength: 8,
+                            example: 'MyPassword123'
+                        },
+                        password_confirmation: {
+                            type: 'string',
+                            format: 'password',
+                            minLength: 8,
+                            example: 'MyPassword123'
                         }
                     }
                 },
@@ -307,10 +354,33 @@ const options: swaggerJsdoc.Options = {
             {
                 bearerAuth: []
             }
+        ],
+
+        tags: [
+            {
+                name: 'Authentication',
+                description: 'Authentication endpoints.'
+            },
+            {
+                name: 'Users',
+                description: 'Manage users.'
+            },
+            {
+                name: 'Products',
+                description: 'Manage products.'
+            },
+            {
+                name: 'Orders',
+                description: 'Manage orders.'
+            },
+            {
+                name: 'Order Products',
+                description: 'Manage products inside orders.'
+            }
         ]
     },
 
-    apis: ['./src/routes/**/*.ts']
+    apis: ['./src/docs/**/*.ts']
 };
 
 export const swaggerSpec = swaggerJsdoc(options);
