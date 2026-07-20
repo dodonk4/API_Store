@@ -6,13 +6,39 @@ const options: swaggerJsdoc.Options = {
         info: {
             title: 'API Store',
             version: '1.0.0',
-            description: 'REST API para la gestión de una tienda online.'
+            description: `
+                REST API for managing an online store.
+
+                ## Authentication
+
+                1. Register a new account using **POST /auth/register**
+                2. Log in using **POST /auth/login**
+                3. Copy the access token returned by the API.
+                4. Click the **Authorize** button in Swagger UI.
+                5. Paste the token using the Bearer scheme.
+
+                Some endpoints require administrator privileges.
+                `,
+
+            contact: {
+                name: 'Ismael Madarieta',
+                url: 'https://github.com/dodonk4/API_Store'
+            },
+
+            license: {
+                name: 'MIT'
+            }
         },
 
         servers: [
             {
                 url: 'http://localhost:3000',
-                description: 'Development Server'
+                description: 'Local Development'
+            },
+
+            {
+                url: 'https://my-api-url.com',
+                description: 'Production'
             }
         ],
 
@@ -22,7 +48,8 @@ const options: swaggerJsdoc.Options = {
                 bearerAuth: {
                     type: 'http',
                     scheme: 'bearer',
-                    bearerFormat: 'JWT'
+                    bearerFormat: 'JWT',
+                    description: 'Enter the JWT access token obtained from POST /auth/login.'
                 }
             },
 
