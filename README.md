@@ -7,10 +7,10 @@ El proyecto implementa autenticación mediante JWT, autorización basada en role
 ## Demo desplegado
 
 🚀 **API desplegada**
-> https://your-api.onrender.com
+> https://api-store-qfw2.onrender.com/
 
 📖 **Documentación de Swagger**
-> https://your-api.onrender.com/docs
+> https://api-store-qfw2.onrender.com/docs
 
 ---
 
