@@ -4,6 +4,14 @@ API REST desarrollada con **Node.js**, **Express**, **TypeScript** y **Prisma OR
 
 El proyecto implementa autenticación mediante JWT, autorización basada en roles, validación de datos con Zod y una arquitectura en capas orientada al mantenimiento y la escalabilidad.
 
+## Demo desplegado
+
+🚀 **API desplegada**
+> https://your-api.onrender.com
+
+📖 **Documentación de Swagger**
+> https://your-api.onrender.com/docs
+
 ---
 
 ## Características
@@ -86,6 +94,13 @@ Instalar las dependencias:
 ```bash
 npm install
 ```
+
+## Probar la API
+
+Se puede probar la API sin necesidad de instalar nada mediante su instancia de despliegue:
+
+- API: https://your-api.onrender.com
+- Swagger UI: https://your-api.onrender.com/docs
 
 ---
 
@@ -197,8 +212,6 @@ La API incorpora diferentes mecanismos de seguridad:
 
 ## Próximas mejoras
 
-* Documentación interactiva con Swagger/OpenAPI.
-* Deploy de la API.
 * Dockerización del proyecto.
 
 ---
