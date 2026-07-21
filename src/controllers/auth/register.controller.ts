@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
 import { createUser } from '../../services/users.service.ts';
-import type { CreateUserData, UserData } from '../../interfaces/User.interface.ts';
+import type { CreateUserData, UserData, UserResponse } from '../../interfaces/User.interface.ts';
 import { UnauthorizedError } from '../../errors/UnauthorizedError.ts';
 import { ConflictError } from '../../errors/ConflictError.ts';
 
@@ -39,7 +39,17 @@ export async function register(req: express.Request, res: express.Response) {
     }
 
     const userRegistered: UserData = await createUser(data);
-    res.status(201).json(userRegistered);
+
+    const userResponse: UserResponse = {
+        id: userRegistered.id,
+        username: userRegistered.username,
+        email: userRegistered.email,
+        rol: userRegistered.rol,
+        createdAt: userRegistered.createdAt,
+        updatedAt: userRegistered.updatedAt
+    };
+
+    res.status(201).json(userResponse);
 
 
 }

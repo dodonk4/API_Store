@@ -31,7 +31,10 @@ export async function generateAccessTokenForLoggedUser(req: express.Request, res
             maxAge: 15 * 60 * 1000 //15m
         })
 
-        res.send("Access token actualizado");
+        res.status(200).json({
+            message: "Access token updated",
+            accessToken
+        });
 
     } catch (error: any) {
         if (error.name === 'TokenExpiredError') {

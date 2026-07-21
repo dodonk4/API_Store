@@ -11,3 +11,7 @@ interface IUserData {
 
 export type UserData = IUserData;
 export type CreateUserData = Omit<UserData, "id" | "rol">;
+export type UserResponse = Omit<UserData, "password" | "refreshToken">;
+export interface LoginResponse extends UserResponse {
+  accessToken: string;
+}

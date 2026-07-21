@@ -2,7 +2,7 @@ import express from 'express';
 import bcrypt from 'bcryptjs';
 import { prisma } from '../../lib/prisma.ts';
 import { updateUser } from '../../services/users.service.ts';
-import type { UserData } from '../../interfaces/User.interface.ts';
+import type { LoginResponse, UserData, UserResponse } from '../../interfaces/User.interface.ts';
 import generateRefreshToken from '../../utils/jwt/refreshToken.utils.ts';
 import generateAccessToken from '../../utils/jwt/accessToken.utils.ts';
 import { NotFoundError } from '../../errors/NotFoundError.ts';
@@ -49,6 +49,17 @@ export async function login(req: express.Request, res: express.Response) {
     });
 
     const userLogged: UserData = await updateUser(user.id, { refreshToken });
-    res.status(200).json(userLogged);
+
+    const userResponse: LoginResponse = {
+            id: userLogged.id,
+            username: userLogged.username,
+            email: userLogged.email,
+            rol: userLogged.rol,
+            accessToken,
+            createdAt: userLogged.createdAt,
+            updatedAt: userLogged.updatedAt
+        };
+
+    res.status(200).json(userResponse);
 
 }
