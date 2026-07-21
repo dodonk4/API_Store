@@ -32,7 +32,7 @@ const options: swaggerJsdoc.Options = {
 
         servers: [
             {
-                url: 'https://api-store-qfw2.onrender.com',
+                url: "https://api-store-qfw2.onrender.com/",
                 description: 'Production'
             }
         ],
@@ -58,11 +58,11 @@ const options: swaggerJsdoc.Options = {
                         },
                         username: {
                             type: 'string',
-                            example: 'ismael'
+                            example: 'juan'
                         },
                         email: {
                             type: 'string',
-                            example: 'ismael@email.com'
+                            example: 'juan@example.com'
                         },
                         role: {
                             type: 'string',
@@ -217,12 +217,12 @@ const options: swaggerJsdoc.Options = {
                     properties: {
                         email: {
                             type: 'string',
-                            example: 'ismael@email.com'
+                            example: 'juan@example.com'
                         },
                         password: {
                             type: 'string',
                             format: 'password',
-                            example: 'MiPassword123'
+                            example: 'abcd1234'
                         }
                     }
                 },
@@ -253,24 +253,24 @@ const options: swaggerJsdoc.Options = {
                         email: {
                             type: 'string',
                             format: 'email',
-                            example: 'ismael@email.com'
+                            example: 'prueba@gmail.com'
                         },
                         username: {
                             type: 'string',
                             maxLength: 20,
-                            example: 'ismael'
+                            example: 'prueba'
                         },
                         password: {
                             type: 'string',
                             format: 'password',
                             minLength: 8,
-                            example: 'MyPassword123'
+                            example: 'abcd1234'
                         },
                         password_confirmation: {
                             type: 'string',
                             format: 'password',
                             minLength: 8,
-                            example: 'MyPassword123'
+                            example: 'abcd1234'
                         }
                     }
                 },

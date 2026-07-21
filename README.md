@@ -99,8 +99,8 @@ npm install
 
 Se puede probar la API sin necesidad de instalar nada mediante su instancia de despliegue:
 
-- API: https://your-api.onrender.com
-- Swagger UI: https://your-api.onrender.com/docs
+- API: https://api-store-qfw2.onrender.com/
+- Swagger UI: https://api-store-qfw2.onrender.com/docs
 
 ---
 
