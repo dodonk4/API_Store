@@ -26,7 +26,7 @@ export async function login(req: express.Request, res: express.Response) {
     const isMatch: boolean = bcrypt.compareSync(password, user?.password);
 
     if (!isMatch) {
-        throw new UnauthorizedError("La contaseña es incorrecta");
+        throw new UnauthorizedError("La contraseña es incorrecta");
     }
 
     const refreshToken: string = generateRefreshToken(user);

@@ -72,6 +72,33 @@ const options: swaggerJsdoc.Options = {
                     }
                 },
 
+                UpdateUserRequest: {
+                    type: 'object',
+                    properties: {
+                        username: {
+                            type: 'string',
+                            example: 'Juan Ignacio'
+                        },
+                    }
+                },
+
+                UpdateOrderRequest: {
+                    type: 'object',
+                    properties: {
+                        state: {
+                            type: 'string',
+                            example: 'CART'
+                        }
+                    }
+                },
+
+                CreateOrderRequest: {
+                    type: 'object',
+                    properties: {
+
+                    }
+                },
+
                 Product: {
                     type: 'object',
                     properties: {
@@ -170,6 +197,8 @@ const options: swaggerJsdoc.Options = {
                     }
                 },
 
+
+
                 Order: {
                     type: 'object',
                     properties: {
@@ -211,6 +240,34 @@ const options: swaggerJsdoc.Options = {
                     }
                 },
 
+                UpdateOrderProductRequest: {
+                    type: 'object',
+                    properties: {
+                        productId: {
+                            type: 'integer',
+                            example: 2
+                        },
+                        cantidad: {
+                            type: 'integer',
+                            example: 3
+                        }
+                    }
+                },
+
+                CreateOrderProductRequest: {
+                    type: 'object',
+                    properties: {
+                        productId: {
+                            type: 'integer',
+                            example: 8
+                        },
+                        cantidad: {
+                            type: 'integer',
+                            example: 2
+                        }
+                    }
+                },
+
                 LoginRequest: {
                     type: 'object',
                     required: ['email', 'password'],
@@ -230,13 +287,47 @@ const options: swaggerJsdoc.Options = {
                 LoginResponse: {
                     type: 'object',
                     properties: {
-                        accessToken: {
-                            type: 'string',
-                            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                        id: {
+                            type: 'integer',
+                            example: '3'
                         },
-                        refreshToken: {
+                        username: {
                             type: 'string',
-                            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...'
+                            example: 'Carlos López...'
+                        },
+                        email: {
+                            type: 'string',
+                            example: 'carlos@example.com'
+                        },
+                        rol: {
+                            type: 'string',
+                            example: 'USER'
+                        },
+                        accesstoken: {
+                            type: 'string',
+                            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6Ik...'
+                        },
+                        createdAt: {
+                            type: 'string',
+                            example: '2026-07-17T01:25:03.619Z'
+                        },
+                        updatedAt: {
+                            type: 'string',
+                            example: '2026-07-22T00:02:45.018Z'
+                        }
+                    }
+                },
+
+                RefreshTokenResponse: {
+                    type: 'object',
+                    properties: {
+                        message: {
+                            type: 'string',
+                            example: 'Access token updated'
+                        },
+                        accesToken: {
+                            type: 'string',
+                            example: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywidXNlcm5hbWUiOiJDYXJsb3MgTMOzcGV6Iiwicm9sIjoiVVNFUiIsImlhdCI6MTc4NDY3Nzg5MywiZXhwIjoxNzg0Njc4NzkzfQ.6MOxG5H4O2jHfhyEREiBiCjsjH9mrGWpr7o4QcYSNeM',
                         }
                     }
                 },
@@ -272,6 +363,33 @@ const options: swaggerJsdoc.Options = {
                             minLength: 8,
                             example: 'abcd1234'
                         }
+                    }
+                },
+
+                CreateUserRequest: {
+                    type: 'object',
+                    required: [
+                        'email',
+                        'username',
+                        'password',
+                    ],
+                    properties: {
+                        email: {
+                            type: 'string',
+                            format: 'email',
+                            example: 'prueba@gmail.com'
+                        },
+                        username: {
+                            type: 'string',
+                            maxLength: 20,
+                            example: 'prueba'
+                        },
+                        password: {
+                            type: 'string',
+                            format: 'password',
+                            minLength: 8,
+                            example: 'abcd1234'
+                        },
                     }
                 },
 

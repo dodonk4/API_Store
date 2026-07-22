@@ -5,7 +5,7 @@
  *     summary: Get all products in an order.
  *     description: Returns all products associated with the specified order.
  *     tags:
- *       - Orders
+ *       - Order Products
  *
  *     security:
  *       - bearerAuth: []

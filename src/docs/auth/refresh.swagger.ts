@@ -13,6 +13,10 @@
  *     responses:
  *       200:
  *         description: Access token refreshed successfully.
+ *         content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/RefreshTokenResponse'
  *
  *       401:
  *         $ref: '#/components/responses/Unauthorized'

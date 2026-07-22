@@ -5,7 +5,7 @@
  *     summary: Get an order product by ID.
  *     description: Returns a specific product associated with the specified order.
  *     tags:
- *       - Orders
+ *       - Order Products
  *
  *     security:
  *       - bearerAuth: []
