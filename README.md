@@ -27,6 +27,12 @@ https://api-store-qfw2.onrender.com/docs
 
 ---
 
+## 📷 Preview
+
+![alt text](image.png)
+
+---
+
 ## ✨ Features
 
 - JWT authentication using Access Token and Refresh Token.
