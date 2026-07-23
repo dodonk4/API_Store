@@ -1,59 +1,76 @@
 # API Store
 
-API REST desarrollada con **Node.js**, **Express**, **TypeScript** y **Prisma ORM** para la gestión de una tienda online.
+<p align="center">
+  <img src="https://img.shields.io/badge/Node.js-22.x-339933?logo=node.js&logoColor=white" />
+  <img src="https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white" />
+  <img src="https://img.shields.io/badge/Express-5.x-000000?logo=express&logoColor=white" />
+  <img src="https://img.shields.io/badge/Prisma-ORM-2D3748?logo=prisma&logoColor=white" />
+  <img src="https://img.shields.io/badge/PostgreSQL-17-4169E1?logo=postgresql&logoColor=white" />
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" />
+</p>
 
-El proyecto implementa autenticación mediante JWT, autorización basada en roles, validación de datos con Zod y una arquitectura en capas orientada al mantenimiento y la escalabilidad.
+A RESTful API built with **Node.js**, **Express**, **TypeScript**, and **Prisma ORM** for managing an online store.
 
-## Demo desplegado
-
-🚀 **API desplegada**
-> https://api-store-qfw2.onrender.com/
-
-📖 **Documentación de Swagger**
-> https://api-store-qfw2.onrender.com/docs
-
----
-
-## Características
-
-* Gestión de usuarios.
-* Gestión de productos.
-* Gestión de órdenes.
-* Asociación de productos a órdenes.
-* Autenticación mediante JSON Web Tokens (JWT).
-* Refresh Tokens.
-* Autorización basada en roles.
-* Validación de datos con Zod.
-* Manejo centralizado de errores.
-* Persistencia con PostgreSQL utilizando Prisma ORM.
-* Tests de integración con Jest y Supertest.
+The project provides JWT authentication, role-based authorization, input validation with Zod, interactive Swagger documentation, automated integration tests, and a layered architecture designed for scalability and maintainability.
 
 ---
 
-## Tecnologías utilizadas
+## 🚀 Live Demo
 
-| Tecnología | Descripción               |
-| ---------- | ------------------------- |
-| TypeScript | Lenguaje principal        |
-| Node.js    | Entorno de ejecución      |
-| Express    | Framework para la API     |
-| Prisma ORM | Acceso a la base de datos |
-| PostgreSQL | Base de datos relacional  |
-| Zod        | Validación de datos       |
-| JWT        | Autenticación             |
-| Jest       | Testing                   |
-| Supertest  | Tests de integración      |
+### API
+
+https://api-store-qfw2.onrender.com/
+
+### Swagger Documentation
+
+https://api-store-qfw2.onrender.com/docs
 
 ---
 
-## Arquitectura
+## ✨ Features
 
-El proyecto sigue una arquitectura en capas para separar responsabilidades.
+- JWT authentication using Access Token and Refresh Token.
+- Role-based authorization.
+- User management.
+- Product management.
+- Order management.
+- Order-product relationship management.
+- Request validation with Zod.
+- Centralized error handling.
+- PostgreSQL database with Prisma ORM.
+- Interactive API documentation with Swagger UI.
+- Integration tests using Jest and Supertest.
+- Docker support.
+- GitHub Actions CI.
+
+---
+
+## 🛠 Tech Stack
+
+| Technology | Purpose |
+|------------|---------|
+| Node.js | Runtime |
+| Express.js | Web framework |
+| TypeScript | Main programming language |
+| PostgreSQL | Relational database |
+| Prisma ORM | Database access |
+| Zod | Request validation |
+| JWT | Authentication |
+| Swagger | API documentation |
+| Jest | Testing |
+| Supertest | Integration testing |
+| Docker | Containerization |
+| GitHub Actions | Continuous Integration |
+
+---
+
+## 📂 Project Structure
 
 ```text
 src/
 ├── config/
 ├── controllers/
+├── docs/
 ├── errors/
 ├── interfaces/
 ├── lib/
@@ -65,165 +82,163 @@ src/
 └── utils/
 ```
 
-### Descripción de las capas
-
-| Carpeta     | Responsabilidad                                        |
-| ----------- | ------------------------------------------------------ |
-| controllers | Reciben las solicitudes HTTP y coordinan la respuesta. |
-| services    | Contienen la lógica de negocio.                        |
-| routes      | Definen los endpoints de la API.                       |
-| middlewares | Autenticación, autorización y validaciones.            |
-| schemas     | Esquemas de validación con Zod.                        |
-| errors      | Clases de errores personalizadas.                      |
-| utils       | Funciones auxiliares reutilizables.                    |
-| lib         | Configuración de librerías externas como Prisma.       |
+The project follows a **layered architecture**, separating routing, business logic, validation, and infrastructure concerns to improve maintainability and scalability.
 
 ---
 
-## Instalación
+## ⚙️ Getting Started
 
-Clonar el repositorio:
+### Clone the repository
 
 ```bash
 git clone https://github.com/dodonk4/API_Store.git
+
 cd API_Store
 ```
 
-Instalar las dependencias:
+### Install dependencies
 
 ```bash
 npm install
 ```
 
-## Probar la API
+## 🔧 Environment Variables
 
-Se puede probar la API sin necesidad de instalar nada mediante su instancia de despliegue:
-
-- API: https://api-store-qfw2.onrender.com/
-- Swagger UI: https://api-store-qfw2.onrender.com/docs
-
----
-
-## Variables de entorno
-
-Crear un archivo `.env.development` con las variables necesarias.
-
-Ejemplo:
+Create a `.env.development` file in the project root with the following variables:
 
 ```env
 DATABASE_URL="postgresql://postgres:postgres@localhost:5432/api_store_dev"
 
-AUTH_SECRET="your_jwt_access_token_secret" 
+AUTH_SECRET="your_jwt_access_token_secret"
 AUTH_SECRET_EXPIRES_IN="15m"
+
 AUTH_REFRESH_SECRET="your_jwt_refresh_token_secret"
 AUTH_REFRESH_SECRET_EXPIRES_IN="24h"
 
 PORT=3000
 ```
 
-También es posible utilizar los archivos de entorno correspondientes para testing y producción.
+The project also supports dedicated environment files for testing and production:
 
----
+- `.env.test`
+- `.env.production`
 
-## Base de datos
+These files allow each environment to use its own database and configuration.
 
-Ejecutar las migraciones:
+## 🐳 Running with Docker
+
+Clone the repository:
+
+```bash
+git clone https://github.com/dodonk4/API_Store.git
+cd API_Store
+```
+
+Build and start all services:
+
+```bash
+docker compose up --build
+```
+
+Once the containers are running, the API will be available at:
+
+```
+http://localhost:3000
+```
+
+Swagger UI:
+
+```
+http://localhost:3000/docs
+```
+
+Docker Compose automatically starts:
+
+- PostgreSQL
+- API Store
+
+> **Note:** Make sure Docker Desktop (or Docker Engine) is running before executing the command.
+
+## 🗄 Database
+
+Run the database migrations:
 
 ```bash
 npm run migrate:dev
 ```
 
-Si se desea cargar datos iniciales:
+Populate the database with seed data:
 
 ```bash
 npm run seed:dev
 ```
 
----
+Prisma ORM is used for database access and schema management.
 
-## Ejecutar el proyecto
+The project includes separate databases for development and testing to prevent test execution from affecting development data.
 
-Modo desarrollo:
+## 📖 API Documentation
 
-```bash
-npm run dev
+Interactive API documentation is available through Swagger UI.
+
+### Local
+
+```
+http://localhost:3000/docs
 ```
 
-Modo producción:
+### Production
 
-```bash
-npm start
+```
+https://api-store-qfw2.onrender.com/docs
 ```
 
----
+Swagger allows you to:
 
-## Ejecutar los tests
+- Explore every endpoint.
+- Execute requests directly from the browser.
+- Authenticate using JWT.
+- View request and response schemas.
+- Inspect HTTP status codes and error responses.
+
+## 🧪 Running the Tests
+
+Run all integration tests:
 
 ```bash
 npm test
 ```
 
-Las pruebas utilizan una base de datos independiente para no afectar los datos del entorno de desarrollo.
+The project uses:
 
----
+- **Jest** as the testing framework.
+- **Supertest** for HTTP endpoint testing.
+- **PostgreSQL** as an isolated test database.
 
-## Estructura general de la API
+Tests are executed against a dedicated database, ensuring that development data remains unaffected.
 
-La API permite gestionar:
+## 🔒 Security
 
-* Usuarios
-* Productos
-* Órdenes
-* Productos pertenecientes a una orden
-* Autenticación de usuarios
+The API implements several security mechanisms:
 
-Cada recurso cuenta con los endpoints necesarios para realizar operaciones CRUD, respetando los códigos de estado HTTP correspondientes.
+- JWT Access Token authentication.
+- Refresh Token authentication using HttpOnly cookies.
+- Role-based authorization.
+- Password hashing with bcrypt.
+- Request validation with Zod.
+- Centralized error handling.
+- Protected routes through authentication and authorization middlewares.
 
----
+## 📄 License
 
-## Manejo de errores
+This project is licensed under the **MIT License**.
 
-La aplicación utiliza clases de errores personalizadas para responder de forma consistente.
+See the `LICENSE` file for more information.
 
-Entre ellas:
-
-* BadRequestError
-* UnauthorizedError
-* ForbiddenError
-* NotFoundError
-* ConflictError
-* ValidationError
-
-Esto permite centralizar el manejo de errores y mantener una respuesta uniforme en toda la API.
-
----
-
-## Seguridad
-
-La API incorpora diferentes mecanismos de seguridad:
-
-* Autenticación mediante Access Token y Refresh Token.
-* Autorización basada en roles.
-* Validación de datos mediante Zod.
-* Contraseñas almacenadas de forma segura mediante hash.
-* Manejo centralizado de errores para evitar exponer información sensible.
-
----
-
-## Próximas mejoras
-
-* Dockerización del proyecto.
-
----
-
-## Licencia
-
-Este proyecto se distribuye bajo la licencia MIT.
-
----
-
-## Autor
+## 👨‍💻 Author
 
 **Ismael Madarieta**
 
 GitHub: https://github.com/dodonk4
+
+If you have any suggestions, feedback, or find an issue, feel free to open an Issue or submit a Pull Request.
