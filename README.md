@@ -21,9 +21,17 @@ The project provides JWT authentication, role-based authorization, input validat
 
 https://api-store-qfw2.onrender.com/
 
+or
+
+https://p01--api-store--2fq8y7qx5g86.code.run/
+
 ### Swagger Documentation
 
 https://api-store-qfw2.onrender.com/docs
+
+or
+
+https://p01--api-store--2fq8y7qx5g86.code.run/docs
 
 ---
 
@@ -197,6 +205,10 @@ http://localhost:3000/docs
 
 ```
 https://api-store-qfw2.onrender.com/docs
+
+or
+
+https://p01--api-store--2fq8y7qx5g86.code.run/
 ```
 
 Swagger allows you to:
