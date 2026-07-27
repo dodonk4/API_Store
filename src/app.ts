@@ -20,7 +20,7 @@ app.use('/users', usersRouter);
 app.use('/orders', ordersRouter);
 
 app.get('/', (req: express.Request, res: express.Response) => {
-  res.json({ message: 'API de Tienda' });
+  res.json({ message: 'API Store' });
 });
 
 app.use(
