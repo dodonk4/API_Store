@@ -32,7 +32,7 @@ const options: swaggerJsdoc.Options = {
 
         servers: [
             {
-                url: "https://api-store-qfw2.onrender.com/",
+                url: "https://api-store-1040817830210.europe-west1.run.app/",
                 description: 'Production'
             }
         ],
